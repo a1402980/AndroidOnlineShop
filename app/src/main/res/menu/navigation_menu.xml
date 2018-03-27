@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/buy"
+            android:icon="@android:drawable/ic_input_add"
+            android:title="Buy items" />
+        <item
+            android:id="@+id/sell"
+            android:icon="@android:drawable/ic_input_add"
+            android:title="Sell items" />
+        <item
+            android:id="@+id/shoppingCart"
+            android:icon="@android:drawable/ic_input_add"
+            android:title="Shopping cart" />
+        <item
+            android:id="@+id/categories"
+            android:icon="@android:drawable/ic_menu_sort_by_size"
+            android:title="Categories" />
+    </group>
+
+</menu>
