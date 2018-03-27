@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 public class Item{
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int itemid;
 
     @ColumnInfo(name = "name")
@@ -28,8 +28,8 @@ public class Item{
     @ColumnInfo(name = "rating")
     private int rating;
 
-    @ColumnInfo(name = "category")
-    private Category category;
+    /*@ColumnInfo(name = "category")
+    private Category category;*/
 
     public Item() {}
 
@@ -40,6 +40,15 @@ public class Item{
         this.description = description;
         this.rating = rating;
     }
+
+    public int getItemid() {
+        return itemid;
+    }
+
+    public void setItemid(int itemid) {
+        this.itemid = itemid;
+    }
+
     public String getName() {
         return name;
     }
@@ -72,12 +81,12 @@ public class Item{
         this.rating = rating;
     }
 
-    public Category getCategory() {
+    /*public Category getCategory() {
         return category;
     }
 
     public void setCategory(Category category) {
         this.category = category;
-    }
+    }*/
 
 }

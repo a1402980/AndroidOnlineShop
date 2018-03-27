@@ -11,22 +11,30 @@ import java.io.Serializable;
  */
 
 @Entity
-public class Cart{
+public class Cart {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int cartid;
 
     @ColumnInfo(name = "quantity")
-
     private int quantity;
-    @ColumnInfo(name = "item")
-    private Item item;
 
-    public Cart(){}
+    /*@ColumnInfo(name = "item")
+    private Item item;*/
 
-    public Cart(int quantity)
-    {
+    public Cart() {
+    }
+
+    public Cart(int quantity) {
         this.quantity = quantity;
+    }
+
+    public int getCartid() {
+        return cartid;
+    }
+
+    public void setCartid(int cartid) {
+        this.cartid = cartid;
     }
 
     public int getQuantity() {
@@ -37,11 +45,11 @@ public class Cart{
         this.quantity = quantity;
     }
 
-    public Item getItem() {
+    /*public Item getItem() {
         return item;
     }
 
     public void setItem(Item item) {
         this.item = item;
-    }
+    }*/
 }
