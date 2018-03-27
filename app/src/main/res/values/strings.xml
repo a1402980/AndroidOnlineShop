@@ -1,3 +1,10 @@
 <resources>
+<<<<<<< HEAD
+    <string name="app_name">AndroidOnlineShop</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+=======
     <string name="app_name">cbay</string>
+>>>>>>> ee814d1f29a75ae3e045b2483049bb92d62aee44
 </resources>

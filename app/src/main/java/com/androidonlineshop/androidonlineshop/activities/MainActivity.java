@@ -2,6 +2,7 @@ package com.androidonlineshop.androidonlineshop.activities;
 
 
 import android.arch.persistence.room.Room;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -23,14 +24,6 @@ public class MainActivity extends AppCompatActivity {
          db = Room.databaseBuilder(getApplicationContext(),
                 Database.class, "onlineshop").build();
 
-        Item item = new Item();
-        item.setName("ttette");
-        item.setDescription("tetetete");
-        item.setPrice(5.00);
-        item.setRating(5);
-
-
-        db.itemDAO().insertItem(item);
     }
     public void testing()
     {
@@ -42,5 +35,20 @@ public class MainActivity extends AppCompatActivity {
 
 
         db.itemDAO().insertItem(item);
+    }
+    private static Item addItem(final Database db, Item item) {
+        db.itemDAO().insertItem(item);
+        return item;
+    }
+
+    private static void populateWithTestData(Database db) {
+        Item item = new Item();
+        item.setName("ttette");
+        item.setDescription("tetetete");
+        item.setPrice(5.00);
+        item.setRating(5);
+
+
+        addItem(db, item);
     }
 }
