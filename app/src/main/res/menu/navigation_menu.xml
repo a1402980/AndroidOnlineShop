@@ -6,15 +6,15 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/buy"
-            android:icon="@android:drawable/ic_input_add"
+            android:icon="@android:drawable/ic_menu_sort_by_size"
             android:title="Buy items" />
         <item
             android:id="@+id/sell"
-            android:icon="@android:drawable/ic_input_add"
+            android:icon="@android:drawable/ic_menu_sort_by_size"
             android:title="Sell items" />
         <item
             android:id="@+id/shoppingCart"
-            android:icon="@android:drawable/ic_input_add"
+            android:icon="@android:drawable/ic_menu_sort_by_size"
             android:title="Shopping cart" />
         <item
             android:id="@+id/categories"
