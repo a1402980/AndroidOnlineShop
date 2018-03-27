@@ -1,18 +1,34 @@
 package com.androidonlineshop.androidonlineshop.model;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import java.io.Serializable;
 
 /**
  * Created by ibraa on 27-Mar-18.
  */
 
+@Entity
 public class Item{
 
+    @PrimaryKey
+    private int itemid;
+
+    @ColumnInfo(name = "name")
     private String name;
+
+    @ColumnInfo(name = "price")
     private double price;
+
+    @ColumnInfo(name = "description")
     private String description;
+
+    @ColumnInfo(name = "rating")
     private int rating;
 
+    @ColumnInfo(name = "category")
     private Category category;
 
     public Item() {}
@@ -24,7 +40,6 @@ public class Item{
         this.description = description;
         this.rating = rating;
     }
-
     public String getName() {
         return name;
     }
