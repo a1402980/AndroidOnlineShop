@@ -20,7 +20,7 @@ import com.androidonlineshop.androidonlineshop.R;
 import com.androidonlineshop.androidonlineshop.fragments.BuyFragment;
 import com.androidonlineshop.androidonlineshop.fragments.SellFragment;
 import com.androidonlineshop.androidonlineshop.model.Item;
-import com.androidonlineshop.androidonlineshop.room.Database;
+import com.androidonlineshop.androidonlineshop.db.Database;
 
 public class MainActivity extends AppCompatActivity implements BuyFragment.OnFragmentInteractionListener, SellFragment.OnFragmentInteractionListener {
 

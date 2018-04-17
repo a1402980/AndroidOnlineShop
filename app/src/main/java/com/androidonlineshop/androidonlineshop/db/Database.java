@@ -1,8 +1,6 @@
-package com.androidonlineshop.androidonlineshop.room;
+package com.androidonlineshop.androidonlineshop.db;
 
-import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
-import android.content.Context;
 
 import com.androidonlineshop.androidonlineshop.dal.CartDAO;
 import com.androidonlineshop.androidonlineshop.dal.CategoryDAO;
