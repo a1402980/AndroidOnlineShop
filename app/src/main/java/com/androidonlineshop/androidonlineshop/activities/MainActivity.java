@@ -24,7 +24,7 @@ import com.androidonlineshop.androidonlineshop.fragments.SellFragment;
 import com.androidonlineshop.androidonlineshop.fragments.SettingsFragment;
 import com.androidonlineshop.androidonlineshop.fragments.ShoppingCartFragment;
 import com.androidonlineshop.androidonlineshop.model.Item;
-import com.androidonlineshop.androidonlineshop.room.Database;
+import com.androidonlineshop.androidonlineshop.db.Database;
 
 public class MainActivity extends AppCompatActivity{
 

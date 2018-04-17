@@ -7,10 +7,9 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.androidonlineshop.androidonlineshop.dal.ItemDAO;
 import com.androidonlineshop.androidonlineshop.model.Item;
-import com.androidonlineshop.androidonlineshop.room.Database;
+import com.androidonlineshop.androidonlineshop.db.Database;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
