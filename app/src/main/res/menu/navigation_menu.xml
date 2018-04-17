@@ -20,6 +20,16 @@
             android:id="@+id/categories"
             android:icon="@android:drawable/ic_menu_sort_by_size"
             android:title="Categories" />
+
+        <item
+            android:id="@+id/settings"
+            android:icon="@android:drawable/ic_menu_sort_by_size"
+            android:title="Settings" />
+
+        <item
+            android:id="@+id/about"
+            android:icon="@android:drawable/ic_menu_sort_by_size"
+            android:title="About" />
     </group>
 
 </menu>

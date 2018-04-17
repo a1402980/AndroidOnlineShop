@@ -2,7 +2,10 @@
 
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="app_name">cbay</string>
+    <string name="app_name" translatable="false">cbay</string>
+    <string name="lang_name">Name</string>
+    <string name="lang_price">Price</string>
+    <string name="lang_description">Description</string>
+    <string name="lang_item_condition">Item condition</string>
 </resources>

@@ -2,17 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.androidonlineshop.androidonlineshop.fragments.BuyFragment">
+    android:layout_marginHorizontal="20dp"
+    tools:context="com.androidonlineshop.androidonlineshop.fragments.AboutFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="BUY STUFF" />
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:text="App made by Ibrahim Beqiri and Mikko Lerto for course Développement Mobile e Cloud in 2018" />
 
 </FrameLayout>

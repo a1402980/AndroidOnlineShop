@@ -17,14 +17,19 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.androidonlineshop.androidonlineshop.R;
+import com.androidonlineshop.androidonlineshop.fragments.AboutFragment;
 import com.androidonlineshop.androidonlineshop.fragments.BuyFragment;
+import com.androidonlineshop.androidonlineshop.fragments.CategoriesFragment;
 import com.androidonlineshop.androidonlineshop.fragments.SellFragment;
+import com.androidonlineshop.androidonlineshop.fragments.SettingsFragment;
+import com.androidonlineshop.androidonlineshop.fragments.ShoppingCartFragment;
 import com.androidonlineshop.androidonlineshop.model.Item;
 import com.androidonlineshop.androidonlineshop.room.Database;
 
-public class MainActivity extends AppCompatActivity implements BuyFragment.OnFragmentInteractionListener, SellFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity{
 
     private Database db;
+    private final String BACK_STACK_ROOT_TAG = "MAIN";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,29 +70,8 @@ public class MainActivity extends AppCompatActivity implements BuyFragment.OnFra
         addItem(db, item);
     }
 
-    public void startBuyFragment(View v) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        BuyFragment fragmentBuy = new BuyFragment();
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.add(R.id.fragment_container,fragmentBuy);
-        fragmentTransaction.commit();
-    }
 
-    public void startSellFragment(View v) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        SellFragment fragmentBuy = new SellFragment();
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.add(R.id.fragment_container,fragmentBuy);
-        fragmentTransaction.commit();
-    }
 
-    @Override
-    public void onFragmentInteraction(Uri uri){
-        //you can leave this empty. It is used to switch between fragments.
-        //you must implement this class with all the fragments related to this activity.
-    }
 
 
 
@@ -96,26 +80,44 @@ public class MainActivity extends AppCompatActivity implements BuyFragment.OnFra
 
         View v = this.findViewById(android.R.id.content).getRootView();
 
+        Class fragmentClass = null;
+        Fragment fragment = null;
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
         switch (menuItem.getItemId()){
             case R.id.buy:
                 Toast.makeText(this, "buy", Toast.LENGTH_SHORT).show();
-                startBuyFragment(v);
+                fragmentClass = BuyFragment.class;
 
                 break;
 
             case R.id.sell:
                 Toast.makeText(this, "Sell", Toast.LENGTH_SHORT).show();
-                startSellFragment(v);
+                fragmentClass = SellFragment.class;
                 break;
 
             case R.id.shoppingCart:
                 Toast.makeText(this, "Shopping cart", Toast.LENGTH_SHORT).show();
-
+                fragmentClass = ShoppingCartFragment.class;
                 break;
 
             case R.id.categories:
-
+                fragmentClass = CategoriesFragment.class;
                 Toast.makeText(this, "Categories", Toast.LENGTH_SHORT).show();
+
+                break;
+
+            case R.id.settings:
+                fragmentClass = SettingsFragment.class;
+                Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
+
+                break;
+
+            case R.id.about:
+                fragmentClass = AboutFragment.class;
+                Toast.makeText(this, "About", Toast.LENGTH_SHORT).show();
 
                 break;
 
@@ -123,11 +125,24 @@ public class MainActivity extends AppCompatActivity implements BuyFragment.OnFra
 
             default:
                 Toast.makeText(this, "Default", Toast.LENGTH_SHORT).show();
+
         }
+
+        try {
+
+            fragment = (Fragment) fragmentClass.newInstance();
+
+        }catch (Exception e){
+
+        }
+
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(BACK_STACK_ROOT_TAG).commit();
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
     }
+
     private void drawerSetup(NavigationView navigationView){
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override

@@ -2,17 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.androidonlineshop.androidonlineshop.fragments.BuyFragment">
+    tools:context="com.androidonlineshop.androidonlineshop.fragments.SettingsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="BUY STUFF" />
+        android:text="Settings page..." />
 
 </FrameLayout>

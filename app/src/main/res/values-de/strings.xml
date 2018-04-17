@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">cbay</string>
+    <string name="lang_name">Bezeichnung</string>
+    <string name="lang_description">Beschreibung</string>
+    <string name="lang_item_condition">Artikelzustand</string>
+    <string name="lang_price">Auszeichnen</string>
+</resources>
