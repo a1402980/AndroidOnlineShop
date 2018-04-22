@@ -8,4 +8,14 @@
     <string name="lang_price">Price</string>
     <string name="lang_description">Description</string>
     <string name="lang_item_condition">Item condition</string>
+    <string name="lang_sell_item">Sell item</string>
+    <string name="lang_menu_buy_items">Buy items</string>
+    <string name="lang_menu_sell_items">Sell items</string>
+    <string name="lang_menu_shopping_cart">Shopping cart</string>
+    <string name="lang_menu_categories">Categories</string>
+    <string name="lang_menu_settings">Settings</string>
+    <string name="lang_menu_about">About</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

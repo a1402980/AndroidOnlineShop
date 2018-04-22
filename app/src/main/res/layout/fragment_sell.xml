@@ -52,9 +52,11 @@
             android:layout_height="wrap_content" />
 
         <Button
-            android:layout_width="match_parent"
+            android:layout_width="220dp"
+            android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:drawableRight="@drawable/ic_attach_money_black_24dp"
+            android:text="@string/lang_sell_item" />
     </LinearLayout>
 
 </FrameLayout>
