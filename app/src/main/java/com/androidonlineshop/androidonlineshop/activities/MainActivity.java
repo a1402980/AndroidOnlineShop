@@ -12,9 +12,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidonlineshop.androidonlineshop.R;
+import com.androidonlineshop.androidonlineshop.db.DatabaseCreator;
 import com.androidonlineshop.androidonlineshop.fragments.AboutFragment;
 import com.androidonlineshop.androidonlineshop.fragments.BuyFragment;
 import com.androidonlineshop.androidonlineshop.fragments.CategoriesFragment;
@@ -31,6 +33,8 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final DatabaseCreator databaseCreator = DatabaseCreator.getInstance(this.getApplication());
+        databaseCreator.createDb(this.getApplication());
 
         NavigationView nvDrawer = (NavigationView) findViewById(R.id.navigation);
         drawerSetup(nvDrawer);

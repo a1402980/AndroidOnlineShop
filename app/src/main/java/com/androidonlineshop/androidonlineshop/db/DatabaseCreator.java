@@ -9,6 +9,7 @@ import android.util.Log;
 import com.androidonlineshop.androidonlineshop.db.entity.CartEntity;
 import com.androidonlineshop.androidonlineshop.db.entity.CategoryEntity;
 import com.androidonlineshop.androidonlineshop.db.entity.ItemEntity;
+import com.androidonlineshop.androidonlineshop.db.pojo.CategoryWithItems;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +76,23 @@ public class DatabaseCreator {
                 addDelay();
 
                 // Add some data to the database
-                generateDate();
+                generateData(db);
+                List<CategoryEntity> categories = db.categoryDAO().getAllCategories();
+                for(CategoryEntity category : categories) {
+                    Log.d(TAG, category.getName());
+                    System.out.println(category.getId());
+                }
+                List<ItemEntity> items = db.itemDAO().getAllItems();
+                for(ItemEntity item : items) {
+                    Log.d(TAG, item.getName());
+                    System.out.println(item.getCategoryid());
+                }
+
+                List<CategoryWithItems> categoryWithItems = db.categoryDAO().loadCategoriesWithItems();
+                for(CategoryWithItems categoryWithItems1 : categoryWithItems)
+                {
+                    System.out.println(categoryWithItems1.items.size());
+                }
 
                 Log.d(TAG, "DB was populated in thread " + Thread.currentThread().getName());
 
@@ -92,7 +109,7 @@ public class DatabaseCreator {
         }
     }
 
-    private void generateDate(){
+    private void generateData(AppDatabase db){
 
         List<ItemEntity> items = new ArrayList<>();
         List<CategoryEntity> categories = new ArrayList<>();
@@ -117,9 +134,8 @@ public class DatabaseCreator {
 
         cart.setQuantity(items.size());
 
-        mDb.categoryDAO().insertAll(categories);
-        mDb.cartDAO().insertCart(cart);
-        mDb.itemDAO().insertAll(items);
-
+        db.categoryDAO().insertAll(categories);
+        db.cartDAO().insertCart(cart);
+        db.itemDAO().insertAll(items);
     }
 }
