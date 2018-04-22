@@ -8,8 +8,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -20,6 +23,7 @@ import com.androidonlineshop.androidonlineshop.db.DatabaseCreator;
 import com.androidonlineshop.androidonlineshop.fragments.AboutFragment;
 import com.androidonlineshop.androidonlineshop.fragments.BuyFragment;
 import com.androidonlineshop.androidonlineshop.fragments.CategoriesFragment;
+import com.androidonlineshop.androidonlineshop.fragments.MainFragment;
 import com.androidonlineshop.androidonlineshop.fragments.SellFragment;
 import com.androidonlineshop.androidonlineshop.fragments.SettingsFragment;
 import com.androidonlineshop.androidonlineshop.fragments.ShoppingCartFragment;
@@ -38,6 +42,28 @@ public class MainActivity extends AppCompatActivity{
 
         NavigationView nvDrawer = (NavigationView) findViewById(R.id.navigation);
         drawerSetup(nvDrawer);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar);
+        setSupportActionBar(toolbar);
+
+
+        if (savedInstanceState == null) {
+            Fragment fragment = null;
+            Class fragmentClass = MainFragment.class;
+            try {
+                fragment = (Fragment) fragmentClass.newInstance();
+            } catch (Exception e) {
+                Log.e("TAG", e.getMessage(), e);
+            }
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment, BACK_STACK_ROOT_TAG).commit();
+        }
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, nvDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        nvDrawer.addDrawerListener(toggle);
+        toggle.syncState();
 
     }
 

@@ -5,4 +5,11 @@
     <string name="lang_description">Beschreibung</string>
     <string name="lang_item_condition">Artikelzustand</string>
     <string name="lang_price">Auszeichnen</string>
+    <string name="lang_sell_item">Artikel verkaufen</string>
+    <string name="lang_menu_buy_items">Artikel kaufen</string>
+    <string name="lang_menu_sell_items">Artikel verkaufen</string>
+    <string name="lang_menu_shopping_cart">Einkaufswagen</string>
+    <string name="lang_menu_categories">Rubriken</string>
+    <string name="lang_menu_settings">Einstellungen</string>
+    <string name="lang_menu_about">Über</string>
 </resources>

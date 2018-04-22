@@ -52,6 +52,9 @@ public class SellFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        //set page title from strings
+        getActivity().setTitle(getResources().getText(R.string.lang_menu_sell_items));
     }
 
     @Override
