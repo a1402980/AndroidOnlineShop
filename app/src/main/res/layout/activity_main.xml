@@ -6,7 +6,6 @@
     android:layout_height="match_parent">
 
 
-
     <RelativeLayout
         android:layout_marginHorizontal="20dp"
         android:id="@+id/fragment_container"

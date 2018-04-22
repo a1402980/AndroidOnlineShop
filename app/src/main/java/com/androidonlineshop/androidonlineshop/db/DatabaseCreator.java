@@ -77,22 +77,6 @@ public class DatabaseCreator {
 
                 // Add some data to the database
                 generateData(db);
-                List<CategoryEntity> categories = db.categoryDAO().getAllCategories();
-                for(CategoryEntity category : categories) {
-                    Log.d(TAG, category.getName());
-                    System.out.println(category.getId());
-                }
-                List<ItemEntity> items = db.itemDAO().getAllItems();
-                for(ItemEntity item : items) {
-                    Log.d(TAG, item.getName());
-                    System.out.println(item.getCategoryid());
-                }
-
-                List<CategoryWithItems> categoryWithItems = db.categoryDAO().loadCategoriesWithItems();
-                for(CategoryWithItems categoryWithItems1 : categoryWithItems)
-                {
-                    System.out.println(categoryWithItems1.items.size());
-                }
 
                 Log.d(TAG, "DB was populated in thread " + Thread.currentThread().getName());
 

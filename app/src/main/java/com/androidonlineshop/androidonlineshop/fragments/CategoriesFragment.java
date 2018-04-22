@@ -1,16 +1,25 @@
 package com.androidonlineshop.androidonlineshop.fragments;
 
-import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.androidonlineshop.androidonlineshop.R;
+import com.androidonlineshop.androidonlineshop.db.async.category.GetCategories;
+import com.androidonlineshop.androidonlineshop.db.entity.CategoryEntity;
 
-
+import java.util.ArrayList;
+import java.util.List;
 
 public class CategoriesFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -18,10 +27,13 @@ public class CategoriesFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    private final String BACK_STACK_ROOT_TAG = "MAIN";
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private ListView categoriesListView;
+    private List<CategoryEntity> categories;
 
     public CategoriesFragment() {
         // Required empty public constructor
@@ -54,14 +66,56 @@ public class CategoriesFragment extends Fragment {
         }
         //set page title from strings
         getActivity().setTitle(getResources().getText(R.string.lang_menu_categories));
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_categories, container, false);
+        View view = inflater.inflate(R.layout.fragment_categories, container, false);
+
+        categoriesListView = view.findViewById(R.id.categoriesListView);
+
+        return view;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
+        categories = new ArrayList<>();
+        List<String> categoryNames = new ArrayList<>();
+
+        // set the listview in the activity with the adapter
+        try {
+            categories = new GetCategories(getView()).execute().get();
+            for(CategoryEntity category : categories)
+            {
+                categoryNames.add(category.getName());
+            }
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_1, categoryNames);
+        categoriesListView.setAdapter(adapter);
+
+        categoriesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                FragmentManager fragmentManager = getFragmentManager();
+                BuyFragment buyFragment = new BuyFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt("id", position);
+                buyFragment.setArguments(bundle);
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, buyFragment, BACK_STACK_ROOT_TAG).commit();
+            }
+
+        });
+    }
 }
