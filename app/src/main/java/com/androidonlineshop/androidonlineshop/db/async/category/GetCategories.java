@@ -20,7 +20,7 @@ public class GetCategories extends AsyncTask<Void, Void, List<CategoryEntity>> {
 
         public GetCategories(View view) {
             mView = new WeakReference<>(view);
-            }
+        }
 
         @Override
         protected List<CategoryEntity> doInBackground(Void... voids) {

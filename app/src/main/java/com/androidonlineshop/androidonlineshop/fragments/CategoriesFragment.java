@@ -65,23 +65,11 @@ public class CategoriesFragment extends Fragment {
         }
         //set page title from strings
         getActivity().setTitle(getResources().getText(R.string.lang_menu_categories));
+
+
         final List<CategoryEntity> categories = new ArrayList<>();
-        final DatabaseCreator databaseCreator = DatabaseCreator.getInstance(getContext());
-        databaseCreator.createDb(getContext());
-        AppDatabase db = databaseCreator.getDatabase();
-        if(db != null)
-        {
-            System.out.println("fdfdfdfdfdfdfdfdfd");
-        }
+        new GetCategories(getView());
 
-
-        //categories = db.categoryDAO().getAllCategories();
-        /*for(CategoryEntity category : categories)
-        {
-            System.out.println(category.getName());
-        }*/
-        //System.out.println(categories.size());
-        //ArrayAdapter<String> adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, categories);
     }
 
     @Override

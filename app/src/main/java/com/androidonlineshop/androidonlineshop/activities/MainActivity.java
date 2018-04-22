@@ -61,11 +61,7 @@ public class MainActivity extends AppCompatActivity{
 
 
     }
-    public static void getAppDatabase(){
-        final DatabaseCreator databaseCreator = DatabaseCreator.getInstance(this.getApplication());
-        databaseCreator.createDb(getBaseContext());
 
-    }
 
     public void selectItemDrawer(MenuItem menuItem){
 
