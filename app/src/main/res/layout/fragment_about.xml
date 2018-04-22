@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginHorizontal="20dp"
     tools:context="com.androidonlineshop.androidonlineshop.fragments.AboutFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -11,6 +10,6 @@
         android:layout_height="match_parent"
         android:textAlignment="center"
         android:textSize="20sp"
-        android:text="App made by Ibrahim Beqiri and Mikko Lerto for course Développement Mobile e Cloud in 2018" />
+        android:text="@string/lang_about_text" />
 
 </FrameLayout>

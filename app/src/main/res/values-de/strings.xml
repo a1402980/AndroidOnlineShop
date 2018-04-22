@@ -13,4 +13,7 @@
     <string name="lang_menu_settings">Einstellungen</string>
     <string name="lang_menu_about">Über</string>
     <string name="lang_intro">cbay ist eine Online-Verkaufsplattform.</string>
+    <string name="lang_welcome">Willkommen</string>
+    <string name="lang_choose_language">Wählen Sie die Sprache der Anwendung:</string>
+    <string name="lang_about_text">App von Ibrahim Beqiri und Mikko Lerto für den Kurs Développement Mobile e Cloud 2018</string>
 </resources>

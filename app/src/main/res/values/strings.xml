@@ -17,6 +17,8 @@
     <string name="lang_menu_about">About</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="lang_welcome">Welcome</string>
     <string name="lang_intro">cbay is an online selling and buying platform.</string>
+    <string name="lang_choose_language">Choose app language:</string>
+    <string name="lang_about_text">App made by Ibrahim Beqiri and Mikko Lerto for course Développement Mobile e Cloud in 2018</string>
 </resources>
