@@ -56,10 +56,7 @@ public class MainActivity extends AppCompatActivity{
             fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment, BACK_STACK_ROOT_TAG).commit();
         }
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, nvDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        nvDrawer.addDrawerListener(toggle);
-        toggle.syncState();
+
 
     }
 
