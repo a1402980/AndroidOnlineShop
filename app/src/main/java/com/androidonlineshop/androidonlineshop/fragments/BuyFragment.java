@@ -54,6 +54,7 @@ public class BuyFragment extends Fragment {
 
         //set page title from strings
         getActivity().setTitle(getResources().getText(R.string.lang_menu_buy_items));
+
     }
 
     @Override
