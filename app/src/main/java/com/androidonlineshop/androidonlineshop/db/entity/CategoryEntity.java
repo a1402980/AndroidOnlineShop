@@ -1,41 +1,35 @@
-package com.androidonlineshop.androidonlineshop.model;
+package com.androidonlineshop.androidonlineshop.db.entity;
 
-import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
-import java.io.Serializable;
-
 /**
- * Created by ibraa on 27-Mar-18.
+ * Created by ibraa on 17-Apr-18.
  */
 
-@Entity
-public class Category{
+@Entity(tableName = "category")
+public class CategoryEntity{
 
     @PrimaryKey(autoGenerate = true)
-    private int categoryid;
+    private long id;
 
-    @ColumnInfo(name = "name")
     private String name;
-
-    @ColumnInfo(name = "description")
     private String description;
 
-    public Category() {}
+    public CategoryEntity() {}
 
-    public Category(String name, String description)
+    public CategoryEntity(String name, String description)
     {
         this.name = name;
         this.description = description;
     }
 
-    public int getCategoryid() {
-        return categoryid;
+    public long getId() {
+        return id;
     }
 
-    public void setCategoryid(int categoryid) {
-        this.categoryid = categoryid;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -54,6 +48,4 @@ public class Category{
         this.description = description;
     }
 
-
 }
-

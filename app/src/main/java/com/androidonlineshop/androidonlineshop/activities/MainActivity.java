@@ -2,12 +2,10 @@ package com.androidonlineshop.androidonlineshop.activities;
 
 
 import android.arch.persistence.room.Room;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -27,12 +25,9 @@ import com.androidonlineshop.androidonlineshop.fragments.MainFragment;
 import com.androidonlineshop.androidonlineshop.fragments.SellFragment;
 import com.androidonlineshop.androidonlineshop.fragments.SettingsFragment;
 import com.androidonlineshop.androidonlineshop.fragments.ShoppingCartFragment;
-import com.androidonlineshop.androidonlineshop.model.Item;
-import com.androidonlineshop.androidonlineshop.db.Database;
 
 public class MainActivity extends AppCompatActivity{
 
-    private Database db;
     private final String BACK_STACK_ROOT_TAG = "MAIN";
 
     @Override
@@ -40,8 +35,6 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        db = Room.databaseBuilder(getApplicationContext(),
-                Database.class, "onlineshop").build();
 
         NavigationView nvDrawer = (NavigationView) findViewById(R.id.navigation);
         drawerSetup(nvDrawer);
@@ -69,36 +62,6 @@ public class MainActivity extends AppCompatActivity{
         toggle.syncState();
 
     }
-    public void testing()
-    {
-        Item item = new Item();
-        item.setName("ttette");
-        item.setDescription("tetetete");
-        item.setPrice(5.00);
-        item.setRating(5);
-
-
-        db.itemDAO().insertItem(item);
-    }
-    private static Item addItem(final Database db, Item item) {
-        db.itemDAO().insertItem(item);
-        return item;
-    }
-
-    private static void populateWithTestData(Database db) {
-        Item item = new Item();
-        item.setName("ttette");
-        item.setDescription("tetetete");
-        item.setPrice(5.00);
-        item.setRating(5);
-
-
-        addItem(db, item);
-    }
-
-
-
-
 
 
     public void selectItemDrawer(MenuItem menuItem){
