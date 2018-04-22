@@ -15,11 +15,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidonlineshop.androidonlineshop.R;
-import com.androidonlineshop.androidonlineshop.db.DatabaseCreator;
 import com.androidonlineshop.androidonlineshop.fragments.AboutFragment;
 import com.androidonlineshop.androidonlineshop.fragments.BuyFragment;
 import com.androidonlineshop.androidonlineshop.fragments.CategoriesFragment;
@@ -37,14 +35,11 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final DatabaseCreator databaseCreator = DatabaseCreator.getInstance(this.getApplication());
-        databaseCreator.createDb(this.getApplication());
 
         NavigationView nvDrawer = (NavigationView) findViewById(R.id.navigation);
         drawerSetup(nvDrawer);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar);
-        setSupportActionBar(toolbar);
+
 
 
         if (savedInstanceState == null) {
@@ -66,7 +61,6 @@ public class MainActivity extends AppCompatActivity{
 
 
     public void selectItemDrawer(MenuItem menuItem){
-        Fragment myFragment = null;
 
         View v = this.findViewById(android.R.id.content).getRootView();
 
