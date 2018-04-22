@@ -20,13 +20,27 @@
             android:hint="@string/lang_name"
             />
 
-        <EditText
-            android:id="@+id/itemprice"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/lang_price"
-            android:ems="10"
-            android:inputType="numberDecimal"/>
+            android:layout_height="59dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/itemprice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/lang_price"
+                android:inputType="numberDecimal" />
+            <Spinner
+                android:id="@+id/spinner1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:background="@android:drawable/btn_dropdown"
+                android:spinnerMode="dropdown"/>
+        </LinearLayout>
 
         <EditText
             android:id="@+id/editText3"
