@@ -130,6 +130,8 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
+
+
     private void drawerSetup(NavigationView navigationView){
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
