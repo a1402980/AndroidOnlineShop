@@ -31,6 +31,10 @@ public class ItemFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+        //set page title from strings
+        getActivity().setTitle(getResources().getText(R.string.lang_menu_buy_items));
+
     }
 
     @Override
