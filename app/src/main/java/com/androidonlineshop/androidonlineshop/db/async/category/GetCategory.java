@@ -12,7 +12,7 @@ import java.lang.ref.WeakReference;
  * Created by ibraa on 17-Apr-18.
  */
 
-public class GetCategory extends AsyncTask<Long, Void, CategoryEntity> {
+public class GetCategory extends AsyncTask<String, Void, CategoryEntity> {
 
     // Weak references will still allow the Activity to be garbage-collected
     private final WeakReference<View> mView;
@@ -22,8 +22,8 @@ public class GetCategory extends AsyncTask<Long, Void, CategoryEntity> {
     }
 
     @Override
-    protected CategoryEntity doInBackground(Long... longs) {
+    protected CategoryEntity doInBackground(String... strings) {
         DatabaseCreator dbCreator = DatabaseCreator.getInstance(mView.get().getContext());
-        return dbCreator.getDatabase().categoryDAO().findById(longs[0]);
+        return dbCreator.getDatabase().categoryDAO().findById(strings[0]);
     }
 }

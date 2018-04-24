@@ -3,12 +3,14 @@ package com.androidonlineshop.androidonlineshop.db.entity;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.io.Serializable;
+
 /**
  * Created by ibraa on 17-Apr-18.
  */
 
 @Entity(tableName = "category")
-public class CategoryEntity{
+public class CategoryEntity implements Serializable{
 
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -18,8 +20,9 @@ public class CategoryEntity{
 
     public CategoryEntity() {}
 
-    public CategoryEntity(String name, String description)
+    public CategoryEntity(long id, String name, String description)
     {
+        this.id = id;
         this.name = name;
         this.description = description;
     }
