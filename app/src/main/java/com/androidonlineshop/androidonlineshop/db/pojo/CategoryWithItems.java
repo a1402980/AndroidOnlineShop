@@ -16,6 +16,6 @@ public class CategoryWithItems {
     @Embedded
     public CategoryEntity category;
 
-    @Relation(parentColumn = "id", entityColumn = "name", entity = ItemEntity.class)
+    @Relation(parentColumn = "id", entityColumn = "categoryid", entity = ItemEntity.class)
     public List<ItemEntity> items;
 }

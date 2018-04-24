@@ -111,7 +111,7 @@ public class CategoriesFragment extends Fragment {
                 FragmentManager fragmentManager = getFragmentManager();
                 BuyFragment buyFragment = new BuyFragment();
                 Bundle bundle = new Bundle();
-                bundle.putInt("id", position);
+                bundle.putSerializable("category", categories.get(position));
                 buyFragment.setArguments(bundle);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, buyFragment, BACK_STACK_ROOT_TAG).commit();
             }

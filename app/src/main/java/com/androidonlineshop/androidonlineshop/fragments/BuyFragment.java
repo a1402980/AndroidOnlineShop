@@ -5,11 +5,21 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.androidonlineshop.androidonlineshop.R;
+import com.androidonlineshop.androidonlineshop.db.async.item.GetItems;
+import com.androidonlineshop.androidonlineshop.db.entity.CategoryEntity;
+import com.androidonlineshop.androidonlineshop.db.entity.ItemEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class BuyFragment extends Fragment {
@@ -21,6 +31,11 @@ public class BuyFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private ListView itemsListView;
+    private List<ItemEntity> items;
+    private CategoryEntity category;
+
+    private final String BACK_STACK_ROOT_TAG = "MAIN";
 
 
     public BuyFragment() {
@@ -61,26 +76,70 @@ public class BuyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_buy, container, false);
+        View view = inflater.inflate(R.layout.fragment_buy, container, false);
+
+        itemsListView = view.findViewById(R.id.itemsListView);
+
+        return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Bundle bundle = this.getArguments();
+        if(bundle != null)
+        {
+            category = (CategoryEntity) bundle.getSerializable("category");
+        }
+
+        items = new ArrayList<>();
+        List<String> itemNames = new ArrayList<>();
+
+        try {
+            items = new GetItems(getView()).execute().get();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        if(category != null) {
+            for (ItemEntity item : items) {
+                if (item.getCategoryid() == category.getId()) {
+                    itemNames.add(item.getName());
+                }
+            }
+        }
+        else
+        {
+            for (ItemEntity item : items) {
+                itemNames.add(item.getName());
+            }
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_1, itemNames);
+        itemsListView.setAdapter(adapter);
+
+        itemsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                FragmentManager fragmentManager = getFragmentManager();
+                ItemFragment itemFragment = new ItemFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("item", items.get(position));
+                itemFragment.setArguments(bundle);
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, itemFragment, BACK_STACK_ROOT_TAG).commit();
+            }
+
+        });
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-
-        Bundle bundle = this.getArguments();
-        if(bundle != null)
-        {
-            int id = bundle.getInt("id");
-            System.out.println(id);;
-        }
     }
 
 

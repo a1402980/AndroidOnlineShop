@@ -6,13 +6,9 @@
 
     <!-- TODO: Update blank fragment layout -->
     <ListView
+        android:id="@+id/itemsListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="BUY STUFF" />
 
 </FrameLayout>

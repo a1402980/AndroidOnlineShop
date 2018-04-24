@@ -7,6 +7,7 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
+import com.androidonlineshop.androidonlineshop.db.entity.CategoryEntity;
 import com.androidonlineshop.androidonlineshop.db.entity.ItemEntity;
 
 import java.util.List;
@@ -20,6 +21,9 @@ public interface ItemDAO {
 
     @Query("SELECT * FROM item")
     List<ItemEntity> getAllItems();
+
+    @Query("SELECT * FROM item where id = :id")
+    ItemEntity findById(Long id);
 
     @Query("SELECT * FROM item where name = :name")
     ItemEntity findByName(String name);

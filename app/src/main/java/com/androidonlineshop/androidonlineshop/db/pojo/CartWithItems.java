@@ -17,6 +17,6 @@ public class CartWithItems {
     @Embedded
     public CartEntity cart;
 
-    @Relation(parentColumn = "id", entityColumn = "name", entity = ItemEntity.class)
+    @Relation(parentColumn = "id", entityColumn = "cartid", entity = ItemEntity.class)
     public List<ItemEntity> items;
 }

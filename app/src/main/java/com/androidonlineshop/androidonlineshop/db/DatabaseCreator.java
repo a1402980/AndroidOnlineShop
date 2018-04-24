@@ -77,7 +77,7 @@ public class DatabaseCreator {
 
                 // Add some data to the database
                 generateData(db);
-
+                
                 Log.d(TAG, "DB was populated in thread " + Thread.currentThread().getName());
 
                 mDb = db;
@@ -98,23 +98,30 @@ public class DatabaseCreator {
         List<ItemEntity> items = new ArrayList<>();
         List<CategoryEntity> categories = new ArrayList<>();
 
-        CategoryEntity accessories = new CategoryEntity("Accessories", "In this category belong accessories!");
-        CategoryEntity laptops = new CategoryEntity("Laptop", "In this category belong laptops!");
+        CategoryEntity accessories = new CategoryEntity(1L,"Accessories", "In this category belong accessories!");
+        CategoryEntity laptops = new CategoryEntity(2L, "Laptop", "In this category belong laptops!");
 
         categories.add(accessories);
         categories.add(laptops);
 
         CartEntity cart = new CartEntity();
 
-        ItemEntity lenovo = new ItemEntity("Lenovo Laptop", 565.00, "New laptop.", 5, cart.getId(), laptops.getId());
-        ItemEntity hp = new ItemEntity("HP Laptop", 450.00, "New laptop.", 4, cart.getId(), laptops.getId());
-        ItemEntity headphones = new ItemEntity("JBL HeadPhones", 45.00, "New headphones.", 5, cart.getId(), accessories.getId());
-        ItemEntity phonecase = new ItemEntity("Iphone 7 case", 15.00, "Phone Case for iphone 7", 3, cart.getId(), accessories.getId());
+        ItemEntity lenovo = new ItemEntity("Lenovo Laptop", 565.00, "New laptop.", 5, 0, laptops.getId());
+        ItemEntity hp = new ItemEntity("HP Laptop", 450.00, "New laptop.", 4, 0, laptops.getId());
+        ItemEntity headphones = new ItemEntity("JBL HeadPhones", 45.00, "New headphones.", 5, 0, accessories.getId());
+        ItemEntity phonecase = new ItemEntity("Iphone 7 case", 15.00, "Phone Case for iphone 7", 3, 0, accessories.getId());
+        ItemEntity test = new ItemEntity();
+        test.setName("TEST");
+        test.setRating(5);
+        test.setPrice(500);
+        test.setDescription("testtesttest");
+        test.setCategoryid(laptops.getId());
 
         items.add(lenovo);
         items.add(hp);
         items.add(headphones);
         items.add(phonecase);
+        items.add(test);
 
         cart.setQuantity(items.size());
 
