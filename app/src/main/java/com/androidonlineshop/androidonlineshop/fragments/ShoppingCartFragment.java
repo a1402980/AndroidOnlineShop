@@ -63,7 +63,9 @@ public class ShoppingCartFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_shopping_cart, container, false);
 
-        cartItems = view.findViewById(R.id.cartItems);
+
+        //THIS LINE CAUSES HELL UPON MY EMULATOR
+        //cartItems = view.findViewById(R.id.cartItems);
 
         return view;
     }
