@@ -26,8 +26,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidonlineshop.androidonlineshop.R;
+import com.androidonlineshop.androidonlineshop.db.async.cart.UpdateCart;
+import com.androidonlineshop.androidonlineshop.db.async.category.CreateCategory;
+import com.androidonlineshop.androidonlineshop.db.async.category.DeleteCategory;
 import com.androidonlineshop.androidonlineshop.db.async.category.GetCategories;
 import com.androidonlineshop.androidonlineshop.db.async.category.GetCategoriesWithItems;
+import com.androidonlineshop.androidonlineshop.db.async.category.UpdateCategory;
 import com.androidonlineshop.androidonlineshop.db.entity.CategoryEntity;
 import com.androidonlineshop.androidonlineshop.db.entity.ItemEntity;
 import com.androidonlineshop.androidonlineshop.db.pojo.CategoryWithItems;
@@ -43,6 +47,8 @@ public class CategoriesFragment extends Fragment {
 
     private ListView categoriesListView;
     private List<CategoryEntity> categories;
+    private int categoryPosition;
+    private CategoryEntity category;
 
     public CategoriesFragment() {
         // Required empty public constructor
@@ -123,7 +129,7 @@ public class CategoriesFragment extends Fragment {
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
                 // TODO Auto-generated method stub
-
+                categoryPosition = pos;
                 Log.v("long clicked","pos: " + pos);
                 generateDialog(1);
                 return true;
@@ -202,7 +208,14 @@ public class CategoriesFragment extends Fragment {
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.lang_delete), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    alertDialog.dismiss();
+                    try{
+                         new DeleteCategory(getView()).execute(categories.get(categoryPosition)).get();
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                    refreshFragment();
                 }
             });
 
@@ -216,8 +229,12 @@ public class CategoriesFragment extends Fragment {
             final EditText etInput    = new EditText(getActivity());
             final EditText etInput2    = new EditText(getActivity());
 
-            etInput.setHint(getString(R.string.lang_name));
-            etInput2.setHint(getString(R.string.lang_description));
+            category = categories.get(categoryPosition);
+            etInput.setText(category.getName());
+            etInput2.setText(category.getDescription());
+
+            //etInput.setHint(getString(R.string.lang_name));
+            //etInput2.setHint(getString(R.string.lang_description));
 
             //SET VALUES FOR etInput & etInput2 here!
 
@@ -238,7 +255,25 @@ public class CategoriesFragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                //UPDATE CODE HERE
+
+                    String categoryName = etInput.getText().toString();
+                    String categoryDescription = etInput2.getText().toString();
+
+                    if(!categoryName.isEmpty() && !categoryDescription.isEmpty()) {
+                        category.setName(categoryName);
+                        category.setDescription(categoryDescription);
+                        try {
+                            new UpdateCategory(getView()).execute(category).get();
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else
+                    {
+                        Toast.makeText(getActivity(), "Some fields are empty!", Toast.LENGTH_LONG);
+                    }
+                    refreshFragment();
 
                 }
             });
@@ -256,19 +291,19 @@ public class CategoriesFragment extends Fragment {
 
             LinearLayout layout       = new LinearLayout(getActivity());
             TextView tvMessage        = new TextView(getActivity());
-            final EditText etInput    = new EditText(getActivity());
-            final EditText etInput2    = new EditText(getActivity());
+            final EditText name    = new EditText(getActivity());
+            final EditText description    = new EditText(getActivity());
 
-            etInput.setHint(getString(R.string.lang_name));
-            etInput2.setHint(getString(R.string.lang_description));
+            name.setHint(getString(R.string.lang_name));
+            description.setHint(getString(R.string.lang_description));
 
             //tvMessage.setText(getString(R.string.lang_modify_delete));
             //tvMessage.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f);
-            etInput.setSingleLine();
+            name.setSingleLine();
             layout.setOrientation(LinearLayout.VERTICAL);
             //layout.addView(tvMessage);
-            layout.addView(etInput);
-            layout.addView(etInput2);
+            layout.addView(name);
+            layout.addView(description);
             layout.setPadding(50, 40, 50, 10);
 
             alertDialog.setView(layout);
@@ -278,9 +313,24 @@ public class CategoriesFragment extends Fragment {
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.lang_confirm), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    String categoryName = name.getText().toString();
+                    String categoryDescription = description.getText().toString();
+                    if(!categoryName.isEmpty() && !categoryDescription.isEmpty()) {
+                        CategoryEntity category = new CategoryEntity(categoryName, categoryDescription);
+                        try {
+                            boolean response = new CreateCategory(getView()).execute(category).get();
+                            System.out.println("Category inserted? " + response);
 
-                //INSERT CODE HERE
+                        } catch (Exception e) {
 
+                        }
+                    }
+                    else
+                    {
+                        Toast.makeText(getContext(), "Some fields are empty!", Toast.LENGTH_LONG);
+                    }
+                    //reset fragment
+                    refreshFragment();
                 }
             });
 
@@ -294,5 +344,13 @@ public class CategoriesFragment extends Fragment {
 
         alertDialog.show();
 
+    }
+    private void refreshFragment()
+    {
+        CategoriesFragment categoriesFragment = new CategoriesFragment();
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, categoriesFragment, BACK_STACK_ROOT_TAG)
+                .addToBackStack("categories")
+                .commit();
     }
 }
