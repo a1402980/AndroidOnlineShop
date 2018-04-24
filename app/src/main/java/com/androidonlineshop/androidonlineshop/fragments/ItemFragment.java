@@ -27,6 +27,7 @@ public class ItemFragment extends Fragment {
     private Button addToCartButton;
     private ItemEntity item;
     private CartEntity cart;
+    private TextView itemPrice;
 
     private final String BACK_STACK_ROOT_TAG = "MAIN";
 
@@ -67,6 +68,7 @@ public class ItemFragment extends Fragment {
         itemDescription = view.findViewById(R.id.itemDescription);
         itemRatingBar = view.findViewById(R.id.itemRatingBar);
         addToCartButton = view.findViewById(R.id.addToCartButton);
+        itemPrice = view.findViewById(R.id.itemPrice);
 
         return view;
     }
@@ -92,6 +94,7 @@ public class ItemFragment extends Fragment {
         itemName.setText(item.getName());
         itemDescription.setText(item.getDescription());
         itemRatingBar.setRating(item.getRating());
+        itemPrice.setText(item.getPrice()+"");
         addToCartButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
 
@@ -112,5 +115,6 @@ public class ItemFragment extends Fragment {
         });
 
     }
+
 
 }
