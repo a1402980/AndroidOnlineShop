@@ -69,15 +69,12 @@ public class SellFragment extends Fragment {
         saleItemDescription = view.findViewById(R.id.saleItemDescription);
         itemCategories = view.findViewById(R.id.itemCategories);
 
-
-
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         categories = new ArrayList<>();
         categoryNames = new ArrayList<>();
         try{
@@ -92,30 +89,39 @@ public class SellFragment extends Fragment {
         {
             e.printStackTrace();
         }
-        final String itemName = saleItemName.getText().toString();
-        final String itemDescription = saleItemDescription.getText().toString();
-        //final double itemPrice = Double.valueOf(saleItemPrice.getText().toString());
-        final int itemRating = Math.round(saleItemRatingBar.getRating());
 
         ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_spinner_item, categoryNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         itemCategories.setAdapter(adapter);
 
-        item = new ItemEntity("TEST", 5.00, "TETETETE", 4, 0, 1);
-
         saleItemButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
-                    try
-                    {
+
+                String itemName = saleItemName.getText().toString();
+                String itemDescription = saleItemDescription.getText().toString();
+                double price = 1;
+                if(!saleItemPrice.getText().toString().isEmpty()) {
+                     price = Double.valueOf(saleItemPrice.getText().toString());
+                }
+                int rating = Math.round(saleItemRatingBar.getRating());
+                int position = itemCategories.getSelectedItemPosition();
+
+                if(!itemName.isEmpty() && !itemDescription.isEmpty() && price > 0 && rating > 0) {
+                    item = new ItemEntity(itemName, price, itemDescription, rating, 0, position+1);
+                    try {
                         new CreateItem(getView()).execute(item).get();
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    Toast.makeText(getContext(), "You have put an item to sale!", Toast.LENGTH_LONG);
+                    Toast.makeText(getContext(), "You have put an item to sale!", Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    Toast.makeText(getContext(), "You need to fill all the fields in order to sell!", Toast.LENGTH_LONG).show();
+                }
+
             }
         });
-    }
 
+    }
 }

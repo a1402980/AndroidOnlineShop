@@ -1,6 +1,5 @@
 package com.androidonlineshop.androidonlineshop.fragments;
 
-import android.arch.persistence.room.Update;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -54,6 +53,8 @@ public class ItemFragment extends Fragment {
         //set page title from strings
         getActivity().setTitle(getResources().getText(R.string.lang_menu_buy_items));
 
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().addToBackStack(BACK_STACK_ROOT_TAG);
     }
 
     @Override
