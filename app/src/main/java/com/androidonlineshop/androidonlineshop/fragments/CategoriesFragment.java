@@ -124,7 +124,7 @@ public class CategoriesFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                //showDialog();
+                generateDialog(3);
             }
         });
 
@@ -207,6 +207,8 @@ public class CategoriesFragment extends Fragment {
             etInput.setHint(getString(R.string.lang_name));
             etInput2.setHint(getString(R.string.lang_description));
 
+            //SET VALUES FOR etInput & etInput2 here!
+
             //tvMessage.setText(getString(R.string.lang_modify_delete));
             //tvMessage.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f);
             etInput.setSingleLine();
@@ -224,7 +226,48 @@ public class CategoriesFragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
+                //UPDATE CODE HERE
 
+                }
+            });
+
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.lang_cancel), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    alertDialog.dismiss();
+                }
+            });
+        }else if(action == 3){
+
+            alertDialog.setTitle(getString(R.string.lang_add_category));
+            alertDialog.setCancelable(true);
+
+            LinearLayout layout       = new LinearLayout(getActivity());
+            TextView tvMessage        = new TextView(getActivity());
+            final EditText etInput    = new EditText(getActivity());
+            final EditText etInput2    = new EditText(getActivity());
+
+            etInput.setHint(getString(R.string.lang_name));
+            etInput2.setHint(getString(R.string.lang_description));
+
+            //tvMessage.setText(getString(R.string.lang_modify_delete));
+            //tvMessage.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f);
+            etInput.setSingleLine();
+            layout.setOrientation(LinearLayout.VERTICAL);
+            //layout.addView(tvMessage);
+            layout.addView(etInput);
+            layout.addView(etInput2);
+            layout.setPadding(50, 40, 50, 10);
+
+            alertDialog.setView(layout);
+
+
+
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.lang_confirm), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                //INSERT CODE HERE
 
                 }
             });
