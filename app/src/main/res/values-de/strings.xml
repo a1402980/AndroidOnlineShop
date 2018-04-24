@@ -25,4 +25,5 @@
     <string name="lang_modify_delete">Artikel ändern oder löschen?</string>
     <string name="lang_delete">Tilgen</string>
     <string name="lang_modify">Modifizieren</string>
+    <string name="lang_shopping_cart_title">Artikel im warenkorb</string>
 </resources>

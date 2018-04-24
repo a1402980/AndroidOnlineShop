@@ -7,12 +7,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.androidonlineshop.androidonlineshop.R;
@@ -38,6 +42,15 @@ public class MainActivity extends AppCompatActivity{
         drawerSetup(nvDrawer);
 
 
+        //setup toolbar with a button to open nav drawer
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+        actionbar.setDisplayHomeAsUpEnabled(true);
+
+
+
         if (savedInstanceState == null) {
             Fragment fragment = null;
             Class fragmentClass = MainFragment.class;
@@ -53,7 +66,21 @@ public class MainActivity extends AppCompatActivity{
 
 
 
+
     }
+
+    @Override   //open navigation drawer with a button
+    public boolean onOptionsItemSelected(MenuItem item) {
+        final DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     public void selectItemDrawer(MenuItem menuItem){
 
