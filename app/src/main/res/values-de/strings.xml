@@ -17,4 +17,9 @@
     <string name="lang_choose_language">Wählen Sie die Sprache der Anwendung:</string>
     <string name="lang_about_text">App von Ibrahim Beqiri und Mikko Lerto für den Kurs Développement Mobile e Cloud 2018</string>
     <string name="lang_add_to_cart">In den warenkorb</string>
+    <string name="lang_add_category">Neue Kategorie hinzufügen</string>
+    <string name="lang_delete_category">Eine Kategorie löschen</string>
+    <string name="lang_cancel">Abbestellen</string>
+    <string name="lang_confirm">Bestätigen</string>
+    <string name="lang_write_category_name">Schreiben Sie den Namen der Kategorie:</string>
 </resources>

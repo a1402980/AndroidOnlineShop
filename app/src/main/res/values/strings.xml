@@ -1,8 +1,4 @@
 <resources>
-
-
-    <!-- TODO: Remove or change this placeholder text -->
-
     <string name="app_name" translatable="false">cbay</string>
     <string name="lang_name">Name</string>
     <string name="lang_price">Price</string>
@@ -15,14 +11,15 @@
     <string name="lang_menu_categories">Categories</string>
     <string name="lang_menu_settings">Settings</string>
     <string name="lang_menu_about">About</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="lang_welcome">Welcome</string>
     <string name="lang_intro">cbay is an online selling and buying platform.</string>
     <string name="lang_choose_language">Choose app language:</string>
     <string name="lang_about_text">App made by Ibrahim Beqiri and Mikko Lerto for course Développement Mobile e Cloud in 2018</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="lang_add_to_cart">Add to cart</string>
+    <string name="lang_add_category">Add a new category</string>
+    <string name="lang_delete_category">Delete a category</string>
+    <string name="lang_confirm">Confirm</string>
+    <string name="lang_cancel">Cancel</string>
+    <string name="lang_write_category_name">Write the name of the category:</string>
 </resources>
