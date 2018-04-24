@@ -42,6 +42,8 @@ public class SellFragment extends Fragment {
     private List<String> categoryNames;
     private ItemEntity item;
 
+    private final String BACK_STACK_ROOT_TAG = "MAIN";
+
     public SellFragment() {
         // Required empty public constructor
     }
@@ -114,6 +116,14 @@ public class SellFragment extends Fragment {
                         e.printStackTrace();
                     }
                     Toast.makeText(getContext(), "You have put an item to sale!", Toast.LENGTH_LONG).show();
+
+
+                    //reset fragment
+                    SellFragment sellFragment = new SellFragment();
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, sellFragment, BACK_STACK_ROOT_TAG)
+                            .addToBackStack("categories")
+                            .commit();
                 }
                 else
                 {

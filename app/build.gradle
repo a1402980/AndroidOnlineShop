@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.androidonlineshop.androidonlineshop"
-        minSdkVersion 14
+        minSdkVersion 23
         targetSdkVersion 23
         javaCompileOptions {
             annotationProcessorOptions {
