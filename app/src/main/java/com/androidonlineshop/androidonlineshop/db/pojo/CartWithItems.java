@@ -6,13 +6,14 @@ import android.arch.persistence.room.Relation;
 import com.androidonlineshop.androidonlineshop.db.entity.CartEntity;
 import com.androidonlineshop.androidonlineshop.db.entity.ItemEntity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by ibraa on 17-Apr-18.
  */
 
-public class CartWithItems {
+public class CartWithItems implements Serializable {
 
     @Embedded
     public CartEntity cart;

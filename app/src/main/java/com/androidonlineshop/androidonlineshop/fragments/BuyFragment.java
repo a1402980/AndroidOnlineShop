@@ -92,7 +92,7 @@ public class BuyFragment extends Fragment {
         }
 
         items = new ArrayList<>();
-        List<String> itemNames = new ArrayList<>();
+        final List<String> itemNames = new ArrayList<>();
 
         try {
             items = new GetItems(getView()).execute().get();
@@ -104,15 +104,17 @@ public class BuyFragment extends Fragment {
 
         if(category != null) {
             for (ItemEntity item : items) {
-                if (item.getCategoryid() == category.getId()) {
+                if (category.getId() == item.getCategoryid()) {
                     itemNames.add(item.getName());
                 }
             }
         }
         else
         {
+            System.out.println("**************************************8");
             for (ItemEntity item : items) {
                 itemNames.add(item.getName());
+
             }
         }
         ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_1, itemNames);
@@ -126,7 +128,8 @@ public class BuyFragment extends Fragment {
                 FragmentManager fragmentManager = getFragmentManager();
                 ItemFragment itemFragment = new ItemFragment();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("item", items.get(position));
+                bundle.putSerializable("itemName", itemNames.get(position));
+                System.out.println(items.get(position).getName());
                 itemFragment.setArguments(bundle);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, itemFragment, BACK_STACK_ROOT_TAG).commit();
             }

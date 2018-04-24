@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.androidonlineshop.androidonlineshop.R;
 import com.androidonlineshop.androidonlineshop.db.async.cart.GetCart;
 import com.androidonlineshop.androidonlineshop.db.async.cart.UpdateCart;
+import com.androidonlineshop.androidonlineshop.db.async.item.GetItem;
 import com.androidonlineshop.androidonlineshop.db.entity.CartEntity;
 import com.androidonlineshop.androidonlineshop.db.entity.ItemEntity;
 
@@ -26,6 +27,8 @@ public class ItemFragment extends Fragment {
     private RatingBar itemRatingBar;
     private Button addToCartButton;
     private ItemEntity item;
+    private Long itemId;
+    private String nameOfItem;
     private CartEntity cart;
     private TextView itemPrice;
 
@@ -53,9 +56,6 @@ public class ItemFragment extends Fragment {
 
         //set page title from strings
         getActivity().setTitle(getResources().getText(R.string.lang_menu_buy_items));
-
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().addToBackStack(BACK_STACK_ROOT_TAG);
     }
 
     @Override
@@ -80,16 +80,18 @@ public class ItemFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if(bundle != null)
         {
-            item = (ItemEntity) bundle.getSerializable("item");
+            nameOfItem = (String) bundle.getSerializable("itemName");
         }
 
         try{
             cart = new GetCart(getView()).execute().get();
+            item = new GetItem(getView()).execute(nameOfItem).get();
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
+
 
         itemName.setText(item.getName());
         itemDescription.setText(item.getDescription());

@@ -24,6 +24,6 @@ public class GetItem extends AsyncTask<String, Void, ItemEntity> {
     @Override
     protected ItemEntity doInBackground(String ... strings) {
         DatabaseCreator dbCreator = DatabaseCreator.getInstance(mView.get().getContext());
-        return dbCreator.getDatabase().itemDAO().findById(strings[0]);
+        return dbCreator.getDatabase().itemDAO().findByName(strings[0]);
     }
 }

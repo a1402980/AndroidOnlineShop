@@ -27,7 +27,10 @@ import android.widget.Toast;
 
 import com.androidonlineshop.androidonlineshop.R;
 import com.androidonlineshop.androidonlineshop.db.async.category.GetCategories;
+import com.androidonlineshop.androidonlineshop.db.async.category.GetCategoriesWithItems;
 import com.androidonlineshop.androidonlineshop.db.entity.CategoryEntity;
+import com.androidonlineshop.androidonlineshop.db.entity.ItemEntity;
+import com.androidonlineshop.androidonlineshop.db.pojo.CategoryWithItems;
 
 import java.util.ArrayList;
 import java.util.List;
