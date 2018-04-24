@@ -23,7 +23,7 @@ public interface ItemDAO {
     List<ItemEntity> getAllItems();
 
     @Query("SELECT * FROM item where id = :id")
-    ItemEntity findById(Long id);
+    ItemEntity findById(String id);
 
     @Query("SELECT * FROM item where name = :name")
     ItemEntity findByName(String name);

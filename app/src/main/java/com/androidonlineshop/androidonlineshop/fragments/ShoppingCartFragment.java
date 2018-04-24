@@ -3,12 +3,15 @@ package com.androidonlineshop.androidonlineshop.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.androidonlineshop.androidonlineshop.R;
+import com.androidonlineshop.androidonlineshop.db.entity.CartEntity;
+import com.androidonlineshop.androidonlineshop.db.entity.ItemEntity;
 
 
 public class ShoppingCartFragment extends Fragment {
@@ -20,6 +23,8 @@ public class ShoppingCartFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private CartEntity cart;
 
 
     public ShoppingCartFragment() {
@@ -62,5 +67,17 @@ public class ShoppingCartFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_shopping_cart, container, false);
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
+        Bundle bundle = this.getArguments();
+        if(bundle != null)
+        {
+             cart = (CartEntity) bundle.getSerializable("cart");
+        }
+
+        System.out.println(cart.getId());
+        System.out.println(cart.getQuantity());
+    }
 }

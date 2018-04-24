@@ -27,7 +27,7 @@ public interface CategoryDAO {
     CategoryEntity findByName(String name);
 
     @Query("SELECT * FROM category where id = :id")
-    CategoryEntity findById(Long id);
+    CategoryEntity findById(String id);
 
     @Query("SELECT * FROM category")
     List<CategoryWithItems> loadCategoriesWithItems();

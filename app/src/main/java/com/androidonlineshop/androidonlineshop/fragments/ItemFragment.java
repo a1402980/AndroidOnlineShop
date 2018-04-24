@@ -1,16 +1,32 @@
 package com.androidonlineshop.androidonlineshop.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 import com.androidonlineshop.androidonlineshop.R;
+import com.androidonlineshop.androidonlineshop.db.async.cart.GetCart;
+import com.androidonlineshop.androidonlineshop.db.entity.CartEntity;
+import com.androidonlineshop.androidonlineshop.db.entity.ItemEntity;
 
 
 public class ItemFragment extends Fragment {
 
+    private TextView itemName;
+    private TextView itemDescription;
+    private RatingBar itemRatingBar;
+    private Button addToCartButton;
+    private ItemEntity item;
+    private CartEntity cart;
+
+    private final String BACK_STACK_ROOT_TAG = "MAIN";
 
     public ItemFragment() {
         // Required empty public constructor
@@ -37,8 +53,54 @@ public class ItemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_item, container, false);
+        View view = inflater.inflate(R.layout.fragment_item, container, false);
+
+        itemName = view.findViewById(R.id.itemName);
+        itemDescription = view.findViewById(R.id.itemDescription);
+        itemRatingBar = view.findViewById(R.id.itemRatingBar);
+        addToCartButton = view.findViewById(R.id.addToCartButton);
+
+        return view;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Bundle bundle = this.getArguments();
+        if(bundle != null)
+        {
+            item = (ItemEntity) bundle.getSerializable("item");
+        }
+
+        try{
+            cart = new GetCart(getView()).execute().get();
+            System.out.println("************************************************************");
+            System.out.println(cart.getId());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        itemName.setText(item.getName());
+        itemDescription.setText(item.getDescription());
+        itemRatingBar.setRating(item.getRating());
+        addToCartButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+
+                item.setCartid(cart.getId());
+                cart.setQuantity(+1);
+
+                FragmentManager fragmentManager = getFragmentManager();
+                ShoppingCartFragment cartFragment = new ShoppingCartFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("cart", cart);
+                cartFragment.setArguments(bundle);
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, cartFragment, BACK_STACK_ROOT_TAG).commit();
+            }
+        });
+
+    }
 
 }

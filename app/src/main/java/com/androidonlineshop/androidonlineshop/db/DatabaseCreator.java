@@ -77,7 +77,7 @@ public class DatabaseCreator {
 
                 // Add some data to the database
                 generateData(db);
-                
+
                 Log.d(TAG, "DB was populated in thread " + Thread.currentThread().getName());
 
                 mDb = db;
@@ -105,23 +105,17 @@ public class DatabaseCreator {
         categories.add(laptops);
 
         CartEntity cart = new CartEntity();
+        cart.setId(1L);
 
         ItemEntity lenovo = new ItemEntity("Lenovo Laptop", 565.00, "New laptop.", 5, 0, laptops.getId());
         ItemEntity hp = new ItemEntity("HP Laptop", 450.00, "New laptop.", 4, 0, laptops.getId());
         ItemEntity headphones = new ItemEntity("JBL HeadPhones", 45.00, "New headphones.", 5, 0, accessories.getId());
         ItemEntity phonecase = new ItemEntity("Iphone 7 case", 15.00, "Phone Case for iphone 7", 3, 0, accessories.getId());
-        ItemEntity test = new ItemEntity();
-        test.setName("TEST");
-        test.setRating(5);
-        test.setPrice(500);
-        test.setDescription("testtesttest");
-        test.setCategoryid(laptops.getId());
 
         items.add(lenovo);
         items.add(hp);
         items.add(headphones);
         items.add(phonecase);
-        items.add(test);
 
         cart.setQuantity(items.size());
 

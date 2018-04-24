@@ -26,7 +26,10 @@ public interface CartDAO {
     int countCartItems();
 
     @Query("SELECT * FROM cart WHERE id = :id")
-    CartEntity getById(Long id);
+    CartEntity getById(String id);
+
+    @Query("SELECT * FROM cart")
+    CartEntity getCart();
 
     @Insert
     void insertAll(List<CartEntity> carts);
