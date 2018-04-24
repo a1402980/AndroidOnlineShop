@@ -12,13 +12,12 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/itemname"
+            android:id="@+id/saleItemName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName"
             android:hint="@string/lang_name"
-            />
+            android:inputType="textPersonName" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,28 +25,29 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/itemprice"
+                android:id="@+id/saleItemPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="@string/lang_price"
                 android:inputType="numberDecimal" />
+
             <Spinner
-                android:id="@+id/spinner1"
+                android:id="@+id/itemCategories"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:background="@android:drawable/btn_dropdown"
-                android:spinnerMode="dropdown"/>
+                android:spinnerMode="dropdown" />
         </LinearLayout>
 
         <EditText
-            android:id="@+id/editText3"
+            android:id="@+id/saleItemDescription"
             android:layout_width="match_parent"
             android:layout_height="104dp"
-            android:hint="@string/lang_description"
             android:ems="10"
+            android:hint="@string/lang_description"
             android:inputType="textMultiLine" />
 
         <TextView
@@ -59,15 +59,16 @@
             android:text="@string/lang_item_condition" />
 
         <RatingBar
-            android:layout_gravity="center"
-            android:id="@+id/ratingBar"
+            android:id="@+id/saleRatingBar"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
 
         <Button
+            android:id="@+id/saleItemButton"
             android:layout_width="220dp"
-            android:layout_gravity="center"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:drawableRight="@drawable/ic_attach_money_black_24dp"
             android:text="@string/lang_sell_item" />
     </LinearLayout>

@@ -77,7 +77,7 @@ public class ShoppingCartFragment extends Fragment {
              cart = (CartEntity) bundle.getSerializable("cart");
         }
 
-        System.out.println(cart.getId());
-        System.out.println(cart.getQuantity());
+       // System.out.println(cart.getId());
+        //System.out.println(cart.getQuantity());
     }
 }

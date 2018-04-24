@@ -1,5 +1,6 @@
 package com.androidonlineshop.androidonlineshop.fragments;
 
+import android.arch.persistence.room.Update;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,9 +11,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidonlineshop.androidonlineshop.R;
 import com.androidonlineshop.androidonlineshop.db.async.cart.GetCart;
+import com.androidonlineshop.androidonlineshop.db.async.cart.UpdateCart;
 import com.androidonlineshop.androidonlineshop.db.entity.CartEntity;
 import com.androidonlineshop.androidonlineshop.db.entity.ItemEntity;
 
@@ -79,8 +82,6 @@ public class ItemFragment extends Fragment {
 
         try{
             cart = new GetCart(getView()).execute().get();
-            System.out.println("************************************************************");
-            System.out.println(cart.getId());
         }
         catch (Exception e)
         {
@@ -95,13 +96,17 @@ public class ItemFragment extends Fragment {
 
                 item.setCartid(cart.getId());
                 cart.setQuantity(+1);
-
-                FragmentManager fragmentManager = getFragmentManager();
-                ShoppingCartFragment cartFragment = new ShoppingCartFragment();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("cart", cart);
-                cartFragment.setArguments(bundle);
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, cartFragment, BACK_STACK_ROOT_TAG).commit();
+                try {
+                    new UpdateCart(getView()).execute(cart).get();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+                Toast.makeText(getContext(), "Item has been added to the cart!", Toast.LENGTH_LONG).show();
+                System.out.println("************************************************************");
+                System.out.println("************************************************************");
+                System.out.println(cart.getQuantity());
             }
         });
 

@@ -3,17 +3,44 @@ package com.androidonlineshop.androidonlineshop.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RatingBar;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidonlineshop.androidonlineshop.R;
+import com.androidonlineshop.androidonlineshop.db.async.cart.UpdateCart;
+import com.androidonlineshop.androidonlineshop.db.async.category.GetCategories;
+import com.androidonlineshop.androidonlineshop.db.async.item.CreateItem;
+import com.androidonlineshop.androidonlineshop.db.entity.CategoryEntity;
+import com.androidonlineshop.androidonlineshop.db.entity.ItemEntity;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class SellFragment extends Fragment {
 
+
+    private EditText saleItemName;
+    private EditText saleItemPrice;
+    private Spinner itemCategories;
+    private RatingBar saleItemRatingBar;
+    private Button saleItemButton;
+    private EditText saleItemDescription;
+
+    private List<CategoryEntity> categories;
+    private List<String> categoryNames;
+    private ItemEntity item;
 
     public SellFragment() {
         // Required empty public constructor
@@ -33,8 +60,62 @@ public class SellFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sell, container, false);
+        View view = inflater.inflate(R.layout.fragment_sell, container, false);
+
+        saleItemName = view.findViewById(R.id.saleItemName);
+        saleItemPrice = view.findViewById(R.id.saleItemPrice);
+        saleItemRatingBar = view.findViewById(R.id.saleRatingBar);
+        saleItemButton = view.findViewById(R.id.saleItemButton);
+        saleItemDescription = view.findViewById(R.id.saleItemDescription);
+        itemCategories = view.findViewById(R.id.itemCategories);
+
+
+
+        return view;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        categories = new ArrayList<>();
+        categoryNames = new ArrayList<>();
+        try{
+            categories = new GetCategories(getView()).execute().get();
+            for(CategoryEntity category : categories)
+            {
+                categoryNames.add(category.getName());
+            }
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        final String itemName = saleItemName.getText().toString();
+        final String itemDescription = saleItemDescription.getText().toString();
+        //final double itemPrice = Double.valueOf(saleItemPrice.getText().toString());
+        final int itemRating = Math.round(saleItemRatingBar.getRating());
+
+        ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_spinner_item, categoryNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        itemCategories.setAdapter(adapter);
+
+        item = new ItemEntity("TEST", 5.00, "TETETETE", 4, 0, 1);
+
+        saleItemButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                    try
+                    {
+                        new CreateItem(getView()).execute(item).get();
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                    Toast.makeText(getContext(), "You have put an item to sale!", Toast.LENGTH_LONG);
+            }
+        });
+    }
 
 }
