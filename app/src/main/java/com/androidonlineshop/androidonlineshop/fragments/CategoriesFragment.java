@@ -96,12 +96,21 @@ public class CategoriesFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                FragmentManager fragmentManager = getFragmentManager();
+
+
+
+                //FragmentManager fragmentManager = getFragmentManager();
                 BuyFragment buyFragment = new BuyFragment();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("category", categories.get(position));
                 buyFragment.setArguments(bundle);
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, buyFragment, BACK_STACK_ROOT_TAG).commit();
+
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, buyFragment, BACK_STACK_ROOT_TAG)
+                        .addToBackStack("categories")
+                        .commit();
+
+                //fragmentManager.beginTransaction().replace(R.id.fragment_container, buyFragment, BACK_STACK_ROOT_TAG).commit();
             }
 
         });

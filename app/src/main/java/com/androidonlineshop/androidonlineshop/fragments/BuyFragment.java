@@ -128,7 +128,13 @@ public class BuyFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("item", items.get(position));
                 itemFragment.setArguments(bundle);
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, itemFragment, BACK_STACK_ROOT_TAG).commit();
+
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, itemFragment, BACK_STACK_ROOT_TAG)
+                        .addToBackStack("categories")
+                        .commit();
+
+                //fragmentManager.beginTransaction().replace(R.id.fragment_container, itemFragment, BACK_STACK_ROOT_TAG).commit();
             }
 
         });
