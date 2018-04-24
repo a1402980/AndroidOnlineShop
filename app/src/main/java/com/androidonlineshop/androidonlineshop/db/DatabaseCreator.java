@@ -98,16 +98,11 @@ public class DatabaseCreator {
         List<ItemEntity> items = new ArrayList<>();
         List<CategoryEntity> categories = new ArrayList<>();
 
-<<<<<<< HEAD
         CategoryEntity accessories = new CategoryEntity(1L,"Accessories", "In this category belong accessories!");
         CategoryEntity laptops = new CategoryEntity(2L, "Laptop", "In this category belong laptops!");
-=======
-        CategoryEntity accessories = new CategoryEntity("Accessories", "In this category belong accessories!");
-        CategoryEntity laptops = new CategoryEntity("Laptop", "In this category belong laptops!");
-        CategoryEntity TVs = new CategoryEntity("TVs", "In this category belong TVs!");
-        CategoryEntity phones = new CategoryEntity("Phones", "In this category belong phones");
-        CategoryEntity printers = new CategoryEntity("Printers", "In this category belong printers");
->>>>>>> 0fe833d78bdc3daa5894cda3c7d9d915e0a4ebff
+        CategoryEntity TVs = new CategoryEntity(3L, "TVs", "In this category belong TVs!");
+        CategoryEntity phones = new CategoryEntity(4L, "Phones", "In this category belong phones");
+        CategoryEntity printers = new CategoryEntity(5L, "Printers", "In this category belong printers");
 
         categories.add(accessories);
         categories.add(laptops);
@@ -118,20 +113,13 @@ public class DatabaseCreator {
         CartEntity cart = new CartEntity();
         cart.setId(1L);
 
-<<<<<<< HEAD
         ItemEntity lenovo = new ItemEntity("Lenovo Laptop", 565.00, "New laptop.", 5, 0, laptops.getId());
         ItemEntity hp = new ItemEntity("HP Laptop", 450.00, "New laptop.", 4, 0, laptops.getId());
         ItemEntity headphones = new ItemEntity("JBL HeadPhones", 45.00, "New headphones.", 5, 0, accessories.getId());
-        ItemEntity phonecase = new ItemEntity("Iphone 7 case", 15.00, "Phone Case for iphone 7", 3, 0, accessories.getId());
-=======
-        ItemEntity lenovo = new ItemEntity("Lenovo Laptop", 565.00, "New laptop.", 5, cart.getId(), laptops.getId());
-        ItemEntity hp = new ItemEntity("HP Laptop", 450.00, "New laptop.", 4, cart.getId(), laptops.getId());
-        ItemEntity headphones = new ItemEntity("JBL HeadPhones", 45.00, "New headphones.", 5, cart.getId(), accessories.getId());
-        ItemEntity phonecase = new ItemEntity("iphone 7 case", 15.00, "Phone Case for iphone 7", 3, cart.getId(), accessories.getId());
-        ItemEntity panasonicTV = new ItemEntity("Panasonic 55' 4k TV",899.00,"This TV is in great condition. I bought it one year ago",5,cart.getId(),TVs.getId());
-        ItemEntity iphone = new ItemEntity("iphone 5s",399.00,"The phone is cracked a little bit but works just fine",2,cart.getId(),phones.getId());
-        ItemEntity brotherprinter = new ItemEntity("Brother printer",49.00,"Used printer for 2 years and now I have a new one. Works just fine. Has some colors included.",4,cart.getId(),phones.getId());
->>>>>>> 0fe833d78bdc3daa5894cda3c7d9d915e0a4ebff
+        ItemEntity phonecase = new ItemEntity("iphone 7 case", 15.00, "Phone Case for iphone 7", 3, 0, accessories.getId());
+        ItemEntity panasonicTV = new ItemEntity("Panasonic 55' 4k TV",899.00,"This TV is in great condition. I bought it one year ago",5,0,TVs.getId());
+        ItemEntity iphone = new ItemEntity("iphone 5s",399.00,"The phone is cracked a little bit but works just fine",2,1,phones.getId());
+        ItemEntity brotherprinter = new ItemEntity("Brother printer",49.00,"Used printer for 2 years and now I have a new one. Works just fine. Has some colors included.",4,1,phones.getId());
 
         items.add(lenovo);
         items.add(hp);
