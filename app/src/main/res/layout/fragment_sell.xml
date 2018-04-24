@@ -27,7 +27,7 @@
             <EditText
                 android:id="@+id/saleItemPrice"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="@string/lang_price"
@@ -35,10 +35,10 @@
 
             <Spinner
                 android:id="@+id/itemCategories"
+                style="@style/Base.Widget.AppCompat.Spinner.Underlined"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="0.5"
-                android:background="@android:drawable/btn_dropdown"
                 android:spinnerMode="dropdown" />
         </LinearLayout>
 

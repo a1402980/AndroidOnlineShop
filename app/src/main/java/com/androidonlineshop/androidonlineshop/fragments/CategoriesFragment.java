@@ -144,37 +144,6 @@ public class CategoriesFragment extends Fragment {
 
     }
 
-//    protected void showDialog(){
-//
-//        final Dialog dialog = new Dialog(getActivity());
-//        dialog.setCancelable(true);
-//
-//        View view  = getActivity().getLayoutInflater().inflate(R.layout.prompt, null);
-//        dialog.setContentView(view);
-//
-//
-//        TextView edit = (TextView) view.findViewById(R.id.prompt_accept);
-//        TextView delete = (TextView) view.findViewById(R.id.prompt_cancel);
-//
-//
-//        edit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //Do something
-//
-//            }
-//        });
-//        delete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                dialog.cancel();
-//
-//            }
-//        });
-//
-//
-//        dialog.show();
-//    };
 
     private void generateDialog(final int action) {
         LayoutInflater inflater = LayoutInflater.from(getContext());

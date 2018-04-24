@@ -2,12 +2,56 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.androidonlineshop.androidonlineshop.fragments.ShoppingCartFragment">
-
-    <!-- TODO: Update blank fragment layout -->
+    tools:context="com.androidonlineshop.androidonlineshop.fragments.CategoriesFragment">
 
 
-    <ListView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/cartItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+        </ListView>
+
+
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:orientation="horizontal"
+            android:weightSum="1.0">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:textAlignment="textEnd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:text="@string/lang_total" />
+            <TextView
+                android:id="@+id/textView5"
+                android:textAlignment="textStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:text="XX.XX" />
+
+            <Button
+                android:id="@+id/addCat"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="0.5"
+                android:drawableRight="@drawable/ic_attach_money_black_24dp"
+                android:text="@string/lang_menu_buy_items" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
 </FrameLayout>

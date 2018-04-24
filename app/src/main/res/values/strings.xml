@@ -26,4 +26,5 @@
     <string name="lang_modify">Modify</string>
     <string name="lang_delete">Delete</string>
     <string name="lang_shopping_cart_title">Items in the shopping cart</string>
+    <string name="lang_total">Total cost:</string>
 </resources>
