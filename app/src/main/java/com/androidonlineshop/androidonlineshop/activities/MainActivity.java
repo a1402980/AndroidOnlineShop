@@ -1,6 +1,8 @@
 package com.androidonlineshop.androidonlineshop.activities;
 
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -41,6 +43,16 @@ public class MainActivity extends AppCompatActivity{
         NavigationView nvDrawer = (NavigationView) findViewById(R.id.navigation);
         drawerSetup(nvDrawer);
 
+        final DatabaseCreator databaseCreator = DatabaseCreator.getInstance(this.getApplication());
+        databaseCreator.createDb(getApplication());
+
+        final Button generateData = findViewById(R.id.generateData);
+        generateData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                generateData.setVisibility(View.INVISIBLE);
+            }
+        });
 
         //setup toolbar with a button to open nav drawer
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

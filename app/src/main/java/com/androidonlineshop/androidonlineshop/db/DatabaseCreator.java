@@ -1,5 +1,7 @@
 package com.androidonlineshop.androidonlineshop.db;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -13,6 +15,7 @@ import com.androidonlineshop.androidonlineshop.db.pojo.CategoryWithItems;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.androidonlineshop.androidonlineshop.db.AppDatabase.DATABASE_NAME;
 
@@ -28,6 +31,10 @@ public class DatabaseCreator {
 
     private AppDatabase mDb;
 
+    private final AtomicBoolean mInitializing = new AtomicBoolean(true);
+
+    private final MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
+
     // For Singleton instantiation
     private static final Object LOCK = new Object();
 
@@ -40,6 +47,9 @@ public class DatabaseCreator {
             }
         }
         return sInstance;
+    }
+    public LiveData<Boolean> isDatabaseCreated() {
+        return mIsDatabaseCreated;
     }
 
     @Nullable
@@ -56,7 +66,11 @@ public class DatabaseCreator {
 
         Log.d("DatabaseCreator", "Creating DB from " + Thread.currentThread().getName());
 
+        if (!mInitializing.compareAndSet(true, false)) {
+            return; // Already initializing
+        }
 
+        mIsDatabaseCreated.setValue(false);// Trigger an update to show a loading screen.
         new AsyncTask<Context, Void, Void>() {
 
             @Override
@@ -66,7 +80,7 @@ public class DatabaseCreator {
                 Context context = params[0].getApplicationContext();
 
                 // Reset the database to have new data on every run.
-                context.deleteDatabase(DATABASE_NAME);
+                //context.deleteDatabase(DATABASE_NAME);
 
                 // Build the database!
                 AppDatabase db = Room.databaseBuilder(context.getApplicationContext(),
@@ -83,6 +97,12 @@ public class DatabaseCreator {
                 mDb = db;
                 return null;
             }
+
+            @Override
+            protected void onPostExecute(Void ignored) {
+                // Now on the main thread, notify observers that the db is created and ready.
+                mIsDatabaseCreated.setValue(true);
+            }
         }.execute(context.getApplicationContext());
     }
 
@@ -93,7 +113,7 @@ public class DatabaseCreator {
         }
     }
 
-    private void generateData(AppDatabase db){
+    public void generateData(AppDatabase db){
 
         List<ItemEntity> items = new ArrayList<>();
         List<CategoryEntity> categories = new ArrayList<>();
@@ -112,6 +132,7 @@ public class DatabaseCreator {
 
         CartEntity cart = new CartEntity();
         cart.setId(1L);
+        cart.setQuantity(0);
 
         ItemEntity lenovo = new ItemEntity("Lenovo Laptop", 565.00, "New laptop.", 5, 0, laptops.getId());
         ItemEntity hp = new ItemEntity("HP Laptop", 450.00, "New laptop.", 4, 0, laptops.getId());

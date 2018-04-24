@@ -1,8 +1,5 @@
 package com.androidonlineshop.androidonlineshop.fragments;
 
-import android.content.ClipData;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,7 +11,6 @@ import android.widget.ListView;
 
 import com.androidonlineshop.androidonlineshop.R;
 import com.androidonlineshop.androidonlineshop.db.async.cart.GetCartWithItems;
-import com.androidonlineshop.androidonlineshop.db.async.category.GetCategoriesWithItems;
 import com.androidonlineshop.androidonlineshop.db.entity.CartEntity;
 import com.androidonlineshop.androidonlineshop.db.entity.ItemEntity;
 import com.androidonlineshop.androidonlineshop.db.pojo.CartWithItems;
@@ -31,7 +27,6 @@ public class ShoppingCartFragment extends Fragment {
     private ListView cartItems;
     private List<String> itemNames;
     private List<CartWithItems> cartWithItemsList;
-    private List<CartEntity> carts;
     private List<ItemEntity> items;
 
 
@@ -53,7 +48,6 @@ public class ShoppingCartFragment extends Fragment {
         getActivity().setTitle(getResources().getText(R.string.lang_shopping_cart_title));
         cartWithItemsList = new ArrayList<>();
         itemNames = new ArrayList<>();
-        carts = new ArrayList<>();
         items = new ArrayList<>();
     }
 
@@ -88,7 +82,6 @@ public class ShoppingCartFragment extends Fragment {
 
         try{
             cartWithItemsList = new GetCartWithItems(getView()).execute().get();
-            cart = cartWithItemsList.get(0).cart;
         }
         catch (Exception e)
         {

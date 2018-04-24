@@ -102,18 +102,18 @@ public class BuyFragment extends Fragment {
             e.printStackTrace();
         }
 
-        if(category != null) {
-            for (ItemEntity item : items) {
-                if (category.getId() == item.getCategoryid()) {
-                    itemNames.add(item.getName());
+        if(!items.isEmpty()) {
+            if (category != null) {
+                for (ItemEntity item : items) {
+                    if (category.getId() == item.getCategoryid()) {
+                        itemNames.add(item.getName());
+                    }
                 }
-            }
-        }
-        else
-        {
-            for (ItemEntity item : items) {
-                itemNames.add(item.getName());
+            } else {
+                for (ItemEntity item : items) {
+                    itemNames.add(item.getName());
 
+                }
             }
         }
         ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_1, itemNames);

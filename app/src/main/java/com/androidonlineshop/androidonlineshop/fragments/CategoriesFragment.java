@@ -84,12 +84,14 @@ public class CategoriesFragment extends Fragment {
         categories = new ArrayList<>();
         List<String> categoryNames = new ArrayList<>();
 
+
         // set the listview in the activity with the adapter
         try {
             categories = new GetCategories(getView()).execute().get();
-            for(CategoryEntity category : categories)
-            {
-                categoryNames.add(category.getName());
+            if(!categories.isEmpty()) {
+                for (CategoryEntity category : categories) {
+                    categoryNames.add(category.getName());
+                }
             }
 
         }
