@@ -178,7 +178,7 @@ public class CategoriesFragment extends Fragment {
             alertDialog.setCancelable(true);
 
 
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.lang_modify), new DialogInterface.OnClickListener() {
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.lang_modify), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
@@ -187,7 +187,7 @@ public class CategoriesFragment extends Fragment {
                 }
             });
 
-            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.lang_delete), new DialogInterface.OnClickListener() {
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.lang_delete), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     alertDialog.dismiss();
@@ -220,7 +220,7 @@ public class CategoriesFragment extends Fragment {
 
 
 
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.lang_confirm), new DialogInterface.OnClickListener() {
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.lang_confirm), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
@@ -229,7 +229,7 @@ public class CategoriesFragment extends Fragment {
                 }
             });
 
-            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.lang_cancel), new DialogInterface.OnClickListener() {
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.lang_cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     alertDialog.dismiss();
