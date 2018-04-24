@@ -22,4 +22,7 @@
     <string name="lang_cancel">Abbestellen</string>
     <string name="lang_confirm">Bestätigen</string>
     <string name="lang_write_category_name">Schreiben Sie den Namen der Kategorie:</string>
+    <string name="lang_modify_delete">Artikel ändern oder löschen?</string>
+    <string name="lang_delete">Tilgen</string>
+    <string name="lang_modify">Modifizieren</string>
 </resources>

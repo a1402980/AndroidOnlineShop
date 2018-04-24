@@ -22,4 +22,7 @@
     <string name="lang_confirm">Confirm</string>
     <string name="lang_cancel">Cancel</string>
     <string name="lang_write_category_name">Write the name of the category:</string>
+    <string name="lang_modify_delete">Modify or delete item?</string>
+    <string name="lang_modify">Modify</string>
+    <string name="lang_delete">Delete</string>
 </resources>
