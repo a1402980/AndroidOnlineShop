@@ -20,6 +20,12 @@ public class CategoryEntity implements Serializable{
 
     public CategoryEntity() {}
 
+    public CategoryEntity(String name, String description)
+    {
+        this.name = name;
+        this.description = description;
+    }
+
     public CategoryEntity(long id, String name, String description)
     {
         this.id = id;
