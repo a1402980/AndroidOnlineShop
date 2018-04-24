@@ -31,9 +31,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.25"
-                android:text="@string/lang_total" />
+                android:textSize="20sp"
+                android:text="@string/lang_cart_cost" />
             <TextView
                 android:id="@+id/textView5"
+                android:textSize="20sp"
                 android:textAlignment="textStart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

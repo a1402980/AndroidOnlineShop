@@ -65,7 +65,7 @@ public class ShoppingCartFragment extends Fragment {
 
 
         //THIS LINE CAUSES HELL UPON MY EMULATOR
-        //cartItems = view.findViewById(R.id.cartItems);
+        cartItems = view.findViewById(R.id.cartItem);
 
         return view;
     }
