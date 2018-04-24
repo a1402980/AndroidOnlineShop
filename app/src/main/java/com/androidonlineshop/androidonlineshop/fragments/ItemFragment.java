@@ -16,6 +16,7 @@ import com.androidonlineshop.androidonlineshop.R;
 import com.androidonlineshop.androidonlineshop.db.async.cart.GetCart;
 import com.androidonlineshop.androidonlineshop.db.async.cart.UpdateCart;
 import com.androidonlineshop.androidonlineshop.db.async.item.GetItem;
+import com.androidonlineshop.androidonlineshop.db.async.item.UpdateItem;
 import com.androidonlineshop.androidonlineshop.db.entity.CartEntity;
 import com.androidonlineshop.androidonlineshop.db.entity.ItemEntity;
 
@@ -27,7 +28,6 @@ public class ItemFragment extends Fragment {
     private RatingBar itemRatingBar;
     private Button addToCartButton;
     private ItemEntity item;
-    private Long itemId;
     private String nameOfItem;
     private CartEntity cart;
     private TextView itemPrice;
@@ -97,22 +97,30 @@ public class ItemFragment extends Fragment {
         itemDescription.setText(item.getDescription());
         itemRatingBar.setRating(item.getRating());
         itemPrice.setText(item.getPrice()+"");
+
         addToCartButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
 
                 item.setCartid(cart.getId());
-                cart.setQuantity(+1);
+                cart.setQuantity(cart.getQuantity()+1);
                 try {
-                    new UpdateCart(getView()).execute(cart).get();
+                   new UpdateCart(getView()).execute(cart).get();
+                   new UpdateItem(getView()).execute(item).get();
+
                 }
                 catch (Exception e)
                 {
                     e.printStackTrace();
                 }
                 Toast.makeText(getContext(), "Item has been added to the cart!", Toast.LENGTH_LONG).show();
-                System.out.println("************************************************************");
-                System.out.println("************************************************************");
-                System.out.println(cart.getQuantity());
+
+                MainFragment mainFragment = new MainFragment();
+                Bundle bundle = new Bundle();
+
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, mainFragment, BACK_STACK_ROOT_TAG)
+                        .commit();
+
             }
         });
 

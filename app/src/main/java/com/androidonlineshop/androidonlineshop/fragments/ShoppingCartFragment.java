@@ -1,5 +1,6 @@
 package com.androidonlineshop.androidonlineshop.fragments;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,16 +9,30 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.androidonlineshop.androidonlineshop.R;
+import com.androidonlineshop.androidonlineshop.db.async.cart.GetCartWithItems;
+import com.androidonlineshop.androidonlineshop.db.async.category.GetCategoriesWithItems;
 import com.androidonlineshop.androidonlineshop.db.entity.CartEntity;
 import com.androidonlineshop.androidonlineshop.db.entity.ItemEntity;
+import com.androidonlineshop.androidonlineshop.db.pojo.CartWithItems;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ShoppingCartFragment extends Fragment {
 
 
     private CartEntity cart;
+    private ItemEntity item;
+    private ListView cartItems;
+    private List<String> itemNames;
+    private List<CartWithItems> cartWithItemsList;
+    private List<CartEntity> carts;
+    private List<ItemEntity> items;
 
 
     public ShoppingCartFragment() {
@@ -36,26 +51,61 @@ public class ShoppingCartFragment extends Fragment {
         super.onCreate(savedInstanceState);
         //set page title from strings
         getActivity().setTitle(getResources().getText(R.string.lang_shopping_cart_title));
+        cartWithItemsList = new ArrayList<>();
+        itemNames = new ArrayList<>();
+        carts = new ArrayList<>();
+        items = new ArrayList<>();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_shopping_cart, container, false);
+        View view = inflater.inflate(R.layout.fragment_shopping_cart, container, false);
+
+        cartItems = view.findViewById(R.id.cartItems);
+
+        return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Bundle bundle = this.getArguments();
+        /*Bundle bundle = this.getArguments();
         if(bundle != null)
         {
              cart = (CartEntity) bundle.getSerializable("cart");
+             item = (ItemEntity) bundle.getSerializable("item");
+
         }
 
-       // System.out.println(cart.getId());
-        //System.out.println(cart.getQuantity());
+        if(item != null && cart != null) {
+            itemNames.add(item.getName());
+            ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_1, itemNames);
+            cartItems.setAdapter(adapter);
+        }*/
+
+        try{
+            cartWithItemsList = new GetCartWithItems(getView()).execute().get();
+            cart = cartWithItemsList.get(0).cart;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        for(CartWithItems cartWithItems : cartWithItemsList)
+        {
+            for(ItemEntity itemEntity : cartWithItems.items)
+            {
+                items.add(itemEntity);
+                itemNames.add(itemEntity.getName());
+            }
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_1, itemNames);
+        cartItems.setAdapter(adapter);
+
+
     }
 }

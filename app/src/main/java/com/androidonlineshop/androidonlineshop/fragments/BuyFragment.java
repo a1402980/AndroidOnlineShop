@@ -111,7 +111,6 @@ public class BuyFragment extends Fragment {
         }
         else
         {
-            System.out.println("**************************************8");
             for (ItemEntity item : items) {
                 itemNames.add(item.getName());
 

@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 import android.view.View;
 
 import com.androidonlineshop.androidonlineshop.db.DatabaseCreator;
-import com.androidonlineshop.androidonlineshop.db.entity.CategoryEntity;
 import com.androidonlineshop.androidonlineshop.db.pojo.CategoryWithItems;
 
 import java.lang.ref.WeakReference;
