@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.androidonlineshop.androidonlineshop.R;
 import com.androidonlineshop.androidonlineshop.db.async.cart.GetCartWithItems;
@@ -25,6 +26,7 @@ public class ShoppingCartFragment extends Fragment {
     private CartEntity cart;
     private ItemEntity item;
     private ListView cartItems;
+    private TextView totalPrice;
     private List<String> itemNames;
     private List<CartWithItems> cartWithItemsList;
     private List<ItemEntity> items;
@@ -57,9 +59,8 @@ public class ShoppingCartFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_shopping_cart, container, false);
 
-
-        //THIS LINE CAUSES HELL UPON MY EMULATOR
         cartItems = view.findViewById(R.id.cartItem);
+        totalPrice = view.findViewById(R.id.totalPrice);
 
         return view;
     }
@@ -96,6 +97,14 @@ public class ShoppingCartFragment extends Fragment {
                 items.add(itemEntity);
                 itemNames.add(itemEntity.getName());
             }
+        }
+
+
+        double priceTotal = 0;
+        for(ItemEntity item : items)
+        {
+                priceTotal += item.getPrice();
+                totalPrice.setText(String.valueOf(priceTotal));
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_1, itemNames);
