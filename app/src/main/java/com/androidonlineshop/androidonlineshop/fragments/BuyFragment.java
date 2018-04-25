@@ -229,6 +229,9 @@ public class BuyFragment extends Fragment {
 
             LinearLayout layout       = new LinearLayout(getActivity());
             TextView tvMessage        = new TextView(getActivity());
+            TextView tvMessage2        = new TextView(getActivity());
+            TextView tvMessage3        = new TextView(getActivity());
+            TextView tvMessage4        = new TextView(getActivity());
             final EditText etInput    = new EditText(getActivity());
             final EditText etInput2    = new EditText(getActivity());
             final EditText etInput3   = new EditText(getActivity());
@@ -248,6 +251,11 @@ public class BuyFragment extends Fragment {
             etInput3.setHint(getString(R.string.lang_price));
             etInput4.setHint(getString(R.string.lang_item_condition));
 
+            tvMessage.setText(getString(R.string.lang_name));
+            tvMessage2.setText(getString(R.string.lang_description));
+            tvMessage3.setText(getString(R.string.lang_price));
+            tvMessage4.setText(getString(R.string.lang_item_condition));
+
             //SET VALUES FOR etInput & etInput2 here!
 
             //tvMessage.setText(getString(R.string.lang_modify_delete));
@@ -255,9 +263,13 @@ public class BuyFragment extends Fragment {
             etInput.setSingleLine();
             layout.setOrientation(LinearLayout.VERTICAL);
             //layout.addView(tvMessage);
+            layout.addView(tvMessage);
             layout.addView(etInput);
+            layout.addView(tvMessage2);
             layout.addView(etInput2);
+            layout.addView(tvMessage3);
             layout.addView(etInput3);
+            layout.addView(tvMessage4);
             layout.addView(etInput4);
             layout.setPadding(50, 40, 50, 10);
 

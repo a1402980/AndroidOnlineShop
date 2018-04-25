@@ -26,6 +26,7 @@
     <string name="lang_delete">Tilgen</string>
     <string name="lang_modify">Modifizieren</string>
     <string name="lang_shopping_cart_title">Artikel im warenkorb</string>
-    <string name="lang_total">Gesamtkosten:</string>
     <string name="lang_cart_cost">Gesamtkosten:</string>
+    <string name="lang_buy">Einkaufen</string>
+    <string name="lang_qty">Anzahl</string>
 </resources>
