@@ -107,10 +107,6 @@ public class CategoriesFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-
-
-
-                //FragmentManager fragmentManager = getFragmentManager();
                 BuyFragment buyFragment = new BuyFragment();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("category", categories.get(position));
@@ -121,7 +117,6 @@ public class CategoriesFragment extends Fragment {
                         .addToBackStack("categories")
                         .commit();
 
-                //fragmentManager.beginTransaction().replace(R.id.fragment_container, buyFragment, BACK_STACK_ROOT_TAG).commit();
             }
 
         });

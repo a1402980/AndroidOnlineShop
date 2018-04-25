@@ -21,9 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidonlineshop.androidonlineshop.R;
-import com.androidonlineshop.androidonlineshop.db.async.category.CreateCategory;
-import com.androidonlineshop.androidonlineshop.db.async.category.DeleteCategory;
-import com.androidonlineshop.androidonlineshop.db.async.category.UpdateCategory;
 import com.androidonlineshop.androidonlineshop.db.async.item.DeleteItem;
 import com.androidonlineshop.androidonlineshop.db.async.item.GetItems;
 import com.androidonlineshop.androidonlineshop.db.async.item.UpdateItem;

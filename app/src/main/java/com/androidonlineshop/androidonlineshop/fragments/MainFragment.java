@@ -39,15 +39,6 @@ public class MainFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        /*final DatabaseCreator databaseCreator = DatabaseCreator.getInstance(getContext());
-        Button generateData = view.findViewById(R.id.generateDataButton);
-        generateData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                databaseCreator.createDb(getContext());
-            }
-        });*/
-
         return view;
 
     }

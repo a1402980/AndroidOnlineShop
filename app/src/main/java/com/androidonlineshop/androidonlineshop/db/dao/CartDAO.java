@@ -39,6 +39,7 @@ public interface CartDAO {
 
     @Update
     void update(CartEntity cart);
+
     @Delete
     void delete(CartEntity cart);
 

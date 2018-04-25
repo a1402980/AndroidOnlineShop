@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +59,7 @@ public class ShoppingCartFragment extends Fragment {
         super.onCreate(savedInstanceState);
         //set page title from strings
         getActivity().setTitle(getResources().getText(R.string.lang_shopping_cart_title));
+
         cartWithItemsList = new ArrayList<>();
         itemNames = new ArrayList<>();
         items = new ArrayList<>();
@@ -126,20 +128,27 @@ public class ShoppingCartFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                for(ItemEntity item : items)
-                {
-                    try {
-                        new DeleteItem(getView()).execute(item).get();
+                if(!itemNames.isEmpty()) {
+                    for (ItemEntity item : items) {
+                        try {
+                            new DeleteItem(getView()).execute(item).get();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                    catch (Exception e)
-                    {
-                        e.printStackTrace();
-                    }
+
+                    Toast.makeText(getActivity(), getString(R.string.lang_items_bought), Toast.LENGTH_LONG).show();
+                    getActivity().getSupportFragmentManager().popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    MainFragment mainFragment = new MainFragment();
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, mainFragment, BACK_STACK_ROOT_TAG)
+                            .addToBackStack("main")
+                            .commit();
                 }
-
-                Toast.makeText(getActivity(), getString(R.string.lang_items_bought), Toast.LENGTH_LONG).show();
-                refreshFragment();
-
+                else
+                {
+                    Toast.makeText(getActivity(), getString(R.string.lang_empty_cart), Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -178,7 +187,6 @@ public class ShoppingCartFragment extends Fragment {
                     {
                         e.printStackTrace();
                     }
-                    itemNames.remove(itemPosition);
                     refreshFragment();
                 }
             });
@@ -190,11 +198,11 @@ public class ShoppingCartFragment extends Fragment {
     }
     private void refreshFragment()
     {
-        Toast.makeText(getActivity(), getString(R.string.lang_items_bought), Toast.LENGTH_LONG);
+        getActivity().getSupportFragmentManager().popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         ShoppingCartFragment shoppingCartFragment = new ShoppingCartFragment();
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, shoppingCartFragment, BACK_STACK_ROOT_TAG)
-                .addToBackStack("shoppingcart")
+                .addToBackStack("main")
                 .commit();
     }
 }

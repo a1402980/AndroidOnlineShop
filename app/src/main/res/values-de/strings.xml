@@ -31,4 +31,5 @@
     <string name="lang_empty_fields">Sie müssen alle Textfeldern ausfüllen!</string>
     <string name="lang_buy">Einkaufen</string>
     <string name="lang_qty">Anzahl</string>
+    <string name="lang_empty_cart">Sie haben keine Artikel im Warenkorb!</string>
 </resources>

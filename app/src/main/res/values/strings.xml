@@ -31,4 +31,5 @@
     <string name="lang_empty_fields">You need to fill all the fields!</string>
     <string name="lang_buy">Buy</string>
     <string name="lang_qty">QTY.</string>
+    <string name="lang_empty_cart">You do not have any items in the cart!</string>
 </resources>

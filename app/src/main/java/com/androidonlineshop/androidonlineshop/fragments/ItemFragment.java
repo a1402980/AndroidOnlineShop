@@ -118,8 +118,10 @@ public class ItemFragment extends Fragment {
                 MainFragment mainFragment = new MainFragment();
                 Bundle bundle = new Bundle();
 
+
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, mainFragment, BACK_STACK_ROOT_TAG)
+                        .addToBackStack("items")
                         .commit();
 
             }
