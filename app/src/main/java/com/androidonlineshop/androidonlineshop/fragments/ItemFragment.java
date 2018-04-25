@@ -102,6 +102,7 @@ public class ItemFragment extends Fragment {
             public void onClick(View v) {
 
                 item.setCartid(cart.getId());
+                item.setSold(true);
                 cart.setQuantity(cart.getQuantity()+1);
                 try {
                    new UpdateCart(getView()).execute(cart).get();

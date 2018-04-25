@@ -20,6 +20,7 @@ public class ItemEntity implements Serializable{
     private double price;
     private String description;
     private int rating;
+    private boolean isSold;
 
     private long cartid;
     private long categoryid;
@@ -27,7 +28,7 @@ public class ItemEntity implements Serializable{
 
     public ItemEntity() {}
 
-    public ItemEntity(String name, double price, String description, int rating, long cartid, long categoryid)
+    public ItemEntity(String name, double price, String description, int rating, long cartid, long categoryid, boolean isSold)
     {
         this.name = name;
         this.price = price;
@@ -35,6 +36,7 @@ public class ItemEntity implements Serializable{
         this.rating = rating;
         this.cartid = cartid;
         this.categoryid = categoryid;
+        this.isSold = isSold;
     }
 
     public long getId() { return id; }
@@ -64,5 +66,9 @@ public class ItemEntity implements Serializable{
     public long getCategoryid() { return categoryid; }
 
     public void setCategoryid(long categoryid) { this.categoryid = categoryid; }
+
+    public boolean isSold() { return isSold; }
+
+    public void setSold(boolean isSold) { this.isSold = isSold; }
 
 }

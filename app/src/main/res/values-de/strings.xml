@@ -28,4 +28,6 @@
     <string name="lang_shopping_cart_title">Artikel im warenkorb</string>
     <string name="lang_total">Gesamtkosten:</string>
     <string name="lang_cart_cost">Gesamtkosten:</string>
+    <string name="lang_items_bought">Sie haben Ihre Artikel erfolgreich gekauft!</string>
+    <string name="lang_empty_fields">Sie müssen alle Textfeldern ausfüllen!</string>
 </resources>

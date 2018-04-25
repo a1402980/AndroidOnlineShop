@@ -41,15 +41,7 @@ public class MainActivity extends AppCompatActivity{
         drawerSetup(nvDrawer);
 
         final DatabaseCreator databaseCreator = DatabaseCreator.getInstance(this.getApplication());
-
-        final Button generateData = findViewById(R.id.generateData);
-        generateData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                generateData.setVisibility(View.INVISIBLE);
-                databaseCreator.createDb(getApplication());
-            }
-        });
+        databaseCreator.createDb(getApplication());
 
         //setup toolbar with a button to open nav drawer
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -103,43 +95,29 @@ public class MainActivity extends AppCompatActivity{
 
         switch (menuItem.getItemId()){
             case R.id.buy:
-                Toast.makeText(this, "buy", Toast.LENGTH_SHORT).show();
                 fragmentClass = BuyFragment.class;
-
                 break;
-
             case R.id.sell:
-                Toast.makeText(this, "Sell", Toast.LENGTH_SHORT).show();
                 fragmentClass = SellFragment.class;
                 break;
 
             case R.id.shoppingCart:
-                Toast.makeText(this, "Shopping cart", Toast.LENGTH_SHORT).show();
                 fragmentClass = ShoppingCartFragment.class;
                 break;
 
             case R.id.categories:
                 fragmentClass = CategoriesFragment.class;
-                Toast.makeText(this, "Categories", Toast.LENGTH_SHORT).show();
-
                 break;
 
             case R.id.settings:
                 fragmentClass = SettingsFragment.class;
-                Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
-
                 break;
 
             case R.id.about:
                 fragmentClass = AboutFragment.class;
-                Toast.makeText(this, "About", Toast.LENGTH_SHORT).show();
-
                 break;
 
-
-
             default:
-                Toast.makeText(this, "Default", Toast.LENGTH_SHORT).show();
 
         }
 

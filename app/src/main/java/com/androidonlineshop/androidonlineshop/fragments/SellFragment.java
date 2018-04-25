@@ -109,7 +109,7 @@ public class SellFragment extends Fragment {
                 int position = itemCategories.getSelectedItemPosition();
 
                 if(!itemName.isEmpty() && !itemDescription.isEmpty() && price > 0 && rating > 0) {
-                    item = new ItemEntity(itemName, price, itemDescription, rating, 0, position+1);
+                    item = new ItemEntity(itemName, price, itemDescription, rating, 0, position+1, false);
                     try {
                         new CreateItem(getView()).execute(item).get();
                     } catch (Exception e) {

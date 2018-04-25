@@ -42,7 +42,7 @@
                 android:layout_weight="0.15" />
 
             <Button
-                android:id="@+id/addCat"
+                android:id="@+id/buyItemsFromCart"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"

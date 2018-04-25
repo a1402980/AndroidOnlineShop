@@ -242,7 +242,7 @@ public class CategoriesFragment extends Fragment {
                     }
                     else
                     {
-                        Toast.makeText(getActivity(), "Some fields are empty!", Toast.LENGTH_LONG);
+                        Toast.makeText(getActivity(), getString(R.string.lang_empty_fields), Toast.LENGTH_LONG).show();
                     }
                     refreshFragment();
 
@@ -298,7 +298,7 @@ public class CategoriesFragment extends Fragment {
                     }
                     else
                     {
-                        Toast.makeText(getContext(), "Some fields are empty!", Toast.LENGTH_LONG);
+                        Toast.makeText(getActivity(), getString(R.string.lang_empty_fields), Toast.LENGTH_LONG).show();
                     }
                     //reset fragment
                     refreshFragment();

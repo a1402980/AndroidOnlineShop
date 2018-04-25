@@ -121,13 +121,15 @@ public class BuyFragment extends Fragment {
         if(!items.isEmpty()) {
             if (category != null) {
                 for (ItemEntity item : items) {
-                    if (category.getId() == item.getCategoryid()) {
+                    if (category.getId() == item.getCategoryid() && item.isSold() == false) {
                         itemNames.add(item.getName());
                     }
                 }
             } else {
                 for (ItemEntity item : items) {
-                    itemNames.add(item.getName());
+                    if(item.isSold() == false) {
+                        itemNames.add(item.getName());
+                    }
 
                 }
             }
@@ -287,7 +289,7 @@ public class BuyFragment extends Fragment {
                     }
                     else
                     {
-                        Toast.makeText(getActivity(), "Some fields are empty!", Toast.LENGTH_LONG);
+                        Toast.makeText(getActivity(), getString(R.string.lang_empty_fields), Toast.LENGTH_LONG).show();
                     }
                     refreshFragment();
 

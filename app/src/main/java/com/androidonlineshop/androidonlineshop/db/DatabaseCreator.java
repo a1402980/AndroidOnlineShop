@@ -134,13 +134,13 @@ public class DatabaseCreator {
         cart.setId(1L);
         cart.setQuantity(0);
 
-        ItemEntity lenovo = new ItemEntity("Lenovo Laptop", 565.00, "New laptop.", 5, 0, laptops.getId());
-        ItemEntity hp = new ItemEntity("HP Laptop", 450.00, "New laptop.", 4, 0, laptops.getId());
-        ItemEntity headphones = new ItemEntity("JBL HeadPhones", 45.00, "New headphones.", 5, 0, accessories.getId());
-        ItemEntity phonecase = new ItemEntity("iphone 7 case", 15.00, "Phone Case for iphone 7", 3, 0, accessories.getId());
-        ItemEntity panasonicTV = new ItemEntity("Panasonic 55' 4k TV",899.00,"This TV is in great condition. I bought it one year ago",5,0,TVs.getId());
-        ItemEntity iphone = new ItemEntity("iphone 5s",399.00,"The phone is cracked a little bit but works just fine",2,cart.getId(),phones.getId());
-        ItemEntity brotherprinter = new ItemEntity("Brother printer",49.00,"Used printer for 2 years and now I have a new one. Works just fine. Has some colors included.",4,cart.getId(),printers.getId());
+        ItemEntity lenovo = new ItemEntity("Lenovo Laptop", 565.00, "New laptop.", 5, 0, laptops.getId(), false);
+        ItemEntity hp = new ItemEntity("HP Laptop", 450.00, "New laptop.", 4, 0, laptops.getId(), false);
+        ItemEntity headphones = new ItemEntity("JBL HeadPhones", 45.00, "New headphones.", 5, 0, accessories.getId(), false);
+        ItemEntity phonecase = new ItemEntity("iphone 7 case", 15.00, "Phone Case for iphone 7", 3, 0, accessories.getId(), false);
+        ItemEntity panasonicTV = new ItemEntity("Panasonic 55' 4k TV",899.00,"This TV is in great condition. I bought it one year ago",5,0,TVs.getId(), false);
+        ItemEntity iphone = new ItemEntity("iphone 5s",399.00,"The phone is cracked a little bit but works just fine",2,cart.getId(),phones.getId(), false);
+        ItemEntity brotherprinter = new ItemEntity("Brother printer",49.00,"Used printer for 2 years and now I have a new one. Works just fine. Has some colors included.",4,cart.getId(),printers.getId(), false);
 
         items.add(lenovo);
         items.add(hp);
