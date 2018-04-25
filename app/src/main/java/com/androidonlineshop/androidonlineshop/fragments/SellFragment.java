@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -119,10 +120,11 @@ public class SellFragment extends Fragment {
 
 
                     //reset fragment
+                    getActivity().getSupportFragmentManager().popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     SellFragment sellFragment = new SellFragment();
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_container, sellFragment, BACK_STACK_ROOT_TAG)
-                            .addToBackStack("categories")
+                            .addToBackStack("stuff")
                             .commit();
                 }
                 else
