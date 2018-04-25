@@ -1,7 +1,6 @@
 package com.androidonlineshop.androidonlineshop.fragments;
 
 import android.app.AlertDialog;
-import android.content.ClipData;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,21 +12,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidonlineshop.androidonlineshop.R;
 import com.androidonlineshop.androidonlineshop.db.async.cart.GetCartWithItems;
-import com.androidonlineshop.androidonlineshop.db.async.category.CreateCategory;
-import com.androidonlineshop.androidonlineshop.db.async.category.DeleteCategory;
-import com.androidonlineshop.androidonlineshop.db.async.category.UpdateCategory;
 import com.androidonlineshop.androidonlineshop.db.async.item.DeleteItem;
 import com.androidonlineshop.androidonlineshop.db.async.item.UpdateItem;
 import com.androidonlineshop.androidonlineshop.db.entity.CartEntity;
-import com.androidonlineshop.androidonlineshop.db.entity.CategoryEntity;
 import com.androidonlineshop.androidonlineshop.db.entity.ItemEntity;
 import com.androidonlineshop.androidonlineshop.db.pojo.CartWithItems;
 
@@ -40,6 +33,7 @@ public class ShoppingCartFragment extends Fragment {
     private ListView cartItems;
     private TextView totalPrice;
     private Button buyItems;
+    private TextView qtyNumber;
     private List<String> itemNames;
     private List<CartWithItems> cartWithItemsList;
     private List<ItemEntity> items;
@@ -78,6 +72,7 @@ public class ShoppingCartFragment extends Fragment {
         cartItems = view.findViewById(R.id.cartItem);
         totalPrice = view.findViewById(R.id.totalPrice);
         buyItems = view.findViewById(R.id.buyItemsFromCart);
+        qtyNumber = view.findViewById(R.id.qtyNumber);
 
         return view;
     }
@@ -93,6 +88,7 @@ public class ShoppingCartFragment extends Fragment {
         {
             e.printStackTrace();
         }
+
         for(CartWithItems cartWithItems : cartWithItemsList)
         {
             for(ItemEntity itemEntity : cartWithItems.items)
@@ -100,15 +96,16 @@ public class ShoppingCartFragment extends Fragment {
                 items.add(itemEntity);
                 itemNames.add(itemEntity.getName());
             }
+
         }
-
-
         double priceTotal = 0;
         for(ItemEntity item : items)
         {
                 priceTotal += item.getPrice();
-                totalPrice.setText(String.valueOf(priceTotal));
         }
+
+        totalPrice.setText(String.valueOf(priceTotal));
+        qtyNumber.setText(String.valueOf(items.size()));
 
         ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_1, itemNames);
         cartItems.setAdapter(adapter);
@@ -162,8 +159,7 @@ public class ShoppingCartFragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                   alertDialog.dismiss();
-
+                    alertDialog.dismiss();
                 }
             });
 
@@ -173,6 +169,7 @@ public class ShoppingCartFragment extends Fragment {
 
                     item = items.get(itemPosition);
                     item.setCartid(0);
+                    item.setSold(false);
                     try
                     {
                         new UpdateItem(getView()).execute(item).get();
