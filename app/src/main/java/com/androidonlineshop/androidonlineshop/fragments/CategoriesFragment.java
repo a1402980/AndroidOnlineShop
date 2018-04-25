@@ -197,6 +197,7 @@ public class CategoriesFragment extends Fragment {
 
             LinearLayout layout       = new LinearLayout(getActivity());
             TextView tvMessage        = new TextView(getActivity());
+            TextView tvMessage2        = new TextView(getActivity());
             final EditText etInput    = new EditText(getActivity());
             final EditText etInput2    = new EditText(getActivity());
 
@@ -209,12 +210,14 @@ public class CategoriesFragment extends Fragment {
 
             //SET VALUES FOR etInput & etInput2 here!
 
-            //tvMessage.setText(getString(R.string.lang_modify_delete));
-            //tvMessage.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f);
+            tvMessage.setText(getString(R.string.lang_name));
+            tvMessage2.setText(getString(R.string.lang_description));
+
             etInput.setSingleLine();
             layout.setOrientation(LinearLayout.VERTICAL);
-            //layout.addView(tvMessage);
+            layout.addView(tvMessage);
             layout.addView(etInput);
+            layout.addView(tvMessage2);
             layout.addView(etInput2);
             layout.setPadding(50, 40, 50, 10);
 

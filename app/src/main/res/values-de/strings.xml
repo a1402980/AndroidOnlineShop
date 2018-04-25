@@ -26,8 +26,12 @@
     <string name="lang_delete">Tilgen</string>
     <string name="lang_modify">Modifizieren</string>
     <string name="lang_shopping_cart_title">Artikel im warenkorb</string>
-    <string name="lang_total">Gesamtkosten:</string>
     <string name="lang_cart_cost">Gesamtkosten:</string>
+<<<<<<< HEAD
     <string name="lang_items_bought">Sie haben Ihre Artikel erfolgreich gekauft!</string>
     <string name="lang_empty_fields">Sie müssen alle Textfeldern ausfüllen!</string>
+=======
+    <string name="lang_buy">Einkaufen</string>
+    <string name="lang_qty">Anzahl</string>
+>>>>>>> 28b3b7994cc00ebef613c9603304abbcd0347255
 </resources>
