@@ -27,11 +27,8 @@
     <string name="lang_delete">Delete</string>
     <string name="lang_shopping_cart_title">Items in the shopping cart</string>
     <string name="lang_cart_cost">Total cost:</string>
-<<<<<<< HEAD
     <string name="lang_items_bought">You have successfully bought your items!</string>
     <string name="lang_empty_fields">You need to fill all the fields!</string>
-=======
     <string name="lang_buy">Buy</string>
     <string name="lang_qty">QTY.</string>
->>>>>>> 28b3b7994cc00ebef613c9603304abbcd0347255
 </resources>
