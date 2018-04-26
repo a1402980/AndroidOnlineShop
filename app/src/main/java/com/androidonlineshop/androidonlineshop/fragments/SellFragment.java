@@ -105,7 +105,10 @@ public class SellFragment extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_spinner_item, categoryNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         itemCategories.setAdapter(adapter);
-
+        if(categories.isEmpty()) {
+            // set an integer position based on which category is being selected from the drop down list
+            Toast.makeText(getContext(), getString(R.string.lang_empty_category_sell), Toast.LENGTH_LONG).show();
+        }
         // listen if the sell item button is being clicked
         saleItemButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
@@ -122,9 +125,11 @@ public class SellFragment extends Fragment {
                 // get the rating from what user inputs
                 int rating = Math.round(saleItemRatingBar.getRating());
 
-                // set an integer position based on which category is being selected from the drop down list
-                long categoryId = categories.get(itemCategories.getSelectedItemPosition()).getId();
-
+                long categoryId = 0;
+                if(!categories.isEmpty()) {
+                    // set an integer position based on which category is being selected from the drop down list
+                    categoryId = categories.get(itemCategories.getSelectedItemPosition()).getId();
+                }
                 // do some checking if the fields are empty, then create a new item and put it in the sale list
                 if(!itemName.isEmpty() && !itemDescription.isEmpty() && price > 0 && rating > 0) {
                     item = new ItemEntity(itemName, price, itemDescription, rating, 0, categoryId, false);
