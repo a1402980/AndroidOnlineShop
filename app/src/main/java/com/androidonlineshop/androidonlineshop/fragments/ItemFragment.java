@@ -128,7 +128,7 @@ public class ItemFragment extends Fragment {
                     e.printStackTrace();
                 }
                 // notify the user that the item has been added to the cart
-                Toast.makeText(getContext(), "Item has been added to the cart!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), getString(R.string.lang_item_added_to_cart), Toast.LENGTH_LONG).show();
 
                 // redirect back to the main fragment
                 MainFragment mainFragment = new MainFragment();
