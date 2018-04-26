@@ -298,20 +298,34 @@ public class BuyFragment extends Fragment {
                     // create strings which get the text from text fields
                     String itemName = etInput.getText().toString();
                     String itemDescription = etInput2.getText().toString();
-                    double price = Double.valueOf(etInput3.getText().toString());
-                    int rating = Integer.valueOf(etInput4.getText().toString());
+                    String itemPrice = etInput3.getText().toString();
+                    String itemRating = etInput4.getText().toString();
+
+                    double price = 0;
+                    int rating = 0;
+                    if(!itemPrice.isEmpty() && !itemRating.isEmpty())
+                    {
+                        price = Double.valueOf(itemPrice);
+                        rating = Integer.valueOf(itemRating);
+                    }
 
                     // as long as all the fields are not empty then udpate (modify) the item
-                    if(!itemName.isEmpty() && !itemDescription.isEmpty() && price > 0 && rating > 0) {
-                        item.setName(itemName);
-                        item.setDescription(itemDescription);
-                        item.setPrice(price);
-                        item.setRating(rating);
-                        try {
-                            new UpdateItem(getView()).execute(item).get();
+                    if(!itemName.isEmpty() && !itemDescription.isEmpty() && price > 0) {
+                        if(rating > 1 && rating < 5) {
+                            item.setName(itemName);
+                            item.setDescription(itemDescription);
+                            item.setPrice(price);
+                            item.setRating(rating);
+                            try {
+                                new UpdateItem(getView()).execute(item).get();
 
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else
+                        {
+                            Toast.makeText(getContext(), getString(R.string.lang_rating_limit), Toast.LENGTH_LONG).show();
                         }
                     }
                     else // otherwise just show  a text saying that the fields are empty
