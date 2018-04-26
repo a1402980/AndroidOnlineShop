@@ -14,10 +14,15 @@ import android.widget.Toast;
 import com.androidonlineshop.androidonlineshop.R;
 import com.androidonlineshop.androidonlineshop.db.async.cart.GetCart;
 import com.androidonlineshop.androidonlineshop.db.async.cart.UpdateCart;
+import com.androidonlineshop.androidonlineshop.db.async.category.GetCategories;
 import com.androidonlineshop.androidonlineshop.db.async.item.GetItem;
 import com.androidonlineshop.androidonlineshop.db.async.item.UpdateItem;
 import com.androidonlineshop.androidonlineshop.db.entity.CartEntity;
+import com.androidonlineshop.androidonlineshop.db.entity.CategoryEntity;
 import com.androidonlineshop.androidonlineshop.db.entity.ItemEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ItemFragment extends Fragment {
@@ -104,7 +109,9 @@ public class ItemFragment extends Fragment {
         itemDescription.setText(item.getDescription());
         itemRatingBar.setRating(item.getRating());
         itemPrice.setText(item.getPrice()+"");
-        //itemCategory.setText();
+
+        String categoryName = getItemCategory(item);
+        itemCategory.setText(categoryName);
 
         // listenes if the add to cart button is clicked
         addToCartButton.setOnClickListener(new View.OnClickListener(){
@@ -143,6 +150,25 @@ public class ItemFragment extends Fragment {
         });
 
     }
+    private String getItemCategory(ItemEntity item)
+    {
+        List<CategoryEntity> categories = new ArrayList<>();
+        String categoryName = null;
+        try{
+                categories = new GetCategories(getView()).execute().get();
 
-
+                for(CategoryEntity category : categories)
+                {
+                    if(item.getCategoryid() == category.getId())
+                    {
+                        categoryName = category.getName();
+                    }
+                }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return categoryName;
+    }
 }
