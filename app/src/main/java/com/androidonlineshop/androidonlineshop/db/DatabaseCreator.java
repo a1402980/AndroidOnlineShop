@@ -11,7 +11,6 @@ import android.util.Log;
 import com.androidonlineshop.androidonlineshop.db.entity.CartEntity;
 import com.androidonlineshop.androidonlineshop.db.entity.CategoryEntity;
 import com.androidonlineshop.androidonlineshop.db.entity.ItemEntity;
-import com.androidonlineshop.androidonlineshop.db.pojo.CategoryWithItems;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -138,7 +137,7 @@ public class DatabaseCreator {
         categories.add(electronics);
 
         CartEntity cart = new CartEntity();
-        cart.setId(1L);
+        cart.setId(0L);
         cart.setQuantity(0);
 
         ItemEntity lenovo = new ItemEntity("Lenovo Laptop", 565.00, "New laptop.", 5, 0, laptops.getId(), false);

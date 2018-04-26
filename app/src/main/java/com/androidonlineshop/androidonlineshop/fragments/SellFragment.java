@@ -123,11 +123,11 @@ public class SellFragment extends Fragment {
                 int rating = Math.round(saleItemRatingBar.getRating());
 
                 // set an integer position based on which category is being selected from the drop down list
-                int position = itemCategories.getSelectedItemPosition();
+                long categoryId = categories.get(itemCategories.getSelectedItemPosition()).getId();
 
                 // do some checking if the fields are empty, then create a new item and put it in the sale list
                 if(!itemName.isEmpty() && !itemDescription.isEmpty() && price > 0 && rating > 0) {
-                    item = new ItemEntity(itemName, price, itemDescription, rating, 0, position+1, false);
+                    item = new ItemEntity(itemName, price, itemDescription, rating, 0, categoryId, false);
                     try {
                         // create the item asychnronously
                         new CreateItem(getView()).execute(item).get();

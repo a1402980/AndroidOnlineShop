@@ -5,7 +5,6 @@ import android.view.View;
 
 import com.androidonlineshop.androidonlineshop.db.DatabaseCreator;
 import com.androidonlineshop.androidonlineshop.db.pojo.CartWithItems;
-import com.androidonlineshop.androidonlineshop.db.pojo.CategoryWithItems;
 
 import java.lang.ref.WeakReference;
 import java.util.List;

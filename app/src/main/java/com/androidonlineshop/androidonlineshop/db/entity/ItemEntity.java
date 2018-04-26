@@ -1,15 +1,27 @@
 package com.androidonlineshop.androidonlineshop.db.entity;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
+
+import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 /**
  * Created by Ibrahim Beqiri on 17-Apr-18.
  */
 
-@Entity(tableName = "item")
+@Entity(tableName = "item",  foreignKeys={
+        @ForeignKey(
+                entity=CategoryEntity.class,
+                parentColumns="id",
+                childColumns="categoryid",
+                onDelete=CASCADE)},
+        indices={
+                @Index(value="categoryid")}
+)
 public class ItemEntity implements Serializable{
 
     @PrimaryKey(autoGenerate = true)
