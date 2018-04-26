@@ -311,7 +311,7 @@ public class BuyFragment extends Fragment {
 
                     // as long as all the fields are not empty then udpate (modify) the item
                     if(!itemName.isEmpty() && !itemDescription.isEmpty() && price > 0) {
-                        if(rating > 1 && rating < 5) {
+                        if(rating > 0 && rating < 5) {
                             item.setName(itemName);
                             item.setDescription(itemDescription);
                             item.setPrice(price);
