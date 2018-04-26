@@ -34,4 +34,5 @@
     <string name="lang_empty_cart">You do not have any items in the cart!</string>
     <string name="lang_item_for_sale">You have put an item for sale!</string>
     <string name="lang_category">Category</string>
+    <string name="lang_rating_limit">You can only rate between 1 and 5!</string>
 </resources>
