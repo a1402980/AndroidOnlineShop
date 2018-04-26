@@ -10,7 +10,7 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 /**
- * Created by ibraa on 17-Apr-18.
+ * Created by Ibrahim Beqiri on 17-Apr-18.
  */
 
 public class GetCategories extends AsyncTask<Void, Void, List<CategoryEntity>> {

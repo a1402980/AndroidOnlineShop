@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -89,6 +88,7 @@ public class BuyFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_buy, container, false);
 
+        // get the listview from the view
         itemsListView = view.findViewById(R.id.itemsListView);
 
         return view;
@@ -98,16 +98,22 @@ public class BuyFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // get the bundle from the fragment arguments
         Bundle bundle = this.getArguments();
         if(bundle != null)
         {
+            // get category from the bundle that instantiated the fragment previously
             category = (CategoryEntity) bundle.getSerializable("category");
         }
 
+        // initialize the items list
         items = new ArrayList<>();
+        // create a lsit for items names
         final List<String> itemNames = new ArrayList<>();
 
+        // try and catch error handling for the async task
         try {
+            // get all items from the database asynchronously
             items = new GetItems(getView()).execute().get();
         }
         catch (Exception e)
@@ -115,14 +121,16 @@ public class BuyFragment extends Fragment {
             e.printStackTrace();
         }
 
+        // as long as the items list is not empty, and the category is not null for every item in the items list get their name
         if(!items.isEmpty()) {
             if (category != null) {
                 for (ItemEntity item : items) {
+                    // check if the category id matches the item's category id in order to display only the items for a certain category
                     if (category.getId() == item.getCategoryid() && item.isSold() == false) {
                         itemNames.add(item.getName());
                     }
                 }
-            } else {
+            } else { // if the fragment is not instantiated from CategoriesFragment then show all the items that are for sale
                 for (ItemEntity item : items) {
                     if(item.isSold() == false) {
                         itemNames.add(item.getName());
@@ -131,9 +139,12 @@ public class BuyFragment extends Fragment {
                 }
             }
         }
+
+        // create an adapter that will handle the items in the list view
         ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_1, itemNames);
         itemsListView.setAdapter(adapter);
 
+        // if the item is clicked get the itemName and instantiante new ItemFragment and replace the current one
         itemsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -151,6 +162,8 @@ public class BuyFragment extends Fragment {
             }
 
         });
+
+        // if the item is clicked for a long time then generate the below dialog
         itemsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
@@ -163,6 +176,7 @@ public class BuyFragment extends Fragment {
             }
         });
 
+        // this button redirects to SellFragment
         Button addbutton = (Button) view.findViewById(R.id.sellItem);
         addbutton.setOnClickListener(new View.OnClickListener()
         {
@@ -184,6 +198,7 @@ public class BuyFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
+    // generate dialogs for long click of an item
     private void generateDialog(final int action) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
@@ -197,7 +212,7 @@ public class BuyFragment extends Fragment {
             alertDialog.setTitle(getString(R.string.lang_modify_delete));
             alertDialog.setCancelable(true);
 
-
+            // if the user modifies the item generate dialog 2
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.lang_modify), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -206,7 +221,7 @@ public class BuyFragment extends Fragment {
 
                 }
             });
-
+            // if the user deletes the item run the asynchronous taks do delete the item
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.lang_delete), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -221,11 +236,12 @@ public class BuyFragment extends Fragment {
                 }
             });
 
-        }else if(action == 2){
+        }else if(action == 2){ // create a new layot if the user decided to modify the item
 
             alertDialog.setTitle(getString(R.string.lang_modify));
             alertDialog.setCancelable(true);
 
+            // textviews and edit texts inputs for all the fields of the item (name, description, price, rating)
             LinearLayout layout       = new LinearLayout(getActivity());
             TextView tvMessage        = new TextView(getActivity());
             TextView tvMessage2        = new TextView(getActivity());
@@ -236,15 +252,16 @@ public class BuyFragment extends Fragment {
             final EditText etInput3   = new EditText(getActivity());
             final EditText etInput4   = new EditText(getActivity());
 
+            // se the edittext values to the items real values
             item = items.get(itemPosition);
             etInput.setText(item.getName());
             etInput2.setText(item.getDescription());
-
             etInput3.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             etInput4.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             etInput3.setText(String.valueOf(item.getPrice()));
             etInput4.setText(String.valueOf(item.getRating()));
 
+            // set the hint for text fields
             etInput.setHint(getString(R.string.lang_name));
             etInput2.setHint(getString(R.string.lang_description));
             etInput3.setHint(getString(R.string.lang_price));
@@ -278,12 +295,13 @@ public class BuyFragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-
+                    // create strings which get the text from text fields
                     String itemName = etInput.getText().toString();
                     String itemDescription = etInput2.getText().toString();
                     double price = Double.valueOf(etInput3.getText().toString());
                     int rating = Integer.valueOf(etInput4.getText().toString());
 
+                    // as long as all the fields are not empty then udpate (modify) the item
                     if(!itemName.isEmpty() && !itemDescription.isEmpty() && price > 0 && rating > 0) {
                         item.setName(itemName);
                         item.setDescription(itemDescription);
@@ -296,7 +314,7 @@ public class BuyFragment extends Fragment {
                             e.printStackTrace();
                         }
                     }
-                    else
+                    else // otherwise just show  a text saying that the fields are empty
                     {
                         Toast.makeText(getActivity(), getString(R.string.lang_empty_fields), Toast.LENGTH_LONG).show();
                     }

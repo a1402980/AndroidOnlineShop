@@ -3,7 +3,6 @@ package com.androidonlineshop.androidonlineshop.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +22,7 @@ import com.androidonlineshop.androidonlineshop.db.entity.ItemEntity;
 
 public class ItemFragment extends Fragment {
 
+    // necessary fields to show the item price, description, rating, name and add them to cart
     private TextView itemName;
     private TextView itemDescription;
     private RatingBar itemRatingBar;
@@ -64,6 +64,7 @@ public class ItemFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_item, container, false);
 
+        // get all the fields from the view
         itemName = view.findViewById(R.id.itemName);
         itemDescription = view.findViewById(R.id.itemDescription);
         itemRatingBar = view.findViewById(R.id.itemRatingBar);
@@ -77,13 +78,17 @@ public class ItemFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // get the bundle from the previous fragment
         Bundle bundle = this.getArguments();
         if(bundle != null)
         {
+            // get the name of the item that was clicked on the previous fragment
             nameOfItem = (String) bundle.getSerializable("itemName");
         }
 
+        // try and catch error handling for asynchronous tasks
         try{
+            // get the cart and the item based on the name asynchronously
             cart = new GetCart(getView()).execute().get();
             item = new GetItem(getView()).execute(nameOfItem).get();
         }
@@ -92,19 +97,25 @@ public class ItemFragment extends Fragment {
             e.printStackTrace();
         }
 
-
+        // set the fields based on the retrieved item's values
         itemName.setText(item.getName());
         itemDescription.setText(item.getDescription());
         itemRatingBar.setRating(item.getRating());
         itemPrice.setText(item.getPrice()+"");
 
+        // listenes if the add to cart button is clicked
         addToCartButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
 
+                // if the add to cart button is clicked then set the card id of the item to the id of the retrieved cart and set the boolean value as true
                 item.setCartid(cart.getId());
                 item.setSold(true);
+
+                // a new item has been added to the cart so set the quantity to be +1
                 cart.setQuantity(cart.getQuantity()+1);
+
                 try {
+                    // update the cart and the item asychnronously
                    new UpdateCart(getView()).execute(cart).get();
                    new UpdateItem(getView()).execute(item).get();
 
@@ -113,11 +124,12 @@ public class ItemFragment extends Fragment {
                 {
                     e.printStackTrace();
                 }
+                // notify the user that the item has been added to the cart
                 Toast.makeText(getContext(), "Item has been added to the cart!", Toast.LENGTH_LONG).show();
 
+                // redirect back to the main fragment
                 MainFragment mainFragment = new MainFragment();
                 Bundle bundle = new Bundle();
-
 
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, mainFragment, BACK_STACK_ROOT_TAG)

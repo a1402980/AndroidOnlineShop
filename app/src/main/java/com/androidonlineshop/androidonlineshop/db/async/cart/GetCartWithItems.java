@@ -11,7 +11,7 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 /**
- * Created by ibraa on 24-Apr-18.
+ * Created by Ibrahim Beqiri on 24-Apr-18.
  */
 
 public class GetCartWithItems extends AsyncTask<Void, Void, List<CartWithItems>> {

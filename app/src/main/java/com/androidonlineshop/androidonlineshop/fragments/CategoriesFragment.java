@@ -75,7 +75,7 @@ public class CategoriesFragment extends Fragment {
         List<String> categoryNames = new ArrayList<>();
 
 
-        // set the listview in the activity with the adapter
+        // get categories from the databae asynchronously
         try {
             categories = new GetCategories(getView()).execute().get();
             if(!categories.isEmpty()) {

@@ -6,7 +6,7 @@ import android.arch.persistence.room.PrimaryKey;
 import java.io.Serializable;
 
 /**
- * Created by ibraa on 17-Apr-18.
+ * Created by Ibrahim Beqiri on 17-Apr-18.
  */
 
 @Entity(tableName = "category")

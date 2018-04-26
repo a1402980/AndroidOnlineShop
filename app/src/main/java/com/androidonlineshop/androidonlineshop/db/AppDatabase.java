@@ -11,7 +11,7 @@ import com.androidonlineshop.androidonlineshop.db.entity.CategoryEntity;
 import com.androidonlineshop.androidonlineshop.db.entity.ItemEntity;
 
 /**
- * Created by ibraa on 17-Apr-18.
+ * Created by Ibrahim Beqiri on 17-Apr-18.
  */
 
 @Database(version = 1, entities = {ItemEntity.class, CategoryEntity.class, CartEntity.class})

@@ -2,12 +2,11 @@ package com.androidonlineshop.androidonlineshop.db.entity;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.support.annotation.Nullable;
 
 import java.io.Serializable;
 
 /**
- * Created by ibraa on 17-Apr-18.
+ * Created by Ibrahim Beqiri on 17-Apr-18.
  */
 
 @Entity(tableName = "item")

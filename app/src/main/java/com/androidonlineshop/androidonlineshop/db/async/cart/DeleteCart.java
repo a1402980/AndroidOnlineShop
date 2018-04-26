@@ -9,7 +9,7 @@ import com.androidonlineshop.androidonlineshop.db.entity.CartEntity;
 import java.lang.ref.WeakReference;
 
 /**
- * Created by ibraa on 17-Apr-18.
+ * Created by Ibrahim Beqiri on 17-Apr-18.
  */
 
 public class DeleteCart extends AsyncTask<CartEntity, Void, Void> {

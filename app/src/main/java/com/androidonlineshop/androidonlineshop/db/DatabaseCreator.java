@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static com.androidonlineshop.androidonlineshop.db.AppDatabase.DATABASE_NAME;
 
 /**
- * Created by ibraa on 17-Apr-18.
+ * Created by Ibrahim Beqiri on 17-Apr-18.
  */
 
 public class DatabaseCreator {
@@ -113,22 +113,29 @@ public class DatabaseCreator {
         }
     }
 
+    // generating data on app launch
     public void generateData(AppDatabase db){
 
+        // one list for items and for categories
         List<ItemEntity> items = new ArrayList<>();
         List<CategoryEntity> categories = new ArrayList<>();
 
+        // creating some custom categories
         CategoryEntity accessories = new CategoryEntity(1L,"Accessories", "In this category belong accessories!");
         CategoryEntity laptops = new CategoryEntity(2L, "Laptop", "In this category belong laptops!");
         CategoryEntity TVs = new CategoryEntity(3L, "TVs", "In this category belong TVs!");
         CategoryEntity phones = new CategoryEntity(4L, "Phones", "In this category belong phones");
         CategoryEntity printers = new CategoryEntity(5L, "Printers", "In this category belong printers");
+        CategoryEntity tablets = new CategoryEntity(6L, "Tablets", "In this category belong tablets");
+        CategoryEntity electronics = new CategoryEntity(7L, "Electronics", "In this category belong electronics");
 
         categories.add(accessories);
         categories.add(laptops);
         categories.add(TVs);
         categories.add(phones);
         categories.add(printers);
+        categories.add(tablets);
+        categories.add(electronics);
 
         CartEntity cart = new CartEntity();
         cart.setId(1L);
@@ -139,8 +146,14 @@ public class DatabaseCreator {
         ItemEntity headphones = new ItemEntity("JBL HeadPhones", 45.00, "New headphones.", 5, 0, accessories.getId(), false);
         ItemEntity phonecase = new ItemEntity("iphone 7 case", 15.00, "Phone Case for iphone 7", 3, 0, accessories.getId(), false);
         ItemEntity panasonicTV = new ItemEntity("Panasonic 55' 4k TV",899.00,"This TV is in great condition. I bought it one year ago",5,0,TVs.getId(), false);
-        ItemEntity iphone = new ItemEntity("iphone 5s",399.00,"The phone is cracked a little bit but works just fine",2,cart.getId(),phones.getId(), true);
-        ItemEntity brotherprinter = new ItemEntity("Brother printer",49.00,"Used printer for 2 years and now I have a new one. Works just fine. Has some colors included.",4,cart.getId(),printers.getId(), true);
+        ItemEntity iphone = new ItemEntity("iphone 5s",399.00,"The phone is cracked a little bit but works just fine",2,0,phones.getId(), false);
+        ItemEntity hpprinter = new ItemEntity("HP PRinter",49.95,"Used printer for 2 years and now I have a new one. Works just fine. Has some colors included.",4,0,printers.getId(), true);
+        ItemEntity asuslaptop = new ItemEntity("Asus Laptop", 565.00, "New laptop.", 5, 0, laptops.getId(), false);
+        ItemEntity intelprocessor = new ItemEntity("Intel processor i3", 52.95, "Intel processor i3. New.", 4, 0, electronics.getId(), false);
+        ItemEntity simpleprinter = new ItemEntity("Office Printer", 145.50, "New office printer.", 5, 0, printers.getId(), false);
+        ItemEntity samsungtablet = new ItemEntity("Samsung note tablet", 155.00, "Used Samsung tablet", 3, 0, tablets.getId(), false);
+        ItemEntity samsunggalaxy= new ItemEntity("Samsung galaxy s7",399.00,"New Samsung Galaxy s7. Earphones and charger included",5,0,phones.getId(), false);
+        ItemEntity nexus5 = new ItemEntity("Nexus 5X phone",299.00,"The phone is used but there are not scratches.",4,0,phones.getId(), false);
 
         items.add(lenovo);
         items.add(hp);
@@ -148,7 +161,13 @@ public class DatabaseCreator {
         items.add(phonecase);
         items.add(panasonicTV);
         items.add(iphone);
-        items.add(brotherprinter);
+        items.add(hpprinter);
+        items.add(asuslaptop);
+        items.add(intelprocessor);
+        items.add(simpleprinter);
+        items.add(samsunggalaxy);
+        items.add(samsungtablet);
+        items.add(nexus5);
 
 
         db.categoryDAO().insertAll(categories);

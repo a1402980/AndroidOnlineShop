@@ -11,7 +11,7 @@ import java.lang.ref.WeakReference;
 import java.util.Locale;
 
 /**
- * Created by ibraa on 17-Apr-18.
+ * Created by Ibrahim Beqiri on 17-Apr-18.
  */
 
 public class CreateCategory extends AsyncTask<CategoryEntity, Void, Boolean> {
