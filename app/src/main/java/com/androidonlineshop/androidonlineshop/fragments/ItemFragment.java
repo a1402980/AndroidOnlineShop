@@ -24,6 +24,7 @@ public class ItemFragment extends Fragment {
 
     // necessary fields to show the item price, description, rating, name and add them to cart
     private TextView itemName;
+    private  TextView itemCategory;
     private TextView itemDescription;
     private RatingBar itemRatingBar;
     private Button addToCartButton;
@@ -70,6 +71,7 @@ public class ItemFragment extends Fragment {
         itemRatingBar = view.findViewById(R.id.itemRatingBar);
         addToCartButton = view.findViewById(R.id.addToCartButton);
         itemPrice = view.findViewById(R.id.itemPrice);
+        itemCategory = view.findViewById(R.id.itemCategory);
 
         return view;
     }
@@ -102,6 +104,7 @@ public class ItemFragment extends Fragment {
         itemDescription.setText(item.getDescription());
         itemRatingBar.setRating(item.getRating());
         itemPrice.setText(item.getPrice()+"");
+        //itemCategory.setText();
 
         // listenes if the add to cart button is clicked
         addToCartButton.setOnClickListener(new View.OnClickListener(){

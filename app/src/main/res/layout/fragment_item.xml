@@ -27,6 +27,23 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:singleLine="false"
+            android:text="@string/lang_category"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/itemCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_marginBottom="5dp"
+            android:singleLine="false" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:singleLine="false"
             android:text="@string/lang_description"
             android:textSize="20sp"
             android:textStyle="bold" />
