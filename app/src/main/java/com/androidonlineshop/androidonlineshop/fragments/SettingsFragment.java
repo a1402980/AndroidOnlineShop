@@ -1,27 +1,16 @@
 package com.androidonlineshop.androidonlineshop.fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import java.util.Locale;
-import android.os.Bundle;
-import android.app.Activity;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Toast;
-
 import com.androidonlineshop.androidonlineshop.R;
-import com.androidonlineshop.androidonlineshop.activities.MainActivity;
 
 
 public class SettingsFragment extends Fragment {
@@ -52,6 +41,7 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        //set on click listeners fo the flag buttons
         View view = inflater.inflate(R.layout.fragment_settings,
                 container, false);
 
@@ -63,7 +53,6 @@ public class SettingsFragment extends Fragment {
             {
                 String lang = "eng";
                 setLocale(lang);
-                Log.i("Works", "Button clicked");
             }
         });
 
@@ -75,7 +64,6 @@ public class SettingsFragment extends Fragment {
             {
                 String lang = "de";
                 setLocale(lang);
-                Log.i("Works", "Button clicked");
             }
         });
 
@@ -85,6 +73,7 @@ public class SettingsFragment extends Fragment {
 
 
     public void setLocale(String lang) {
+        //change the apps default language to a different one so the language will change.
         Locale myLocale = new Locale(lang);
         Resources res = getResources();
         DisplayMetrics dm = res.getDisplayMetrics();

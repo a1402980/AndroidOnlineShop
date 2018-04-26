@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.androidonlineshop.androidonlineshop.R;
 import com.androidonlineshop.androidonlineshop.db.DatabaseCreator;
@@ -56,7 +55,7 @@ public class MainActivity extends AppCompatActivity{
             } catch (Exception e) {
                 Log.e("TAG", e.getMessage(), e);
             }
-
+            //if there is no other fragment in use, use the mainFragment
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment, BACK_STACK_ROOT_TAG).commit();
         }
@@ -80,8 +79,6 @@ public class MainActivity extends AppCompatActivity{
 
 
     public void selectItemDrawer(MenuItem menuItem){
-
-        View v = this.findViewById(android.R.id.content).getRootView();
 
         Class fragmentClass = null;
         Fragment fragment = null;

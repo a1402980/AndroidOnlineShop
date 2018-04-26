@@ -1,17 +1,11 @@
 package com.androidonlineshop.androidonlineshop.fragments;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,22 +13,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidonlineshop.androidonlineshop.R;
-import com.androidonlineshop.androidonlineshop.db.async.cart.UpdateCart;
 import com.androidonlineshop.androidonlineshop.db.async.category.CreateCategory;
 import com.androidonlineshop.androidonlineshop.db.async.category.DeleteCategory;
 import com.androidonlineshop.androidonlineshop.db.async.category.GetCategories;
-import com.androidonlineshop.androidonlineshop.db.async.category.GetCategoriesWithItems;
 import com.androidonlineshop.androidonlineshop.db.async.category.UpdateCategory;
 import com.androidonlineshop.androidonlineshop.db.entity.CategoryEntity;
-import com.androidonlineshop.androidonlineshop.db.entity.ItemEntity;
-import com.androidonlineshop.androidonlineshop.db.pojo.CategoryWithItems;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +61,7 @@ public class CategoriesFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_categories, container, false);
 
+        //get listview from layout
         categoriesListView = view.findViewById(R.id.categoriesListView);
 
         return view;
@@ -107,6 +97,7 @@ public class CategoriesFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                //when clicking on an item on the list, take to the buy items page with only those categories items there
                 BuyFragment buyFragment = new BuyFragment();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("category", categories.get(position));
@@ -128,6 +119,7 @@ public class CategoriesFragment extends Fragment {
                 // TODO Auto-generated method stub
                 categoryPosition = pos;
                 Log.v("long clicked","pos: " + pos);
+                //when pressing down on an item on the list, generate a dialog that asks what user wants to do with the list
                 generateDialog(1);
                 return true;
             }
@@ -150,14 +142,14 @@ public class CategoriesFragment extends Fragment {
 
     private void generateDialog(final int action) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
-
+        //initialize the dialog
         final View view = inflater.inflate(R.layout.prompt, null);
         final AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
 
 
 
         if (action == 1){
-
+            //ask user what he wants to do with the selected item
             alertDialog.setTitle(getString(R.string.lang_modify_delete));
             alertDialog.setCancelable(true);
 
@@ -165,7 +157,7 @@ public class CategoriesFragment extends Fragment {
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.lang_modify), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-
+                //if user chooses modify, open a new dialog with different fields
                 generateDialog(2);
 
                 }
@@ -175,6 +167,7 @@ public class CategoriesFragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     try{
+                            //if user chooses delete, delete this item
                          new DeleteCategory(getView()).execute(categories.get(categoryPosition)).get();
                     }
                     catch (Exception e)
@@ -186,7 +179,7 @@ public class CategoriesFragment extends Fragment {
             });
 
         }else if(action == 2){
-
+            //generate a dialog that has information about the category with the current data in the fields
             alertDialog.setTitle(getString(R.string.lang_modify));
             alertDialog.setCancelable(true);
 
@@ -200,10 +193,6 @@ public class CategoriesFragment extends Fragment {
             etInput.setText(category.getName());
             etInput2.setText(category.getDescription());
 
-            //etInput.setHint(getString(R.string.lang_name));
-            //etInput2.setHint(getString(R.string.lang_description));
-
-            //SET VALUES FOR etInput & etInput2 here!
 
             tvMessage.setText(getString(R.string.lang_name));
             tvMessage2.setText(getString(R.string.lang_description));
@@ -223,7 +212,7 @@ public class CategoriesFragment extends Fragment {
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.lang_confirm), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-
+                    //when clicking confirm, update the fields
 
                     String categoryName = etInput.getText().toString();
                     String categoryDescription = etInput2.getText().toString();
@@ -250,27 +239,26 @@ public class CategoriesFragment extends Fragment {
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.lang_cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    //if cancel, close the dialog
                     alertDialog.dismiss();
                 }
             });
         }else if(action == 3){
 
+            //generate a dialog for making a new category
+
             alertDialog.setTitle(getString(R.string.lang_add_category));
             alertDialog.setCancelable(true);
 
             LinearLayout layout       = new LinearLayout(getActivity());
-            TextView tvMessage        = new TextView(getActivity());
             final EditText name    = new EditText(getActivity());
             final EditText description    = new EditText(getActivity());
 
             name.setHint(getString(R.string.lang_name));
             description.setHint(getString(R.string.lang_description));
 
-            //tvMessage.setText(getString(R.string.lang_modify_delete));
-            //tvMessage.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f);
             name.setSingleLine();
             layout.setOrientation(LinearLayout.VERTICAL);
-            //layout.addView(tvMessage);
             layout.addView(name);
             layout.addView(description);
             layout.setPadding(50, 40, 50, 10);
@@ -282,6 +270,7 @@ public class CategoriesFragment extends Fragment {
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.lang_confirm), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    //when clicking confirm, create a new category
                     String categoryName = name.getText().toString();
                     String categoryDescription = description.getText().toString();
                     if(!categoryName.isEmpty() && !categoryDescription.isEmpty()) {
@@ -306,6 +295,7 @@ public class CategoriesFragment extends Fragment {
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.lang_cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    //if cancel click, close dialog
                     alertDialog.dismiss();
                 }
             });
@@ -316,6 +306,7 @@ public class CategoriesFragment extends Fragment {
     }
     private void refreshFragment()
     {
+        //this method is used so that the page is refreshed
         CategoriesFragment categoriesFragment = new CategoriesFragment();
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, categoriesFragment, BACK_STACK_ROOT_TAG)
