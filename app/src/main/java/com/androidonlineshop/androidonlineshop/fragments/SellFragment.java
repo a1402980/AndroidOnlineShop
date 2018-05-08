@@ -1,25 +1,37 @@
 package com.androidonlineshop.androidonlineshop.fragments;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidonlineshop.androidonlineshop.R;
 import com.androidonlineshop.androidonlineshop.entity.CategoryEntity;
 import com.androidonlineshop.androidonlineshop.entity.ItemEntity;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 
 public class SellFragment extends Fragment {
@@ -30,6 +42,7 @@ public class SellFragment extends Fragment {
     private RatingBar saleItemRatingBar;
     private Button saleItemButton;
     private EditText saleItemDescription;
+    private Button choosePic;
 
 
     // dropdown spinner where the user can choose in which category to sell the item
@@ -38,6 +51,12 @@ public class SellFragment extends Fragment {
     // lists of categories and their names
     private List<CategoryEntity> categories;
     private List<String> categoryNames;
+
+    private ImageView imageView;
+    private String encodedImage;
+    private byte[] imageByte;
+    //a Uri object to store file path
+    private Uri filePath;
 
     // an item object
     private ItemEntity item;
@@ -61,6 +80,11 @@ public class SellFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        //storageReference= FirebaseStorage.getInstance().getReference();
+
+
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_sell, container, false);
 
@@ -71,6 +95,7 @@ public class SellFragment extends Fragment {
         saleItemButton = view.findViewById(R.id.saleItemButton);
         saleItemDescription = view.findViewById(R.id.saleItemDescription);
         itemCategories = view.findViewById(R.id.itemCategories);
+        choosePic = view.findViewById(R.id.choosePic);
 
         return view;
     }
@@ -133,6 +158,9 @@ public class SellFragment extends Fragment {
                             .replace(R.id.fragment_container, sellFragment, BACK_STACK_ROOT_TAG)
                             .addToBackStack("stuff")
                             .commit();
+
+                    // FIREBASE SAVE IMAGE CODE SAMPLE
+                    //ItemEntity.setByteArrayFromImage(imageByte);
                 }
                 else // if the fields are empty let the user know he/she needs to fill them
                 {
@@ -140,7 +168,46 @@ public class SellFragment extends Fragment {
                 }*/
 
             }
+
+
         });
 
+        choosePic.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                takePhoto();
+            }
+        });
     }
+
+    public void takePhoto() {
+        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        getActivity().startActivityForResult(takePicture, 0);
+
+    }
+
+
+    //handling the image chooser activity result
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode==0 && resultCode == RESULT_OK){
+
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageView.setImageBitmap(imageBitmap);
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+            byte[] bytesForImage = baos.toByteArray();
+            imageByte = bytesForImage;
+            //encodedImage = Base64.encodeToString(bytesForImage, Base64.DEFAULT);
+
+        }
+
+    }
+
+
+
+
 }
