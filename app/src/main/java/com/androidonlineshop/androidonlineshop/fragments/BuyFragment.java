@@ -20,11 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidonlineshop.androidonlineshop.R;
-import com.androidonlineshop.androidonlineshop.db.async.item.DeleteItem;
-import com.androidonlineshop.androidonlineshop.db.async.item.GetItems;
-import com.androidonlineshop.androidonlineshop.db.async.item.UpdateItem;
-import com.androidonlineshop.androidonlineshop.db.entity.CategoryEntity;
-import com.androidonlineshop.androidonlineshop.db.entity.ItemEntity;
+import com.androidonlineshop.androidonlineshop.entity.CategoryEntity;
+import com.androidonlineshop.androidonlineshop.entity.ItemEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,18 +108,9 @@ public class BuyFragment extends Fragment {
         // create a lsit for items names
         final List<String> itemNames = new ArrayList<>();
 
-        // try and catch error handling for the async task
-        try {
-            // get all items from the database asynchronously
-            items = new GetItems(getView()).execute().get();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
 
         // as long as the items list is not empty, and the category is not null for every item in the items list get their name
-        if(!items.isEmpty()) {
+        /*if(!items.isEmpty()) {
             if (category != null) {
                 for (ItemEntity item : items) {
                     // check if the category id matches the item's category id in order to display only the items for a certain category
@@ -138,7 +126,7 @@ public class BuyFragment extends Fragment {
 
                 }
             }
-        }
+        }*/
 
         // create an adapter that will handle the items in the list view
         ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_1, itemNames);
@@ -225,13 +213,7 @@ public class BuyFragment extends Fragment {
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.lang_delete), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    try{
-                        new DeleteItem(getView()).execute(items.get(itemPosition)).get();
-                    }
-                    catch (Exception e)
-                    {
-                        e.printStackTrace();
-                    }
+
                     refreshFragment();
                 }
             });
@@ -310,7 +292,7 @@ public class BuyFragment extends Fragment {
                     }
 
                     // as long as all the fields are not empty then udpate (modify) the item
-                    if(!itemName.isEmpty() && !itemDescription.isEmpty() && price > 0) {
+                    /*if(!itemName.isEmpty() && !itemDescription.isEmpty() && price > 0) {
                         if(rating > 0 && rating < 5) {
                             item.setName(itemName);
                             item.setDescription(itemDescription);
@@ -331,7 +313,7 @@ public class BuyFragment extends Fragment {
                     else // otherwise just show  a text saying that the fields are empty
                     {
                         Toast.makeText(getActivity(), getString(R.string.lang_empty_fields), Toast.LENGTH_LONG).show();
-                    }
+                    }*/
                     refreshFragment();
 
                 }

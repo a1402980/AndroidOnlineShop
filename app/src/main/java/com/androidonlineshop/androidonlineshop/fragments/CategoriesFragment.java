@@ -19,11 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidonlineshop.androidonlineshop.R;
-import com.androidonlineshop.androidonlineshop.db.async.category.CreateCategory;
-import com.androidonlineshop.androidonlineshop.db.async.category.DeleteCategory;
-import com.androidonlineshop.androidonlineshop.db.async.category.GetCategories;
-import com.androidonlineshop.androidonlineshop.db.async.category.UpdateCategory;
-import com.androidonlineshop.androidonlineshop.db.entity.CategoryEntity;
+import com.androidonlineshop.androidonlineshop.entity.CategoryEntity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +38,7 @@ public class CategoriesFragment extends Fragment {
     private List<CategoryEntity> categories;
     private int categoryPosition;
     private CategoryEntity category;
+    private String categoryUid;
 
     public CategoriesFragment() {
         // Required empty public constructor
@@ -72,25 +73,33 @@ public class CategoriesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         categories = new ArrayList<>();
-        List<String> categoryNames = new ArrayList<>();
+        final List<String> categoryNames = new ArrayList<>();
 
-
-        // get categories from the databae asynchronously
-        try {
-            categories = new GetCategories(getView()).execute().get();
-            if(!categories.isEmpty()) {
-                for (CategoryEntity category : categories) {
-                    categoryNames.add(category.getName());
-                }
-            }
-
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_1, categoryNames);
+        final ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_1, categoryNames);
+        adapter.notifyDataSetChanged();
         categoriesListView.setAdapter(adapter);
+
+        FirebaseDatabase.getInstance()
+                .getReference("categories")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()) {
+                            //category.setUid(categoryUid);
+                            for(CategoryEntity category : toCategories(dataSnapshot)) {
+                                categoryNames.add(category.getName());
+                            }
+                            adapter.notifyDataSetChanged();
+
+                            categories.add(category);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 
         categoriesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -166,14 +175,7 @@ public class CategoriesFragment extends Fragment {
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.lang_delete), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    try{
-                            //if user chooses delete, delete this item
-                         new DeleteCategory(getView()).execute(categories.get(categoryPosition)).get();
-                    }
-                    catch (Exception e)
-                    {
-                        e.printStackTrace();
-                    }
+
                     refreshFragment();
                 }
             });
@@ -217,20 +219,6 @@ public class CategoriesFragment extends Fragment {
                     String categoryName = etInput.getText().toString();
                     String categoryDescription = etInput2.getText().toString();
 
-                    if(!categoryName.isEmpty() && !categoryDescription.isEmpty()) {
-                        category.setName(categoryName);
-                        category.setDescription(categoryDescription);
-                        try {
-                            new UpdateCategory(getView()).execute(category).get();
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    else
-                    {
-                        Toast.makeText(getActivity(), getString(R.string.lang_empty_fields), Toast.LENGTH_LONG).show();
-                    }
                     refreshFragment();
 
                 }
@@ -273,20 +261,6 @@ public class CategoriesFragment extends Fragment {
                     //when clicking confirm, create a new category
                     String categoryName = name.getText().toString();
                     String categoryDescription = description.getText().toString();
-                    if(!categoryName.isEmpty() && !categoryDescription.isEmpty()) {
-                        CategoryEntity category = new CategoryEntity(categoryName, categoryDescription);
-                        try {
-                            boolean response = new CreateCategory(getView()).execute(category).get();
-                            System.out.println("Category inserted? " + response);
-
-                        } catch (Exception e) {
-
-                        }
-                    }
-                    else
-                    {
-                        Toast.makeText(getActivity(), getString(R.string.lang_empty_fields), Toast.LENGTH_LONG).show();
-                    }
                     //reset fragment
                     refreshFragment();
                 }
@@ -312,5 +286,16 @@ public class CategoriesFragment extends Fragment {
                 .replace(R.id.fragment_container, categoriesFragment, BACK_STACK_ROOT_TAG)
                 .addToBackStack("categories")
                 .commit();
+    }
+    private List<CategoryEntity> toCategories(DataSnapshot snapshot)
+    {
+        List<CategoryEntity> categories = new ArrayList<>();
+        for(DataSnapshot childSnapshot : snapshot.getChildren())
+        {
+            CategoryEntity category = childSnapshot.getValue(CategoryEntity.class);
+            category.setUid(childSnapshot.getKey());
+            categories.add(category);
+        }
+        return categories;
     }
 }

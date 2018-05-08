@@ -1,7 +1,8 @@
-package com.androidonlineshop.androidonlineshop.db.entity;
+package com.androidonlineshop.androidonlineshop.entity;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+
+import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
 
@@ -9,36 +10,30 @@ import java.io.Serializable;
  * Created by Ibrahim Beqiri on 17-Apr-18.
  */
 
-@Entity(tableName = "category")
 public class CategoryEntity implements Serializable{
 
-    @PrimaryKey(autoGenerate = true)
-    private long id;
+    @NonNull
+    private String  uid;
 
     private String name;
     private String description;
 
     public CategoryEntity() {}
 
-    public CategoryEntity(String name, String description)
+    public CategoryEntity(String uid, String name, String description)
     {
+        this.uid = uid;
         this.name = name;
         this.description = description;
     }
 
-    public CategoryEntity(long id, String name, String description)
-    {
-        this.id = id;
-        this.name = name;
-        this.description = description;
+    @Exclude
+    public String getUid() {
+        return uid;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getName() {

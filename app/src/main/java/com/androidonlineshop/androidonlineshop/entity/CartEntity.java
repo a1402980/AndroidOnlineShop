@@ -1,7 +1,8 @@
-package com.androidonlineshop.androidonlineshop.db.entity;
+package com.androidonlineshop.androidonlineshop.entity;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+
+import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
 
@@ -9,11 +10,10 @@ import java.io.Serializable;
  * Created by Ibrahim Beqiri on 17-Apr-18.
  */
 
-@Entity(tableName = "cart")
 public class CartEntity implements Serializable{
 
-    @PrimaryKey(autoGenerate = true)
-    private long id;
+    @NonNull
+    private String uid;
 
     private int quantity;
 
@@ -23,9 +23,10 @@ public class CartEntity implements Serializable{
         this.quantity = quantity;
     }
 
-    public long getId() { return id; }
+    @Exclude
+    public String getUid() { return uid; }
 
-    public void setId(long id) { this.id = id; }
+    public void setUid(String uid) { this.uid = uid; }
 
     public int getQuantity() { return quantity; }
 

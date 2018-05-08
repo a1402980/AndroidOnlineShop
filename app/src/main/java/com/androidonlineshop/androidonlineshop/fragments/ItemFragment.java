@@ -12,14 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidonlineshop.androidonlineshop.R;
-import com.androidonlineshop.androidonlineshop.db.async.cart.GetCart;
-import com.androidonlineshop.androidonlineshop.db.async.cart.UpdateCart;
-import com.androidonlineshop.androidonlineshop.db.async.category.GetCategories;
-import com.androidonlineshop.androidonlineshop.db.async.item.GetItem;
-import com.androidonlineshop.androidonlineshop.db.async.item.UpdateItem;
-import com.androidonlineshop.androidonlineshop.db.entity.CartEntity;
-import com.androidonlineshop.androidonlineshop.db.entity.CategoryEntity;
-import com.androidonlineshop.androidonlineshop.db.entity.ItemEntity;
+import com.androidonlineshop.androidonlineshop.entity.CartEntity;
+import com.androidonlineshop.androidonlineshop.entity.CategoryEntity;
+import com.androidonlineshop.androidonlineshop.entity.ItemEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,16 +88,6 @@ public class ItemFragment extends Fragment {
             nameOfItem = (String) bundle.getSerializable("itemName");
         }
 
-        // try and catch error handling for asynchronous tasks
-        try{
-            // get the cart and the item based on the name asynchronously
-            cart = new GetCart(getView()).execute().get();
-            item = new GetItem(getView()).execute(nameOfItem).get();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
 
         // set the fields based on the retrieved item's values
         itemName.setText(item.getName());
@@ -118,7 +103,7 @@ public class ItemFragment extends Fragment {
             public void onClick(View v) {
 
                 // if the add to cart button is clicked then set the card id of the item to the id of the retrieved cart and set the boolean value as true
-                item.setCartid(cart.getId());
+                /*item.setCartid(cart.getId());
                 item.setSold(true);
 
                 // a new item has been added to the cart so set the quantity to be +1
@@ -144,7 +129,7 @@ public class ItemFragment extends Fragment {
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, mainFragment, BACK_STACK_ROOT_TAG)
                         .addToBackStack("items")
-                        .commit();
+                        .commit();*/
 
             }
         });
@@ -154,21 +139,6 @@ public class ItemFragment extends Fragment {
     {
         List<CategoryEntity> categories = new ArrayList<>();
         String categoryName = null;
-        try{
-                categories = new GetCategories(getView()).execute().get();
-
-                for(CategoryEntity category : categories)
-                {
-                    if(item.getCategoryid() == category.getId())
-                    {
-                        categoryName = category.getName();
-                    }
-                }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
         return categoryName;
     }
 }

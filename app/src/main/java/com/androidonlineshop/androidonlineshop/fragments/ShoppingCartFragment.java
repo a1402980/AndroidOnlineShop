@@ -18,11 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidonlineshop.androidonlineshop.R;
-import com.androidonlineshop.androidonlineshop.db.async.cart.GetCartWithItems;
-import com.androidonlineshop.androidonlineshop.db.async.item.DeleteItem;
-import com.androidonlineshop.androidonlineshop.db.async.item.UpdateItem;
-import com.androidonlineshop.androidonlineshop.db.entity.ItemEntity;
-import com.androidonlineshop.androidonlineshop.db.pojo.CartWithItems;
+import com.androidonlineshop.androidonlineshop.entity.ItemEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +32,6 @@ public class ShoppingCartFragment extends Fragment {
     private Button buyItems;
     private TextView qtyNumber;
     private List<String> itemNames;
-    private List<CartWithItems> cartWithItemsList;
     private List<ItemEntity> items;
     private ItemEntity item;
     private int itemPosition;
@@ -61,7 +56,6 @@ public class ShoppingCartFragment extends Fragment {
         getActivity().setTitle(getResources().getText(R.string.lang_shopping_cart_title));
 
         // initialize the lists on creation
-        cartWithItemsList = new ArrayList<>();
         itemNames = new ArrayList<>();
         items = new ArrayList<>();
     }
@@ -85,26 +79,7 @@ public class ShoppingCartFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // get the cart along with its items asynchronously
-        try{
-            cartWithItemsList = new GetCartWithItems(getView()).execute().get();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
 
-        // for every cart and its items in the list
-        for(CartWithItems cartWithItems : cartWithItemsList)
-        {
-            // for every item in the carts with items add those items to items list and their names to itemsNames
-            for(ItemEntity itemEntity : cartWithItems.items)
-            {
-                items.add(itemEntity);
-                itemNames.add(itemEntity.getName());
-            }
-
-        }
         // set the total price of the cart
         double priceTotal = 0;
         for(ItemEntity item : items)
@@ -141,7 +116,7 @@ public class ShoppingCartFragment extends Fragment {
 
                 // as long as there are items in the cart and you click buy items button remove them from database
                 // because you bough the items they are no long in the store
-                if(!itemNames.isEmpty()) {
+                /*if(!itemNames.isEmpty()) {
                     for (ItemEntity item : items) {
                         try {
                             new DeleteItem(getView()).execute(item).get();
@@ -162,7 +137,7 @@ public class ShoppingCartFragment extends Fragment {
                 else // if there are no items in the cart notify the user that the cart is empty
                 {
                     Toast.makeText(getActivity(), getString(R.string.lang_empty_cart), Toast.LENGTH_LONG).show();
-                }
+                }*/
             }
         });
     }
@@ -191,7 +166,7 @@ public class ShoppingCartFragment extends Fragment {
                 public void onClick(DialogInterface dialog, int which) {
 
                     // if item is removed from the list set the card id back to 0 set it's sold boolean value to false
-                    item = items.get(itemPosition);
+                   /*item = items.get(itemPosition);
                     item.setCartid(0);
                     item.setSold(false);
                     try
@@ -203,7 +178,7 @@ public class ShoppingCartFragment extends Fragment {
                     {
                         e.printStackTrace();
                     }
-                    refreshFragment();
+                    refreshFragment();*/
                 }
             });
 

@@ -15,10 +15,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.androidonlineshop.androidonlineshop.R;
-import com.androidonlineshop.androidonlineshop.db.async.category.GetCategories;
-import com.androidonlineshop.androidonlineshop.db.async.item.CreateItem;
-import com.androidonlineshop.androidonlineshop.db.entity.CategoryEntity;
-import com.androidonlineshop.androidonlineshop.db.entity.ItemEntity;
+import com.androidonlineshop.androidonlineshop.entity.CategoryEntity;
+import com.androidonlineshop.androidonlineshop.entity.ItemEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,21 +83,6 @@ public class SellFragment extends Fragment {
         categories = new ArrayList<>();
         categoryNames = new ArrayList<>();
 
-        // get all categories asynchronously from the database
-        try{
-            categories = new GetCategories(getView()).execute().get();
-
-            // for every categories you retrieved add their names to the category names list
-            for(CategoryEntity category : categories)
-            {
-                categoryNames.add(category.getName());
-            }
-
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
 
         // create an adapter for the spinner that will handle the category names
         ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_spinner_item, categoryNames);
@@ -114,7 +97,7 @@ public class SellFragment extends Fragment {
             public void onClick(View v) {
 
                 // get the string values from the text fields of what user inputs
-                String itemName = saleItemName.getText().toString();
+               /* String itemName = saleItemName.getText().toString();
                 String itemDescription = saleItemDescription.getText().toString();
 
                 // check if the price field of the item is not empty and then set the double value to what the user inputs
@@ -154,7 +137,7 @@ public class SellFragment extends Fragment {
                 else // if the fields are empty let the user know he/she needs to fill them
                 {
                     Toast.makeText(getContext(), getString(R.string.lang_empty_fields), Toast.LENGTH_LONG).show();
-                }
+                }*/
 
             }
         });
