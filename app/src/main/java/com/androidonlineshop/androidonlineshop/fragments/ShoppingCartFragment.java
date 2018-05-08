@@ -19,6 +19,11 @@ import android.widget.Toast;
 
 import com.androidonlineshop.androidonlineshop.R;
 import com.androidonlineshop.androidonlineshop.entity.ItemEntity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +39,8 @@ public class ShoppingCartFragment extends Fragment {
     private List<String> itemNames;
     private List<ItemEntity> items;
     private ItemEntity item;
-    private int itemPosition;
+    private double priceTotal;
+    private int quantity;
 
     private final String BACK_STACK_ROOT_TAG = "MAIN";
 
@@ -55,9 +61,6 @@ public class ShoppingCartFragment extends Fragment {
         //set page title from strings
         getActivity().setTitle(getResources().getText(R.string.lang_shopping_cart_title));
 
-        // initialize the lists on creation
-        itemNames = new ArrayList<>();
-        items = new ArrayList<>();
     }
 
     @Override
@@ -79,21 +82,48 @@ public class ShoppingCartFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        itemNames = new ArrayList<>();
+        items = new ArrayList<>();
 
+        // create an adapter to handle the itemnames list
+        final ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_1, itemNames);
+        adapter.notifyDataSetChanged();
+        cartItems.setAdapter(adapter);
+
+        FirebaseDatabase.getInstance()
+                .getReference("items")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()) {
+
+                            for (ItemEntity itemEntity : toItems(dataSnapshot)) {
+                                if (itemEntity.isSold()) {
+                                    itemNames.add(itemEntity.getName());
+                                    items.add(itemEntity);
+                                    priceTotal += itemEntity.getPrice();
+                                    quantity++;
+                                }
+                            }
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
         // set the total price of the cart
-        double priceTotal = 0;
-        for(ItemEntity item : items)
-        {
-                priceTotal += item.getPrice();
-        }
+        System.out.println("******************************");
+        System.out.println("names "+ itemNames.size());
+        System.out.println("items "+ items.size());
+        System.out.println("******************************");
 
         // show the total price and quantity of items in the text view
         totalPrice.setText(String.valueOf(priceTotal));
-        qtyNumber.setText(String.valueOf(items.size()));
+        qtyNumber.setText(String.valueOf(quantity));
 
-        // create an adapter to handle the itemnames list
-        ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_1, itemNames);
-        cartItems.setAdapter(adapter);
 
         // listen if the items in the cart are being clicked for a longer period of time
         cartItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -102,7 +132,7 @@ public class ShoppingCartFragment extends Fragment {
                                            int pos, long id) {
                 // TODO Auto-generated method stub
                 // get the position of the item clicked
-                itemPosition = pos;
+                item = items.get(pos);
                 Log.v("long clicked","pos: " + pos);
                 generateDialog(1);
                 return true;
@@ -113,6 +143,7 @@ public class ShoppingCartFragment extends Fragment {
         buyItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
 
                 // as long as there are items in the cart and you click buy items button remove them from database
                 // because you bough the items they are no long in the store
@@ -165,20 +196,22 @@ public class ShoppingCartFragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    // if item is removed from the list set the card id back to 0 set it's sold boolean value to false
-                   /*item = items.get(itemPosition);
-                    item.setCartid(0);
+
                     item.setSold(false);
-                    try
-                    {
-                        // asychrnously update the item
-                        new UpdateItem(getView()).execute(item).get();
-                    }
-                    catch (Exception e)
-                    {
-                        e.printStackTrace();
-                    }
-                    refreshFragment();*/
+                    FirebaseDatabase.getInstance()
+                            .getReference("items")
+                            .child(item.getUid())
+                            .updateChildren(item.toMap(), new DatabaseReference.CompletionListener() {
+                                @Override
+                                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                    if (databaseError != null) {
+
+                                    } else {
+                                        Toast.makeText(getContext(), "Item removed from cart!", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+                    refreshFragment();
                 }
             });
 
@@ -195,5 +228,16 @@ public class ShoppingCartFragment extends Fragment {
                 .replace(R.id.fragment_container, shoppingCartFragment, BACK_STACK_ROOT_TAG)
                 .addToBackStack("main")
                 .commit();
+    }
+    private List<ItemEntity> toItems(DataSnapshot snapshot)
+    {
+        List<ItemEntity> items = new ArrayList<>();
+        for(DataSnapshot childSnapshot : snapshot.getChildren())
+        {
+            ItemEntity item = childSnapshot.getValue(ItemEntity.class);
+            item.setUid(childSnapshot.getKey());
+            items.add(item);
+        }
+        return items;
     }
 }

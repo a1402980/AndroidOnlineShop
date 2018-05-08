@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Ibrahim Beqiri on 17-Apr-18.
@@ -50,6 +52,15 @@ public class CategoryEntity implements Serializable{
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("name", name);
+        result.put("description", description);
+
+        return result;
     }
 
 }

@@ -20,13 +20,16 @@ import android.widget.Toast;
 
 import com.androidonlineshop.androidonlineshop.R;
 import com.androidonlineshop.androidonlineshop.entity.CategoryEntity;
+import com.androidonlineshop.androidonlineshop.entity.ItemEntity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class CategoriesFragment extends Fragment {
 
@@ -36,9 +39,7 @@ public class CategoriesFragment extends Fragment {
 
     private ListView categoriesListView;
     private List<CategoryEntity> categories;
-    private int categoryPosition;
     private CategoryEntity category;
-    private String categoryUid;
 
     public CategoriesFragment() {
         // Required empty public constructor
@@ -85,13 +86,13 @@ public class CategoriesFragment extends Fragment {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(dataSnapshot.exists()) {
-                            //category.setUid(categoryUid);
+
                             for(CategoryEntity category : toCategories(dataSnapshot)) {
                                 categoryNames.add(category.getName());
+                                categories.add(category);
                             }
                             adapter.notifyDataSetChanged();
 
-                            categories.add(category);
                         }
                     }
 
@@ -112,6 +113,9 @@ public class CategoriesFragment extends Fragment {
                 bundle.putSerializable("category", categories.get(position));
                 buyFragment.setArguments(bundle);
 
+                System.out.println("********************************8");
+                System.out.println(bundle);
+
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, buyFragment, BACK_STACK_ROOT_TAG)
                         .addToBackStack("categories")
@@ -126,7 +130,8 @@ public class CategoriesFragment extends Fragment {
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
                 // TODO Auto-generated method stub
-                categoryPosition = pos;
+                //categoryPosition = pos;
+                category = categories.get(pos);
                 Log.v("long clicked","pos: " + pos);
                 //when pressing down on an item on the list, generate a dialog that asks what user wants to do with the list
                 generateDialog(1);
@@ -176,6 +181,9 @@ public class CategoriesFragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
+                    FirebaseDatabase.getInstance()
+                            .getReference("categories").child(category.getUid()).removeValue();
+
                     refreshFragment();
                 }
             });
@@ -191,7 +199,6 @@ public class CategoriesFragment extends Fragment {
             final EditText etInput    = new EditText(getActivity());
             final EditText etInput2    = new EditText(getActivity());
 
-            category = categories.get(categoryPosition);
             etInput.setText(category.getName());
             etInput2.setText(category.getDescription());
 
@@ -218,6 +225,24 @@ public class CategoriesFragment extends Fragment {
 
                     String categoryName = etInput.getText().toString();
                     String categoryDescription = etInput2.getText().toString();
+                    category.setName(categoryName);
+                    category.setDescription(categoryDescription);
+                    FirebaseDatabase.getInstance()
+                            .getReference("categories")
+                            .child(category.getUid())
+                            .updateChildren(category.toMap(), new DatabaseReference.CompletionListener() {
+                                @Override
+                                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                    if(databaseError != null)
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        Toast.makeText(getContext(), "Category successfully updated!", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
 
                     refreshFragment();
 
@@ -261,6 +286,12 @@ public class CategoriesFragment extends Fragment {
                     //when clicking confirm, create a new category
                     String categoryName = name.getText().toString();
                     String categoryDescription = description.getText().toString();
+
+                    final CategoryEntity category = new CategoryEntity(UUID.randomUUID().toString(), categoryName, categoryDescription);
+
+                    FirebaseDatabase.getInstance()
+                            .getReference()
+                            .child("categories").child(category.getUid()).setValue(category);
                     //reset fragment
                     refreshFragment();
                 }

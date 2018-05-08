@@ -1,6 +1,7 @@
 package com.androidonlineshop.androidonlineshop.fragments;
 
 import android.app.AlertDialog;
+import android.content.ClipData;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,6 +23,11 @@ import android.widget.Toast;
 import com.androidonlineshop.androidonlineshop.R;
 import com.androidonlineshop.androidonlineshop.entity.CategoryEntity;
 import com.androidonlineshop.androidonlineshop.entity.ItemEntity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +46,6 @@ public class BuyFragment extends Fragment {
     private List<ItemEntity> items;
     private ItemEntity item;
     private CategoryEntity category;
-    private int itemPosition;
 
     private final String BACK_STACK_ROOT_TAG = "MAIN";
 
@@ -96,7 +101,7 @@ public class BuyFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // get the bundle from the fragment arguments
-        Bundle bundle = this.getArguments();
+        Bundle bundle = getArguments();
         if(bundle != null)
         {
             // get category from the bundle that instantiated the fragment previously
@@ -108,29 +113,44 @@ public class BuyFragment extends Fragment {
         // create a lsit for items names
         final List<String> itemNames = new ArrayList<>();
 
-
-        // as long as the items list is not empty, and the category is not null for every item in the items list get their name
-        /*if(!items.isEmpty()) {
-            if (category != null) {
-                for (ItemEntity item : items) {
-                    // check if the category id matches the item's category id in order to display only the items for a certain category
-                    if (category.getId() == item.getCategoryid() && item.isSold() == false) {
-                        itemNames.add(item.getName());
-                    }
-                }
-            } else { // if the fragment is not instantiated from CategoriesFragment then show all the items that are for sale
-                for (ItemEntity item : items) {
-                    if(item.isSold() == false) {
-                        itemNames.add(item.getName());
-                    }
-
-                }
-            }
-        }*/
-
         // create an adapter that will handle the items in the list view
-        ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_1, itemNames);
+        final ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_1, itemNames);
         itemsListView.setAdapter(adapter);
+
+        FirebaseDatabase.getInstance()
+                .getReference("items")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()) {
+
+                            if(category != null) {
+                                for (ItemEntity itemEntity : toItems(dataSnapshot)) {
+                                    if (itemEntity.getCategoryid().equals(category.getUid()) && !itemEntity.isSold()) {
+                                        itemNames.add(itemEntity.getName());
+                                        items.add(itemEntity);
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+                                for (ItemEntity itemEntity : toItems(dataSnapshot)) {
+                                    if (!itemEntity.isSold()) {
+                                        itemNames.add(itemEntity.getName());
+                                        items.add(itemEntity);
+                                    }
+                                }
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 
         // if the item is clicked get the itemName and instantiante new ItemFragment and replace the current one
         itemsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -140,7 +160,7 @@ public class BuyFragment extends Fragment {
 
                 ItemFragment itemFragment = new ItemFragment();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("itemName", itemNames.get(position));
+                bundle.putSerializable("item", items.get(position));
                 itemFragment.setArguments(bundle);
 
                 getActivity().getSupportFragmentManager().beginTransaction()
@@ -157,7 +177,7 @@ public class BuyFragment extends Fragment {
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
                 // TODO Auto-generated method stub
-                itemPosition = pos;
+                item = items.get(pos);
                 Log.v("long clicked","pos: " + pos);
                 generateDialog(1);
                 return true;
@@ -214,6 +234,9 @@ public class BuyFragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
+                    FirebaseDatabase.getInstance()
+                            .getReference("items").child(item.getUid()).removeValue();
+
                     refreshFragment();
                 }
             });
@@ -235,7 +258,6 @@ public class BuyFragment extends Fragment {
             final EditText etInput4   = new EditText(getActivity());
 
             // se the edittext values to the items real values
-            item = items.get(itemPosition);
             etInput.setText(item.getName());
             etInput2.setText(item.getDescription());
             etInput3.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -290,30 +312,30 @@ public class BuyFragment extends Fragment {
                         price = Double.valueOf(itemPrice);
                         rating = Integer.valueOf(itemRating);
                     }
+                    item.setName(itemName);
+                    item.setDescription(itemDescription);
+                    item.setPrice(price);
+                    item.setRating(rating);
 
-                    // as long as all the fields are not empty then udpate (modify) the item
-                    /*if(!itemName.isEmpty() && !itemDescription.isEmpty() && price > 0) {
-                        if(rating > 0 && rating < 5) {
-                            item.setName(itemName);
-                            item.setDescription(itemDescription);
-                            item.setPrice(price);
-                            item.setRating(rating);
-                            try {
-                                new UpdateItem(getView()).execute(item).get();
+                    if(!itemName.isEmpty() && !itemDescription.isEmpty() && price > 0 && rating > 0 && rating < 6) {
+                        FirebaseDatabase.getInstance()
+                                .getReference("items")
+                                .child(item.getUid())
+                                .updateChildren(item.toMap(), new DatabaseReference.CompletionListener() {
+                                    @Override
+                                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                        if (databaseError != null) {
 
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        else
-                        {
-                            Toast.makeText(getContext(), getString(R.string.lang_rating_limit), Toast.LENGTH_LONG).show();
-                        }
+                                        } else {
+                                            Toast.makeText(getContext(), "Item successfully updated!", Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
                     }
-                    else // otherwise just show  a text saying that the fields are empty
+                    else
                     {
-                        Toast.makeText(getActivity(), getString(R.string.lang_empty_fields), Toast.LENGTH_LONG).show();
-                    }*/
+                        Toast.makeText(getContext(), getString(R.string.lang_rating_limit), Toast.LENGTH_LONG).show();
+                    }
                     refreshFragment();
 
                 }
@@ -336,6 +358,17 @@ public class BuyFragment extends Fragment {
                 .replace(R.id.fragment_container, buyFragment, BACK_STACK_ROOT_TAG)
                 .addToBackStack("items")
                 .commit();
+    }
+    private List<ItemEntity> toItems(DataSnapshot snapshot)
+    {
+        List<ItemEntity> items = new ArrayList<>();
+        for(DataSnapshot childSnapshot : snapshot.getChildren())
+        {
+            ItemEntity item = childSnapshot.getValue(ItemEntity.class);
+            item.setUid(childSnapshot.getKey());
+            items.add(item);
+        }
+        return items;
     }
 
 }

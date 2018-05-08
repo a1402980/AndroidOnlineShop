@@ -25,11 +25,16 @@ import android.widget.Toast;
 import com.androidonlineshop.androidonlineshop.R;
 import com.androidonlineshop.androidonlineshop.entity.CategoryEntity;
 import com.androidonlineshop.androidonlineshop.entity.ItemEntity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -110,19 +115,40 @@ public class SellFragment extends Fragment {
 
 
         // create an adapter for the spinner that will handle the category names
-        ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_spinner_item, categoryNames);
+        final ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_spinner_item, categoryNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         itemCategories.setAdapter(adapter);
         if(categories.isEmpty()) {
             // set an integer position based on which category is being selected from the drop down list
             Toast.makeText(getContext(), getString(R.string.lang_empty_category_sell), Toast.LENGTH_LONG).show();
         }
+        FirebaseDatabase.getInstance()
+                .getReference("categories")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()) {
+
+                            for(CategoryEntity category : toCategories(dataSnapshot)) {
+                                categoryNames.add(category.getName());
+                                categories.add(category);
+                            }
+                            adapter.notifyDataSetChanged();
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
         // listen if the sell item button is being clicked
         saleItemButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
 
                 // get the string values from the text fields of what user inputs
-               /* String itemName = saleItemName.getText().toString();
+                String itemName = saleItemName.getText().toString();
                 String itemDescription = saleItemDescription.getText().toString();
 
                 // check if the price field of the item is not empty and then set the double value to what the user inputs
@@ -133,20 +159,17 @@ public class SellFragment extends Fragment {
                 // get the rating from what user inputs
                 int rating = Math.round(saleItemRatingBar.getRating());
 
-                long categoryId = 0;
+                String categoryUid = null;
                 if(!categories.isEmpty()) {
                     // set an integer position based on which category is being selected from the drop down list
-                    categoryId = categories.get(itemCategories.getSelectedItemPosition()).getId();
+                    categoryUid = categories.get(itemCategories.getSelectedItemPosition()).getUid();
                 }
                 // do some checking if the fields are empty, then create a new item and put it in the sale list
                 if(!itemName.isEmpty() && !itemDescription.isEmpty() && price > 0 && rating > 0) {
-                    item = new ItemEntity(itemName, price, itemDescription, rating, 0, categoryId, false);
-                    try {
-                        // create the item asychnronously
-                        new CreateItem(getView()).execute(item).get();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    item = new ItemEntity(UUID.randomUUID().toString(), itemName, price, itemDescription, rating, null, categoryUid, false);
+                    FirebaseDatabase.getInstance()
+                            .getReference()
+                            .child("items").child(item.getUid()).setValue(item);
                     // notify the user that they have put an item for sale
                     Toast.makeText(getContext(), getString(R.string.lang_item_for_sale), Toast.LENGTH_LONG).show();
 
@@ -165,7 +188,7 @@ public class SellFragment extends Fragment {
                 else // if the fields are empty let the user know he/she needs to fill them
                 {
                     Toast.makeText(getContext(), getString(R.string.lang_empty_fields), Toast.LENGTH_LONG).show();
-                }*/
+                }
 
             }
 
@@ -206,7 +229,17 @@ public class SellFragment extends Fragment {
         }
 
     }
-
+    private List<CategoryEntity> toCategories(DataSnapshot snapshot)
+    {
+        List<CategoryEntity> categories = new ArrayList<>();
+        for(DataSnapshot childSnapshot : snapshot.getChildren())
+        {
+            CategoryEntity category = childSnapshot.getValue(CategoryEntity.class);
+            category.setUid(childSnapshot.getKey());
+            categories.add(category);
+        }
+        return categories;
+    }
 
 
 

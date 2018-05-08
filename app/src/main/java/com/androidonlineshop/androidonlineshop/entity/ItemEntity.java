@@ -2,16 +2,17 @@ package com.androidonlineshop.androidonlineshop.entity;
 
 import android.support.annotation.NonNull;
 
-import com.androidonlineshop.androidonlineshop.model.Item;
 import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Ibrahim Beqiri on 17-Apr-18.
  */
 
-public class ItemEntity implements Serializable, Item{
+public class ItemEntity implements Serializable{
 
     @NonNull
     private String uid;
@@ -43,7 +44,7 @@ public class ItemEntity implements Serializable, Item{
     @Exclude
     public String getUid() { return uid; }
 
-    public void setUid(String id) { this.uid = uid; }
+    public void setUid(String uid) { this.uid = uid; }
 
     public String getName() { return name; }
 
@@ -73,4 +74,17 @@ public class ItemEntity implements Serializable, Item{
 
     public void setSold(boolean isSold) { this.isSold = isSold; }
 
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("name", name);
+        result.put("price", price);
+        result.put("description", description);
+        result.put("rating", rating);
+        result.put("sold", isSold);
+        result.put("cartid", cartid);
+        result.put("categoryid", categoryid);
+
+        return result;
+    }
 }

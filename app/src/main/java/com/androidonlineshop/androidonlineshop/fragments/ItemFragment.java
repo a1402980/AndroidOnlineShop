@@ -15,6 +15,11 @@ import com.androidonlineshop.androidonlineshop.R;
 import com.androidonlineshop.androidonlineshop.entity.CartEntity;
 import com.androidonlineshop.androidonlineshop.entity.CategoryEntity;
 import com.androidonlineshop.androidonlineshop.entity.ItemEntity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,9 +90,31 @@ public class ItemFragment extends Fragment {
         if(bundle != null)
         {
             // get the name of the item that was clicked on the previous fragment
-            nameOfItem = (String) bundle.getSerializable("itemName");
+            item = (ItemEntity) bundle.getSerializable("item");
         }
 
+        final List<CategoryEntity> categories = new ArrayList<>();
+        FirebaseDatabase.getInstance()
+                .getReference("categories")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()) {
+
+                            for(CategoryEntity category : toCategories(dataSnapshot)) {
+                                categories.add(category);
+                                if(item.getCategoryid().equals(category.getUid())){
+                                    itemCategory.setText(category.getName());
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 
         // set the fields based on the retrieved item's values
         itemName.setText(item.getName());
@@ -95,50 +122,47 @@ public class ItemFragment extends Fragment {
         itemRatingBar.setRating(item.getRating());
         itemPrice.setText(item.getPrice()+"");
 
-        String categoryName = getItemCategory(item);
-        itemCategory.setText(categoryName);
-
         // listenes if the add to cart button is clicked
         addToCartButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
 
-                // if the add to cart button is clicked then set the card id of the item to the id of the retrieved cart and set the boolean value as true
-                /*item.setCartid(cart.getId());
                 item.setSold(true);
+                FirebaseDatabase.getInstance()
+                        .getReference("items")
+                        .child(item.getUid())
+                        .updateChildren(item.toMap(), new DatabaseReference.CompletionListener() {
+                            @Override
+                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                if (databaseError != null) {
 
-                // a new item has been added to the cart so set the quantity to be +1
-                cart.setQuantity(cart.getQuantity()+1);
+                                } else {
+                                    Toast.makeText(getContext(), getString(R.string.lang_item_added_to_cart), Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
 
-                try {
-                    // update the cart and the item asychnronously
-                   new UpdateCart(getView()).execute(cart).get();
-                   new UpdateItem(getView()).execute(item).get();
-
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-                // notify the user that the item has been added to the cart
-                Toast.makeText(getContext(), getString(R.string.lang_item_added_to_cart), Toast.LENGTH_LONG).show();
-
-                // redirect back to the main fragment
                 MainFragment mainFragment = new MainFragment();
                 Bundle bundle = new Bundle();
 
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, mainFragment, BACK_STACK_ROOT_TAG)
                         .addToBackStack("items")
-                        .commit();*/
+                        .commit();
+
 
             }
         });
 
     }
-    private String getItemCategory(ItemEntity item)
+    private List<CategoryEntity> toCategories(DataSnapshot snapshot)
     {
         List<CategoryEntity> categories = new ArrayList<>();
-        String categoryName = null;
-        return categoryName;
+        for(DataSnapshot childSnapshot : snapshot.getChildren())
+        {
+            CategoryEntity category = childSnapshot.getValue(CategoryEntity.class);
+            category.setUid(childSnapshot.getKey());
+            categories.add(category);
+        }
+        return categories;
     }
 }

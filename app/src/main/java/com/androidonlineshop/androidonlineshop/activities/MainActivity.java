@@ -24,9 +24,11 @@ import com.androidonlineshop.androidonlineshop.fragments.MainFragment;
 import com.androidonlineshop.androidonlineshop.fragments.SellFragment;
 import com.androidonlineshop.androidonlineshop.fragments.SettingsFragment;
 import com.androidonlineshop.androidonlineshop.fragments.ShoppingCartFragment;
-import com.androidonlineshop.androidonlineshop.model.Category;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +39,9 @@ public class MainActivity extends AppCompatActivity{
     private final String BACK_STACK_ROOT_TAG = "MAIN";
     private DatabaseReference mDatabase;
     private FirebaseDatabase firebaseDatabase;
+    private List<CategoryEntity> categories;
+    private List<ItemEntity> items;
+    private CartEntity cart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,8 +163,8 @@ public class MainActivity extends AppCompatActivity{
     }
     private void generateData()
     {
-        List<CategoryEntity> categories = new ArrayList<>();
-        List<ItemEntity> items = new ArrayList<>();
+        categories = new ArrayList<>();
+        items = new ArrayList<>();
 
         // creating some custom categories
         CategoryEntity accessories = new CategoryEntity(UUID.randomUUID().toString(),"Accessories", "In this category belong accessories!");
@@ -178,7 +183,7 @@ public class MainActivity extends AppCompatActivity{
         categories.add(tablets);
         categories.add(electronics);
 
-        CartEntity cart = new CartEntity();
+        cart = new CartEntity();
         cart.setUid(UUID.randomUUID().toString());
         cart.setQuantity(0);
 
@@ -210,13 +215,41 @@ public class MainActivity extends AppCompatActivity{
         items.add(samsungtablet);
         items.add(nexus5);
 
-        for(CategoryEntity categoryEntity : categories)
-        {
-            mDatabase.child("categories").child(categoryEntity.getUid()).setValue(categoryEntity);
-        }
-        for(ItemEntity itemEntity : items)
-        {
-            mDatabase.child("items").child(itemEntity.getUid()).setValue(itemEntity);
-        }
+        mDatabase.child("categories").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists())
+                {
+                    for(CategoryEntity categoryEntity : categories)
+                    {
+                        mDatabase.child("categories").child(categoryEntity.getUid()).setValue(categoryEntity);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        mDatabase.child("items").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists())
+                {
+                    for(ItemEntity itemEntity : items)
+                    {
+                        mDatabase.child("items").child(itemEntity.getUid()).setValue(itemEntity);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }
