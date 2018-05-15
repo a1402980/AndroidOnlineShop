@@ -118,11 +118,6 @@ public class SellFragment extends Fragment {
         final ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_spinner_item, categoryNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         itemCategories.setAdapter(adapter);
-        if(categories.isEmpty()) {
-            // set an integer position based on which category is being selected from the drop down list
-            Toast.makeText(getContext(), getString(R.string.lang_empty_category_sell), Toast.LENGTH_LONG).show();
-        }
-
         // retrieve all categories from the database to add them to the dropdown list
         FirebaseDatabase.getInstance()
                 .getReference("categories")
