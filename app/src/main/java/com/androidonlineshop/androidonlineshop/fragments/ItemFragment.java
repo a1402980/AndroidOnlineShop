@@ -1,12 +1,16 @@
 package com.androidonlineshop.androidonlineshop.fragments;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +40,7 @@ public class ItemFragment extends Fragment {
     private ItemEntity item;
     private TextView itemPrice;
     private CartEntity cart;
+    private ImageView itemPic;
 
     private final String BACK_STACK_ROOT_TAG = "MAIN";
 
@@ -76,6 +81,7 @@ public class ItemFragment extends Fragment {
         addToCartButton = view.findViewById(R.id.addToCartButton);
         itemPrice = view.findViewById(R.id.itemPrice);
         itemCategory = view.findViewById(R.id.itemCategory);
+        itemPic = view.findViewById(R.id.itemImg);
 
         return view;
     }
@@ -141,6 +147,21 @@ public class ItemFragment extends Fragment {
         itemDescription.setText(item.getDescription());
         itemRatingBar.setRating(item.getRating());
         itemPrice.setText(item.getPrice()+"");
+
+        //get img base64
+        String imgBase64 = item.getImg();
+        //it its not null, turn string into a bitmap and show it on the page
+        if (imgBase64 != null){
+            try {
+                byte[] decodedString = Base64.decode(imgBase64, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                itemPic.setImageBitmap(decodedByte);
+            }catch (Exception e){
+
+            }
+
+        }
+
 
 
         // listenes if the add to cart button is clicked

@@ -25,7 +25,8 @@ public class ItemEntity implements Serializable{
     private String img;
     private String categoryid;
 
-
+    public ItemEntity() {
+    }
 
     public ItemEntity(String uid, String name, double price, String description, float rating, String categoryid, boolean isSold)
     {
