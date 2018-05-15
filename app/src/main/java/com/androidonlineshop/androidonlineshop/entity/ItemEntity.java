@@ -23,13 +23,15 @@ public class ItemEntity implements Serializable{
     private int rating;
     private boolean isSold;
 
+
+    private String img;
+
     private String cartid;
     private String categoryid;
 
 
-    public ItemEntity() {}
 
-    public ItemEntity(String uid, String name, double price, String description, int rating, String cartid, String categoryid, boolean isSold)
+    public ItemEntity(String uid, String name, double price, String description, int rating,String cartid, String categoryid, boolean isSold)
     {
         this.uid = uid;
         this.name = name;
@@ -39,6 +41,7 @@ public class ItemEntity implements Serializable{
         this.cartid = cartid;
         this.categoryid = categoryid;
         this.isSold = isSold;
+        this.img = img;
     }
 
     @Exclude
@@ -73,6 +76,14 @@ public class ItemEntity implements Serializable{
     public boolean isSold() { return isSold; }
 
     public void setSold(boolean isSold) { this.isSold = isSold; }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
 
     @Exclude
     public Map<String, Object> toMap() {

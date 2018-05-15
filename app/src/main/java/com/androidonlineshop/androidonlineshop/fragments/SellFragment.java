@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,13 +26,20 @@ import android.widget.Toast;
 import com.androidonlineshop.androidonlineshop.R;
 import com.androidonlineshop.androidonlineshop.entity.CategoryEntity;
 import com.androidonlineshop.androidonlineshop.entity.ItemEntity;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -48,6 +56,8 @@ public class SellFragment extends Fragment {
     private Button saleItemButton;
     private EditText saleItemDescription;
     private Button choosePic;
+    private ImageView imgPreview;
+    private StorageReference mStorageRef;
 
 
     // dropdown spinner where the user can choose in which category to sell the item
@@ -57,7 +67,6 @@ public class SellFragment extends Fragment {
     private List<CategoryEntity> categories;
     private List<String> categoryNames;
 
-    private ImageView imageView;
     private String encodedImage;
     private byte[] imageByte;
     //a Uri object to store file path
@@ -101,6 +110,9 @@ public class SellFragment extends Fragment {
         saleItemDescription = view.findViewById(R.id.saleItemDescription);
         itemCategories = view.findViewById(R.id.itemCategories);
         choosePic = view.findViewById(R.id.choosePic);
+        imgPreview = view.findViewById(R.id.previewImg);
+
+        mStorageRef = FirebaseStorage.getInstance().getReference();
 
         return view;
     }
@@ -167,6 +179,8 @@ public class SellFragment extends Fragment {
                 // do some checking if the fields are empty, then create a new item and put it in the sale list
                 if(!itemName.isEmpty() && !itemDescription.isEmpty() && price > 0 && rating > 0) {
                     item = new ItemEntity(UUID.randomUUID().toString(), itemName, price, itemDescription, rating, null, categoryUid, false);
+                    item.setImg(encodedImage);
+                    // create a new item in database
                     FirebaseDatabase.getInstance()
                             .getReference()
                             .child("items").child(item.getUid()).setValue(item);
@@ -182,8 +196,8 @@ public class SellFragment extends Fragment {
                             .addToBackStack("stuff")
                             .commit();
 
-                    // FIREBASE SAVE IMAGE CODE SAMPLE
-                    //ItemEntity.setByteArrayFromImage(imageByte);
+
+
                 }
                 else // if the fields are empty let the user know he/she needs to fill them
                 {
@@ -203,32 +217,52 @@ public class SellFragment extends Fragment {
     }
 
     public void takePhoto() {
-        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        getActivity().startActivityForResult(takePicture, 0);
+        Intent cameraIntent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        getActivity().startActivityFromFragment(SellFragment.this, cameraIntent, 100);
+
 
     }
 
 
     //handling the image chooser activity result
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        //super.onActivityResult(requestCode, resultCode, data);
+        try{
+            if (requestCode==100 && resultCode == RESULT_OK){
 
-        if (requestCode==0 && resultCode == RESULT_OK){
+                //get file URI for storage saving
+                filePath = data.getData();
 
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            imageView.setImageBitmap(imageBitmap);
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
 
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
-            byte[] bytesForImage = baos.toByteArray();
-            imageByte = bytesForImage;
-            //encodedImage = Base64.encodeToString(bytesForImage, Base64.DEFAULT);
 
+                imgPreview.setImageBitmap(imageBitmap);
+
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+                byte[] bytesForImage = baos.toByteArray();
+                imageByte = bytesForImage;
+                encodedImage = Base64.encodeToString(bytesForImage, Base64.DEFAULT);
+
+                Toast.makeText(getContext(), "asd", Toast.LENGTH_LONG).show();
+
+
+
+
+            }
+        }catch (Exception e){
+            Toast.makeText(getContext(), "Something went wrong :(", Toast.LENGTH_LONG).show();
         }
 
+
     }
+
+
+
+
     private List<CategoryEntity> toCategories(DataSnapshot snapshot)
     {
         List<CategoryEntity> categories = new ArrayList<>();
