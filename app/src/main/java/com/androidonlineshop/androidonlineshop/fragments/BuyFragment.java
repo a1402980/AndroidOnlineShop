@@ -117,6 +117,7 @@ public class BuyFragment extends Fragment {
         final ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_1, itemNames);
         itemsListView.setAdapter(adapter);
 
+        // retrieving all items from firebase database
         FirebaseDatabase.getInstance()
                 .getReference("items")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -124,6 +125,7 @@ public class BuyFragment extends Fragment {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(dataSnapshot.exists()) {
 
+                            // if the user navigated from category then only show items that belong to a category
                             if(category != null) {
                                 for (ItemEntity itemEntity : toItems(dataSnapshot)) {
                                     if (itemEntity.getCategoryid().equals(category.getUid()) && !itemEntity.isSold()) {
@@ -131,9 +133,8 @@ public class BuyFragment extends Fragment {
                                         items.add(itemEntity);
                                     }
                                 }
-
                             }
-                            else
+                            else // if the user navigated directly form buy items page then show all items
                             {
                                 for (ItemEntity itemEntity : toItems(dataSnapshot)) {
                                     if (!itemEntity.isSold()) {
@@ -142,10 +143,10 @@ public class BuyFragment extends Fragment {
                                     }
                                 }
                             }
+                            // notify the adapter that the data has changed
+                            adapter.notifyDataSetChanged();
                         }
-                        adapter.notifyDataSetChanged();
                     }
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
@@ -177,6 +178,7 @@ public class BuyFragment extends Fragment {
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
                 // TODO Auto-generated method stub
+                // get the clicked item
                 item = items.get(pos);
                 Log.v("long clicked","pos: " + pos);
                 generateDialog(1);
@@ -234,6 +236,7 @@ public class BuyFragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
+                    // remove the item the user wants from the database
                     FirebaseDatabase.getInstance()
                             .getReference("items").child(item.getUid()).removeValue();
 
@@ -306,17 +309,18 @@ public class BuyFragment extends Fragment {
                     String itemRating = etInput4.getText().toString();
 
                     double price = 0;
-                    int rating = 0;
+                    float rating = 0;
                     if(!itemPrice.isEmpty() && !itemRating.isEmpty())
                     {
                         price = Double.valueOf(itemPrice);
-                        rating = Integer.valueOf(itemRating);
+                        rating = Float.valueOf(itemRating);
                     }
                     item.setName(itemName);
                     item.setDescription(itemDescription);
                     item.setPrice(price);
                     item.setRating(rating);
 
+                    // do some checking for the values and then update the item in database
                     if(!itemName.isEmpty() && !itemDescription.isEmpty() && price > 0 && rating > 0 && rating < 6) {
                         FirebaseDatabase.getInstance()
                                 .getReference("items")
@@ -325,9 +329,7 @@ public class BuyFragment extends Fragment {
                                     @Override
                                     public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                                         if (databaseError != null) {
-
                                         } else {
-                                            Toast.makeText(getContext(), "Item successfully updated!", Toast.LENGTH_LONG).show();
                                         }
                                     }
                                 });
@@ -359,6 +361,7 @@ public class BuyFragment extends Fragment {
                 .addToBackStack("items")
                 .commit();
     }
+    // helper method to get all the items from firebase database
     private List<ItemEntity> toItems(DataSnapshot snapshot)
     {
         List<ItemEntity> items = new ArrayList<>();

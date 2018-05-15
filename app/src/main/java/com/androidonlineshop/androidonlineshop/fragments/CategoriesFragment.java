@@ -73,13 +73,16 @@ public class CategoriesFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // initiate the categories list and a list with categories names to show them in the adapter
         categories = new ArrayList<>();
         final List<String> categoryNames = new ArrayList<>();
 
+        // create an adapter to show the list items
         final ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_1, categoryNames);
         adapter.notifyDataSetChanged();
         categoriesListView.setAdapter(adapter);
 
+        // retrieve all the categories from the database
         FirebaseDatabase.getInstance()
                 .getReference("categories")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -92,10 +95,8 @@ public class CategoriesFragment extends Fragment {
                                 categories.add(category);
                             }
                             adapter.notifyDataSetChanged();
-
                         }
                     }
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
@@ -113,9 +114,6 @@ public class CategoriesFragment extends Fragment {
                 bundle.putSerializable("category", categories.get(position));
                 buyFragment.setArguments(bundle);
 
-                System.out.println("********************************8");
-                System.out.println(bundle);
-
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, buyFragment, BACK_STACK_ROOT_TAG)
                         .addToBackStack("categories")
@@ -130,7 +128,7 @@ public class CategoriesFragment extends Fragment {
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
                 // TODO Auto-generated method stub
-                //categoryPosition = pos;
+                // get the clicked category
                 category = categories.get(pos);
                 Log.v("long clicked","pos: " + pos);
                 //when pressing down on an item on the list, generate a dialog that asks what user wants to do with the list
@@ -149,10 +147,7 @@ public class CategoriesFragment extends Fragment {
             }
         });
 
-
-
     }
-
 
     private void generateDialog(final int action) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -181,9 +176,30 @@ public class CategoriesFragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
+                    // delete the category
                     FirebaseDatabase.getInstance()
                             .getReference("categories").child(category.getUid()).removeValue();
 
+                    // delete all the items that belong to the category if  a category is deleted
+                    FirebaseDatabase.getInstance()
+                            .getReference("items")
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if(dataSnapshot.exists()) {
+
+                                            for (ItemEntity item : toItems(dataSnapshot)) {
+                                                if (item.getCategoryid().equals(category.getUid())) {
+                                                    FirebaseDatabase.getInstance()
+                                                            .getReference("items").child(item.getUid()).removeValue();
+                                                }
+                                            }
+                                        }
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                }
+                            });
                     refreshFragment();
                 }
             });
@@ -216,17 +232,18 @@ public class CategoriesFragment extends Fragment {
 
             alertDialog.setView(layout);
 
-
-
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.lang_confirm), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //when clicking confirm, update the fields
 
+                    // get the calues from text fields
                     String categoryName = etInput.getText().toString();
                     String categoryDescription = etInput2.getText().toString();
                     category.setName(categoryName);
                     category.setDescription(categoryDescription);
+
+                    // update the category with the new values
                     FirebaseDatabase.getInstance()
                             .getReference("categories")
                             .child(category.getUid())
@@ -235,11 +252,9 @@ public class CategoriesFragment extends Fragment {
                                 public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                                     if(databaseError != null)
                                     {
-
                                     }
                                     else
                                     {
-                                        Toast.makeText(getContext(), "Category successfully updated!", Toast.LENGTH_LONG).show();
                                     }
                                 }
                             });
@@ -278,8 +293,6 @@ public class CategoriesFragment extends Fragment {
 
             alertDialog.setView(layout);
 
-
-
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.lang_confirm), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -289,6 +302,7 @@ public class CategoriesFragment extends Fragment {
 
                     final CategoryEntity category = new CategoryEntity(UUID.randomUUID().toString(), categoryName, categoryDescription);
 
+                    // create a new category in the database
                     FirebaseDatabase.getInstance()
                             .getReference()
                             .child("categories").child(category.getUid()).setValue(category);
@@ -318,6 +332,7 @@ public class CategoriesFragment extends Fragment {
                 .addToBackStack("categories")
                 .commit();
     }
+    // helper method to get all the categories from firebase database
     private List<CategoryEntity> toCategories(DataSnapshot snapshot)
     {
         List<CategoryEntity> categories = new ArrayList<>();
@@ -328,5 +343,17 @@ public class CategoriesFragment extends Fragment {
             categories.add(category);
         }
         return categories;
+    }
+    // helper method to get all the items from firebase database
+    private List<ItemEntity> toItems(DataSnapshot snapshot)
+    {
+        List<ItemEntity> items = new ArrayList<>();
+        for(DataSnapshot childSnapshot : snapshot.getChildren())
+        {
+            ItemEntity item = childSnapshot.getValue(ItemEntity.class);
+            item.setUid(childSnapshot.getKey());
+            items.add(item);
+        }
+        return items;
     }
 }

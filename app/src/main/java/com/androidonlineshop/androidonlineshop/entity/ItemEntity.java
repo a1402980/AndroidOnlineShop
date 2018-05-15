@@ -20,25 +20,20 @@ public class ItemEntity implements Serializable{
     private String name;
     private double price;
     private String description;
-    private int rating;
+    private float rating;
     private boolean isSold;
-
-
     private String img;
-
-    private String cartid;
     private String categoryid;
 
 
 
-    public ItemEntity(String uid, String name, double price, String description, int rating,String cartid, String categoryid, boolean isSold)
+    public ItemEntity(String uid, String name, double price, String description, float rating, String categoryid, boolean isSold)
     {
         this.uid = uid;
         this.name = name;
         this.price = price;
         this.description = description;
         this.rating = rating;
-        this.cartid = cartid;
         this.categoryid = categoryid;
         this.isSold = isSold;
         this.img = img;
@@ -61,13 +56,9 @@ public class ItemEntity implements Serializable{
 
     public void setDescription(String description) { this.description = description; }
 
-    public int getRating() { return rating; }
+    public float getRating() { return rating; }
 
-    public void setRating(int rating) { this.rating = rating; }
-
-    public String getCartid() { return cartid; }
-
-    public void setCartid(String cartid) { this.cartid = cartid; }
+    public void setRating(float rating) { this.rating = rating; }
 
     public String getCategoryid() { return categoryid; }
 
@@ -93,7 +84,6 @@ public class ItemEntity implements Serializable{
         result.put("description", description);
         result.put("rating", rating);
         result.put("sold", isSold);
-        result.put("cartid", cartid);
         result.put("categoryid", categoryid);
 
         return result;

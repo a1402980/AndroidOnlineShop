@@ -18,10 +18,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidonlineshop.androidonlineshop.R;
+import com.androidonlineshop.androidonlineshop.entity.CartEntity;
 import com.androidonlineshop.androidonlineshop.entity.ItemEntity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -39,6 +41,7 @@ public class ShoppingCartFragment extends Fragment {
     private List<String> itemNames;
     private List<ItemEntity> items;
     private ItemEntity item;
+    private CartEntity cart;
     private double priceTotal;
     private int quantity;
 
@@ -90,41 +93,51 @@ public class ShoppingCartFragment extends Fragment {
         adapter.notifyDataSetChanged();
         cartItems.setAdapter(adapter);
 
+        // retrieve the items from the database that were added to the cart
         FirebaseDatabase.getInstance()
                 .getReference("items")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists()) {
+                        if (dataSnapshot.exists()) {
 
                             for (ItemEntity itemEntity : toItems(dataSnapshot)) {
                                 if (itemEntity.isSold()) {
                                     itemNames.add(itemEntity.getName());
                                     items.add(itemEntity);
-                                    priceTotal += itemEntity.getPrice();
-                                    quantity++;
                                 }
                             }
                             adapter.notifyDataSetChanged();
                         }
                     }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
 
+        // retreive the cart from the database and update the totalprice and quantity textviews
+        FirebaseDatabase.getInstance()
+                .getReference("cart")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+
+                            for (CartEntity cartEntity : toCart(dataSnapshot)) {
+                                cart = cartEntity;
+                            }
+                            totalPrice.setText(String.valueOf(cart.getTotalPrice()));
+                            qtyNumber.setText(String.valueOf(cart.getQuantity()));
+                        }
+                    }
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
                     }
                 });
-        // set the total price of the cart
-        System.out.println("******************************");
-        System.out.println("names "+ itemNames.size());
-        System.out.println("items "+ items.size());
-        System.out.println("******************************");
+
 
         // show the total price and quantity of items in the text view
-        totalPrice.setText(String.valueOf(priceTotal));
-        qtyNumber.setText(String.valueOf(quantity));
-
-
         // listen if the items in the cart are being clicked for a longer period of time
         cartItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -147,28 +160,30 @@ public class ShoppingCartFragment extends Fragment {
 
                 // as long as there are items in the cart and you click buy items button remove them from database
                 // because you bough the items they are no long in the store
-                /*if(!itemNames.isEmpty()) {
-                    for (ItemEntity item : items) {
-                        try {
-                            new DeleteItem(getView()).execute(item).get();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    // notify the users that he/she has bought successfully and redirect to the main fragment
-                    Toast.makeText(getActivity(), getString(R.string.lang_items_bought), Toast.LENGTH_LONG).show();
-                    getActivity().getSupportFragmentManager().popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    MainFragment mainFragment = new MainFragment();
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, mainFragment, BACK_STACK_ROOT_TAG)
-                            .addToBackStack("main")
-                            .commit();
-                }
-                else // if there are no items in the cart notify the user that the cart is empty
+                for(ItemEntity item : items)
                 {
-                    Toast.makeText(getActivity(), getString(R.string.lang_empty_cart), Toast.LENGTH_LONG).show();
-                }*/
+                    FirebaseDatabase.getInstance()
+                            .getReference("items").child(item.getUid()).removeValue();
+                }
+                // update the cart after the items have been baught
+                cart.setQuantity(0);
+                cart.setTotalPrice(0);
+                FirebaseDatabase.getInstance()
+                        .getReference("cart")
+                        .child(cart.getUid())
+                        .updateChildren(cart.toMap(), new DatabaseReference.CompletionListener() {
+                            @Override
+                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                if (databaseError != null) {
+                                } else {
+
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+                Toast.makeText(getActivity(), getString(R.string.lang_items_bought), Toast.LENGTH_LONG).show();
+                refreshFragment();
+
             }
         });
     }
@@ -197,6 +212,7 @@ public class ShoppingCartFragment extends Fragment {
                 public void onClick(DialogInterface dialog, int which) {
 
 
+                    // remove the items from the cart and update the item
                     item.setSold(false);
                     FirebaseDatabase.getInstance()
                             .getReference("items")
@@ -205,9 +221,24 @@ public class ShoppingCartFragment extends Fragment {
                                 @Override
                                 public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                                     if (databaseError != null) {
-
+                                        Toast.makeText(getActivity(), getString(R.string.lang_item_removed_cart), Toast.LENGTH_LONG).show();
                                     } else {
-                                        Toast.makeText(getContext(), "Item removed from cart!", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+
+                    // update the cart if an item is removed from it
+                    cart.setTotalPrice(cart.getTotalPrice()-item.getPrice());
+                    cart.setQuantity(cart.getQuantity()-1);
+                    FirebaseDatabase.getInstance()
+                            .getReference("cart")
+                            .child(cart.getUid())
+                            .updateChildren(cart.toMap(), new DatabaseReference.CompletionListener() {
+                                @Override
+                                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                    if (databaseError != null) {
+                                        Toast.makeText(getActivity(), getString(R.string.lang_item_removed_cart), Toast.LENGTH_LONG).show();
+                                    } else {
                                     }
                                 }
                             });
@@ -216,9 +247,7 @@ public class ShoppingCartFragment extends Fragment {
             });
 
         }
-
         alertDialog.show();
-
     }
     private void refreshFragment()
     {
@@ -229,6 +258,7 @@ public class ShoppingCartFragment extends Fragment {
                 .addToBackStack("main")
                 .commit();
     }
+    // helper method to get all the items from firebase database
     private List<ItemEntity> toItems(DataSnapshot snapshot)
     {
         List<ItemEntity> items = new ArrayList<>();
@@ -239,5 +269,17 @@ public class ShoppingCartFragment extends Fragment {
             items.add(item);
         }
         return items;
+    }
+    // helper method to get the cart from firebase database
+    private List<CartEntity> toCart(DataSnapshot snapshot)
+    {
+        List<CartEntity> carts = new ArrayList<>();
+        for(DataSnapshot childSnapshot : snapshot.getChildren())
+        {
+            CartEntity cartEntity = childSnapshot.getValue(CartEntity.class);
+            cartEntity.setUid(childSnapshot.getKey());
+            carts.add(cartEntity);
+        }
+        return carts;
     }
 }

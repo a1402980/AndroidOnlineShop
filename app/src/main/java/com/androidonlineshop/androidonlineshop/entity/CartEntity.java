@@ -18,6 +18,7 @@ public class CartEntity implements Serializable{
     private String uid;
 
     private int quantity;
+    private double totalPrice;
 
     public CartEntity() {}
 
@@ -34,10 +35,18 @@ public class CartEntity implements Serializable{
 
     public void setQuantity(int quantity) { this.quantity = quantity; }
 
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
-        result.put("name", quantity);
+        result.put("quantity", quantity);
+        result.put("totalPrice", totalPrice);
         return result;
     }
 
