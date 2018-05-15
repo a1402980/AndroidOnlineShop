@@ -122,6 +122,8 @@ public class SellFragment extends Fragment {
             // set an integer position based on which category is being selected from the drop down list
             Toast.makeText(getContext(), getString(R.string.lang_empty_category_sell), Toast.LENGTH_LONG).show();
         }
+
+        // retrieve all categories from the database to add them to the dropdown list
         FirebaseDatabase.getInstance()
                 .getReference("categories")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -166,7 +168,7 @@ public class SellFragment extends Fragment {
                 }
                 // do some checking if the fields are empty, then create a new item and put it in the sale list
                 if(!itemName.isEmpty() && !itemDescription.isEmpty() && price > 0 && rating > 0) {
-                    item = new ItemEntity(UUID.randomUUID().toString(), itemName, price, itemDescription, rating, null, categoryUid, false);
+                    item = new ItemEntity(UUID.randomUUID().toString(), itemName, price, itemDescription, rating, categoryUid, false);
                     FirebaseDatabase.getInstance()
                             .getReference()
                             .child("items").child(item.getUid()).setValue(item);
@@ -229,6 +231,7 @@ public class SellFragment extends Fragment {
         }
 
     }
+    // helper method to get all the categories from firebase database
     private List<CategoryEntity> toCategories(DataSnapshot snapshot)
     {
         List<CategoryEntity> categories = new ArrayList<>();

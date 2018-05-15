@@ -37,4 +37,5 @@
     <string name="lang_rating_limit">You can only rate between 1 and 5!</string>
     <string name="lang_item_added_to_cart">Item has been added to the cart!</string>
     <string name="lang_empty_category_sell">There are no categories available to sell items right now. Try again later!</string>
+    <string name="lang_item_removed_cart">You have removed the item from the cart!</string>
 </resources>

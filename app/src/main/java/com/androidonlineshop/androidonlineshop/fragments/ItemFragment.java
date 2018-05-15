@@ -34,9 +34,8 @@ public class ItemFragment extends Fragment {
     private RatingBar itemRatingBar;
     private Button addToCartButton;
     private ItemEntity item;
-    private String nameOfItem;
-    private CartEntity cart;
     private TextView itemPrice;
+    private CartEntity cart;
 
     private final String BACK_STACK_ROOT_TAG = "MAIN";
 
@@ -93,7 +92,10 @@ public class ItemFragment extends Fragment {
             item = (ItemEntity) bundle.getSerializable("item");
         }
 
+        // initiate the categories list
         final List<CategoryEntity> categories = new ArrayList<>();
+
+        // retrieve all the categories from the database
         FirebaseDatabase.getInstance()
                 .getReference("categories")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -109,23 +111,43 @@ public class ItemFragment extends Fragment {
                             }
                         }
                     }
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
                     }
                 });
 
+        // retrieve the cart from the databasse
+        FirebaseDatabase.getInstance()
+                .getReference("cart")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()) {
+
+                            for(CartEntity cartEntity : toCart(dataSnapshot)) {
+                                cart = cartEntity;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
         // set the fields based on the retrieved item's values
         itemName.setText(item.getName());
         itemDescription.setText(item.getDescription());
         itemRatingBar.setRating(item.getRating());
         itemPrice.setText(item.getPrice()+"");
 
+
         // listenes if the add to cart button is clicked
         addToCartButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
 
+                // if the item is added to cart set it as sold and update it in the database
                 item.setSold(true);
                 FirebaseDatabase.getInstance()
                         .getReference("items")
@@ -134,9 +156,27 @@ public class ItemFragment extends Fragment {
                             @Override
                             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                                 if (databaseError != null) {
+                                    Toast.makeText(getActivity(), getString(R.string.lang_item_added_to_cart), Toast.LENGTH_LONG).show();
 
                                 } else {
-                                    Toast.makeText(getContext(), getString(R.string.lang_item_added_to_cart), Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+
+                // update the quantity and the totalprice of the cart if items are added to it
+                int quantity = 1;
+                quantity = quantity + cart.getQuantity();
+                cart.setQuantity(quantity);
+                cart.setTotalPrice(cart.getTotalPrice()+item.getPrice());
+                FirebaseDatabase.getInstance()
+                        .getReference("cart")
+                        .child(cart.getUid())
+                        .updateChildren(cart.toMap(), new DatabaseReference.CompletionListener() {
+                            @Override
+                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                if (databaseError != null) {
+                                } else {
+
                                 }
                             }
                         });
@@ -154,6 +194,7 @@ public class ItemFragment extends Fragment {
         });
 
     }
+    // helper method to get all the categories from firebase database
     private List<CategoryEntity> toCategories(DataSnapshot snapshot)
     {
         List<CategoryEntity> categories = new ArrayList<>();
@@ -164,5 +205,17 @@ public class ItemFragment extends Fragment {
             categories.add(category);
         }
         return categories;
+    }
+    // helper method to get the cart from firebase database
+    private List<CartEntity> toCart(DataSnapshot snapshot)
+    {
+        List<CartEntity> carts = new ArrayList<>();
+        for(DataSnapshot childSnapshot : snapshot.getChildren())
+        {
+            CartEntity cartEntity = childSnapshot.getValue(CartEntity.class);
+            cartEntity.setUid(childSnapshot.getKey());
+            carts.add(cartEntity);
+        }
+        return carts;
     }
 }
