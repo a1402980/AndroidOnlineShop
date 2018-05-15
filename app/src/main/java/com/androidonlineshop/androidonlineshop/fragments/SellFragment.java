@@ -57,7 +57,6 @@ public class SellFragment extends Fragment {
     private EditText saleItemDescription;
     private Button choosePic;
     private ImageView imgPreview;
-    private StorageReference mStorageRef;
 
 
     // dropdown spinner where the user can choose in which category to sell the item
@@ -69,8 +68,6 @@ public class SellFragment extends Fragment {
 
     private String encodedImage;
     private byte[] imageByte;
-    //a Uri object to store file path
-    private Uri filePath;
 
     // an item object
     private ItemEntity item;
@@ -112,7 +109,6 @@ public class SellFragment extends Fragment {
         choosePic = view.findViewById(R.id.choosePic);
         imgPreview = view.findViewById(R.id.previewImg);
 
-        mStorageRef = FirebaseStorage.getInstance().getReference();
 
         return view;
     }
@@ -227,9 +223,6 @@ public class SellFragment extends Fragment {
         //super.onActivityResult(requestCode, resultCode, data);
         try{
             if (requestCode==100 && resultCode == RESULT_OK){
-
-                //get file URI for storage saving
-                filePath = data.getData();
 
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
