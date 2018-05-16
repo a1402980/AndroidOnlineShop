@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity{
 
         // getting the reference from database and enabling offline persistence mode
         firebaseDatabase = FirebaseDatabase.getInstance();
-        //firebaseDatabase.setPersistenceEnabled(true);
         mDatabase = firebaseDatabase.getReference();
         mDatabase.keepSynced(true);
 
