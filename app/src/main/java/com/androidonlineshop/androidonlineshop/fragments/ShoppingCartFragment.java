@@ -87,6 +87,8 @@ public class ShoppingCartFragment extends Fragment {
 
         itemNames = new ArrayList<>();
         items = new ArrayList<>();
+        totalPrice.setText("");
+        qtyNumber.setText("");
 
         // create an adapter to handle the itemnames list
         final ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_1, itemNames);
@@ -101,7 +103,6 @@ public class ShoppingCartFragment extends Fragment {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
-
                             for (ItemEntity itemEntity : toItems(dataSnapshot)) {
                                 if (itemEntity.isSold()) {
                                     itemNames.add(itemEntity.getName());
