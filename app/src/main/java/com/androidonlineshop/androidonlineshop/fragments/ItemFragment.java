@@ -2,10 +2,12 @@ package com.androidonlineshop.androidonlineshop.fragments;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +21,16 @@ import com.androidonlineshop.androidonlineshop.R;
 import com.androidonlineshop.androidonlineshop.entity.CartEntity;
 import com.androidonlineshop.androidonlineshop.entity.CategoryEntity;
 import com.androidonlineshop.androidonlineshop.entity.ItemEntity;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +48,7 @@ public class ItemFragment extends Fragment {
     private TextView itemPrice;
     private CartEntity cart;
     private ImageView itemPic;
+    private StorageReference mStorageRef;
 
     private final String BACK_STACK_ROOT_TAG = "MAIN";
 
@@ -66,6 +74,7 @@ public class ItemFragment extends Fragment {
 
         //set page title from strings
         getActivity().setTitle(getResources().getText(R.string.lang_menu_buy_items));
+        mStorageRef = FirebaseStorage.getInstance().getReference();
     }
 
     @Override
@@ -149,21 +158,18 @@ public class ItemFragment extends Fragment {
         itemPrice.setText(item.getPrice()+"");
 
         //get img base64
-        String imgBase64 = item.getImg();
-        //it its not null, turn string into a bitmap and show it on the page
-        if (imgBase64 != null){
-            try {
-                byte[] decodedString = Base64.decode(imgBase64, Base64.DEFAULT);
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        mStorageRef.child(item.getUid()).getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                 itemPic.setImageBitmap(decodedByte);
-            }catch (Exception e){
-
             }
-
-        }
-
-
-
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("Error", e.getMessage());
+            }
+        });
         // listenes if the add to cart button is clicked
         addToCartButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
@@ -183,7 +189,6 @@ public class ItemFragment extends Fragment {
                                 }
                             }
                         });
-
                 // update the quantity and the totalprice of the cart if items are added to it
                 int quantity = 1;
                 quantity = quantity + cart.getQuantity();

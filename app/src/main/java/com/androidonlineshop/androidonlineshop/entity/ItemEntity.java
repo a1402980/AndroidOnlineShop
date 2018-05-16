@@ -22,7 +22,6 @@ public class ItemEntity implements Serializable{
     private String description;
     private float rating;
     private boolean isSold;
-    private String img;
     private String categoryid;
 
     public ItemEntity() {
@@ -37,7 +36,6 @@ public class ItemEntity implements Serializable{
         this.rating = rating;
         this.categoryid = categoryid;
         this.isSold = isSold;
-        this.img = img;
     }
 
     @Exclude
@@ -68,14 +66,6 @@ public class ItemEntity implements Serializable{
     public boolean isSold() { return isSold; }
 
     public void setSold(boolean isSold) { this.isSold = isSold; }
-
-    public String getImg() {
-        return img;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
-    }
 
     @Exclude
     public Map<String, Object> toMap() {

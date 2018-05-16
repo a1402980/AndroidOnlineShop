@@ -96,6 +96,7 @@ public class ShoppingCartFragment extends Fragment {
         // retrieve the items from the database that were added to the cart
         FirebaseDatabase.getInstance()
                 .getReference("items")
+                .orderByChild("name")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {

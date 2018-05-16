@@ -120,6 +120,7 @@ public class BuyFragment extends Fragment {
         // retrieving all items from firebase database
         FirebaseDatabase.getInstance()
                 .getReference("items")
+                .orderByChild("name")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {

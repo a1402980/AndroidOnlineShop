@@ -85,6 +85,7 @@ public class CategoriesFragment extends Fragment {
         // retrieve all the categories from the database
         FirebaseDatabase.getInstance()
                 .getReference("categories")
+                .orderByChild("name")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {

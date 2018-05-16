@@ -2,6 +2,7 @@ package com.androidonlineshop.androidonlineshop.fragments;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -41,7 +42,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
@@ -57,6 +60,8 @@ public class SellFragment extends Fragment {
     private EditText saleItemDescription;
     private Button choosePic;
     private ImageView imgPreview;
+    private StorageReference mStorageRef;
+    private static Uri imageUri;
 
 
     // dropdown spinner where the user can choose in which category to sell the item
@@ -86,6 +91,7 @@ public class SellFragment extends Fragment {
 
         //set page title from strings
         getActivity().setTitle(getResources().getText(R.string.lang_menu_sell_items));
+        mStorageRef = FirebaseStorage.getInstance().getReference();
     }
 
     @Override
@@ -129,6 +135,7 @@ public class SellFragment extends Fragment {
         // retrieve all categories from the database to add them to the dropdown list
         FirebaseDatabase.getInstance()
                 .getReference("categories")
+                .orderByChild("name")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -173,7 +180,10 @@ public class SellFragment extends Fragment {
                 if(!itemName.isEmpty() && !itemDescription.isEmpty() && price > 0 && rating > 0) {
 
                     item = new ItemEntity(UUID.randomUUID().toString(), itemName, price, itemDescription, rating, categoryUid, false);
-                    item.setImg(encodedImage);
+                    if(encodedImage != null) {
+                        insertPicture(encodedImage);
+                    }
+
                     FirebaseDatabase.getInstance()
                             .getReference()
                             .child("items").child(item.getUid()).setValue(item);
@@ -213,7 +223,6 @@ public class SellFragment extends Fragment {
         Intent cameraIntent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         getActivity().startActivityFromFragment(SellFragment.this, cameraIntent, 100);
 
-
     }
 
 
@@ -237,9 +246,6 @@ public class SellFragment extends Fragment {
                 imageByte = bytesForImage;
                 encodedImage = Base64.encodeToString(bytesForImage, Base64.DEFAULT);
 
-
-
-
             }
         }catch (Exception e){
             Toast.makeText(getContext(), "Something went wrong :(", Toast.LENGTH_LONG).show();
@@ -259,6 +265,44 @@ public class SellFragment extends Fragment {
             categories.add(category);
         }
         return categories;
+    }
+    //add picture to Firebase storage to check if file is correctly stored
+    public void insertPicture(final String image){
+
+        //Decode the string value to a bitmap file
+        Bitmap bitmap = null;
+        try {
+            bitmap = decodeFromBase64(image);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Create a reference to the image file using the encoded string value
+        StorageReference mountainsRef = mStorageRef.child(item.getUid());
+
+        // Get the data from bitmap as bytes
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = mountainsRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+            }
+        });
+    }
+    // method to decode from base 64
+    public Bitmap decodeFromBase64(String image) throws IOException {
+        byte[] decodedByteArray = android.util.Base64.decode(image, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedByteArray, 0, decodedByteArray.length);
     }
 
 
