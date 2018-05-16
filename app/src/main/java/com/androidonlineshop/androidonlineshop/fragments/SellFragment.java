@@ -237,8 +237,6 @@ public class SellFragment extends Fragment {
                 imageByte = bytesForImage;
                 encodedImage = Base64.encodeToString(bytesForImage, Base64.DEFAULT);
 
-                Toast.makeText(getContext(), "asd", Toast.LENGTH_LONG).show();
-
 
 
 
